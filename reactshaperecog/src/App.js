@@ -446,7 +446,9 @@ function App() {
     const [lineWidth, /*setLineWidth*/] = useState(5);
     const [lineColor, /*setLineColor*/] = useState("black");
     const [lineOpacity, /*setLineOpacity*/] = useState(1.0);
-    const [drawResult, setDrawResult] = useState("");
+    const [drawResult, setDrawResult] = useState("No Match.");
+    const [score, setScore] = useState(0);
+    const [scoreText, setScoreText] = useState("Score: ");
     const Recognizer = new DollarRecognizer();
 
     // Initialization when the component
@@ -519,11 +521,17 @@ function App() {
           }
       
           let DrawResult = Recognizer.Recognize(pointArray, false);
-          let DrawResStr = new String("Draw Result name: %s, score: %f, time: %f", DrawResult.Name, DrawResult.Score, DrawResult.Time);
-          let enumResult = ShapeToEnum[DrawResult.Name];
-          console.log("Enum result: %d", enumResult);
-          console.log(DrawResult);
-          setDrawResult(DrawResult.Name);
+
+          if(DrawResult.Score >= 0.5)
+          {
+            let enumResult = ShapeToEnum[DrawResult.Name];
+            setDrawResult(DrawResult.Name);
+          }
+          else
+          {
+            setDrawResult("No Match.");
+          }
+
     };
 
     const draw = (e) => {
@@ -589,6 +597,14 @@ function App() {
 
     };
 
+    const AddScore = (x) => {
+      setScore(score + x);
+      setScoreText("Score: " + score);
+    };
+
+    const AddSetScore = () => {
+      AddScore(10);
+    };
 
     return (
       <div className="App">
@@ -599,8 +615,9 @@ function App() {
 				<button onClick={connectToServer}>Connect</button>
 				</section>
 			</div>  
-          <button type="button" onClick={AddTemplate}>Add Template</button>
+          <button type="button" onClick={AddSetScore}>Add Template</button>
           <span class="resultText">{drawResult}</span>
+          <span class="resultText">{scoreText}</span>
           <div className="draw-area">
               <canvas
                   onMouseDown={startDrawing}
