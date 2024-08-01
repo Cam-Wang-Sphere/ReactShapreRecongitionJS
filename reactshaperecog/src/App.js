@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 // import Menu from "./components/Menu";
 import "./App.css";
-
 //#region ShapeRecognition
  //// Shape recognition below ////
 
@@ -147,7 +146,7 @@ function Result(name, score, ms) // constructor
 //
 // DollarRecognizer constants
 //
-const NumUnistrokes = 16;
+const NumUnistrokes = 4;
 const NumPoints = 64;
 const SquareSize = 250.0;
 const Origin = new Point(0,0);
@@ -163,25 +162,13 @@ function DollarRecognizer() // constructor
 {
 	//
 	// one built-in unistroke per gesture type
-	//
+	// //
 	this.Unistrokes = new Array(NumUnistrokes);
-	this.Unistrokes[0] = new Unistroke("triangle", new Array(new Point(137,139),new Point(135,141),new Point(133,144),new Point(132,146),new Point(130,149),new Point(128,151),new Point(126,155),new Point(123,160),new Point(120,166),new Point(116,171),new Point(112,177),new Point(107,183),new Point(102,188),new Point(100,191),new Point(95,195),new Point(90,199),new Point(86,203),new Point(82,206),new Point(80,209),new Point(75,213),new Point(73,213),new Point(70,216),new Point(67,219),new Point(64,221),new Point(61,223),new Point(60,225),new Point(62,226),new Point(65,225),new Point(67,226),new Point(74,226),new Point(77,227),new Point(85,229),new Point(91,230),new Point(99,231),new Point(108,232),new Point(116,233),new Point(125,233),new Point(134,234),new Point(145,233),new Point(153,232),new Point(160,233),new Point(170,234),new Point(177,235),new Point(179,236),new Point(186,237),new Point(193,238),new Point(198,239),new Point(200,237),new Point(202,239),new Point(204,238),new Point(206,234),new Point(205,230),new Point(202,222),new Point(197,216),new Point(192,207),new Point(186,198),new Point(179,189),new Point(174,183),new Point(170,178),new Point(164,171),new Point(161,168),new Point(154,160),new Point(148,155),new Point(143,150),new Point(138,148),new Point(136,148)));
-	this.Unistrokes[1] = new Unistroke("x", new Array(new Point(87,142),new Point(89,145),new Point(91,148),new Point(93,151),new Point(96,155),new Point(98,157),new Point(100,160),new Point(102,162),new Point(106,167),new Point(108,169),new Point(110,171),new Point(115,177),new Point(119,183),new Point(123,189),new Point(127,193),new Point(129,196),new Point(133,200),new Point(137,206),new Point(140,209),new Point(143,212),new Point(146,215),new Point(151,220),new Point(153,222),new Point(155,223),new Point(157,225),new Point(158,223),new Point(157,218),new Point(155,211),new Point(154,208),new Point(152,200),new Point(150,189),new Point(148,179),new Point(147,170),new Point(147,158),new Point(147,148),new Point(147,141),new Point(147,136),new Point(144,135),new Point(142,137),new Point(140,139),new Point(135,145),new Point(131,152),new Point(124,163),new Point(116,177),new Point(108,191),new Point(100,206),new Point(94,217),new Point(91,222),new Point(89,225),new Point(87,226),new Point(87,224)));
-	this.Unistrokes[2] = new Unistroke("rectangle", new Array(new Point(78,149),new Point(78,153),new Point(78,157),new Point(78,160),new Point(79,162),new Point(79,164),new Point(79,167),new Point(79,169),new Point(79,173),new Point(79,178),new Point(79,183),new Point(80,189),new Point(80,193),new Point(80,198),new Point(80,202),new Point(81,208),new Point(81,210),new Point(81,216),new Point(82,222),new Point(82,224),new Point(82,227),new Point(83,229),new Point(83,231),new Point(85,230),new Point(88,232),new Point(90,233),new Point(92,232),new Point(94,233),new Point(99,232),new Point(102,233),new Point(106,233),new Point(109,234),new Point(117,235),new Point(123,236),new Point(126,236),new Point(135,237),new Point(142,238),new Point(145,238),new Point(152,238),new Point(154,239),new Point(165,238),new Point(174,237),new Point(179,236),new Point(186,235),new Point(191,235),new Point(195,233),new Point(197,233),new Point(200,233),new Point(201,235),new Point(201,233),new Point(199,231),new Point(198,226),new Point(198,220),new Point(196,207),new Point(195,195),new Point(195,181),new Point(195,173),new Point(195,163),new Point(194,155),new Point(192,145),new Point(192,143),new Point(192,138),new Point(191,135),new Point(191,133),new Point(191,130),new Point(190,128),new Point(188,129),new Point(186,129),new Point(181,132),new Point(173,131),new Point(162,131),new Point(151,132),new Point(149,132),new Point(138,132),new Point(136,132),new Point(122,131),new Point(120,131),new Point(109,130),new Point(107,130),new Point(90,132),new Point(81,133),new Point(76,133)));
-	this.Unistrokes[3] = new Unistroke("circle", new Array(new Point(127,141),new Point(124,140),new Point(120,139),new Point(118,139),new Point(116,139),new Point(111,140),new Point(109,141),new Point(104,144),new Point(100,147),new Point(96,152),new Point(93,157),new Point(90,163),new Point(87,169),new Point(85,175),new Point(83,181),new Point(82,190),new Point(82,195),new Point(83,200),new Point(84,205),new Point(88,213),new Point(91,216),new Point(96,219),new Point(103,222),new Point(108,224),new Point(111,224),new Point(120,224),new Point(133,223),new Point(142,222),new Point(152,218),new Point(160,214),new Point(167,210),new Point(173,204),new Point(178,198),new Point(179,196),new Point(182,188),new Point(182,177),new Point(178,167),new Point(170,150),new Point(163,138),new Point(152,130),new Point(143,129),new Point(140,131),new Point(129,136),new Point(126,139)));
-	this.Unistrokes[4] = new Unistroke("check", new Array(new Point(91,185),new Point(93,185),new Point(95,185),new Point(97,185),new Point(100,188),new Point(102,189),new Point(104,190),new Point(106,193),new Point(108,195),new Point(110,198),new Point(112,201),new Point(114,204),new Point(115,207),new Point(117,210),new Point(118,212),new Point(120,214),new Point(121,217),new Point(122,219),new Point(123,222),new Point(124,224),new Point(126,226),new Point(127,229),new Point(129,231),new Point(130,233),new Point(129,231),new Point(129,228),new Point(129,226),new Point(129,224),new Point(129,221),new Point(129,218),new Point(129,212),new Point(129,208),new Point(130,198),new Point(132,189),new Point(134,182),new Point(137,173),new Point(143,164),new Point(147,157),new Point(151,151),new Point(155,144),new Point(161,137),new Point(165,131),new Point(171,122),new Point(174,118),new Point(176,114),new Point(177,112),new Point(177,114),new Point(175,116),new Point(173,118)));
-	this.Unistrokes[5] = new Unistroke("caret", new Array(new Point(79,245),new Point(79,242),new Point(79,239),new Point(80,237),new Point(80,234),new Point(81,232),new Point(82,230),new Point(84,224),new Point(86,220),new Point(86,218),new Point(87,216),new Point(88,213),new Point(90,207),new Point(91,202),new Point(92,200),new Point(93,194),new Point(94,192),new Point(96,189),new Point(97,186),new Point(100,179),new Point(102,173),new Point(105,165),new Point(107,160),new Point(109,158),new Point(112,151),new Point(115,144),new Point(117,139),new Point(119,136),new Point(119,134),new Point(120,132),new Point(121,129),new Point(122,127),new Point(124,125),new Point(126,124),new Point(129,125),new Point(131,127),new Point(132,130),new Point(136,139),new Point(141,154),new Point(145,166),new Point(151,182),new Point(156,193),new Point(157,196),new Point(161,209),new Point(162,211),new Point(167,223),new Point(169,229),new Point(170,231),new Point(173,237),new Point(176,242),new Point(177,244),new Point(179,250),new Point(181,255),new Point(182,257)));
-	this.Unistrokes[6] = new Unistroke("zig-zag", new Array(new Point(307,216),new Point(333,186),new Point(356,215),new Point(375,186),new Point(399,216),new Point(418,186)));
-	this.Unistrokes[7] = new Unistroke("arrow", new Array(new Point(68,222),new Point(70,220),new Point(73,218),new Point(75,217),new Point(77,215),new Point(80,213),new Point(82,212),new Point(84,210),new Point(87,209),new Point(89,208),new Point(92,206),new Point(95,204),new Point(101,201),new Point(106,198),new Point(112,194),new Point(118,191),new Point(124,187),new Point(127,186),new Point(132,183),new Point(138,181),new Point(141,180),new Point(146,178),new Point(154,173),new Point(159,171),new Point(161,170),new Point(166,167),new Point(168,167),new Point(171,166),new Point(174,164),new Point(177,162),new Point(180,160),new Point(182,158),new Point(183,156),new Point(181,154),new Point(178,153),new Point(171,153),new Point(164,153),new Point(160,153),new Point(150,154),new Point(147,155),new Point(141,157),new Point(137,158),new Point(135,158),new Point(137,158),new Point(140,157),new Point(143,156),new Point(151,154),new Point(160,152),new Point(170,149),new Point(179,147),new Point(185,145),new Point(192,144),new Point(196,144),new Point(198,144),new Point(200,144),new Point(201,147),new Point(199,149),new Point(194,157),new Point(191,160),new Point(186,167),new Point(180,176),new Point(177,179),new Point(171,187),new Point(169,189),new Point(165,194),new Point(164,196)));
-	this.Unistrokes[8] = new Unistroke("left square bracket", new Array(new Point(140,124),new Point(138,123),new Point(135,122),new Point(133,123),new Point(130,123),new Point(128,124),new Point(125,125),new Point(122,124),new Point(120,124),new Point(118,124),new Point(116,125),new Point(113,125),new Point(111,125),new Point(108,124),new Point(106,125),new Point(104,125),new Point(102,124),new Point(100,123),new Point(98,123),new Point(95,124),new Point(93,123),new Point(90,124),new Point(88,124),new Point(85,125),new Point(83,126),new Point(81,127),new Point(81,129),new Point(82,131),new Point(82,134),new Point(83,138),new Point(84,141),new Point(84,144),new Point(85,148),new Point(85,151),new Point(86,156),new Point(86,160),new Point(86,164),new Point(86,168),new Point(87,171),new Point(87,175),new Point(87,179),new Point(87,182),new Point(87,186),new Point(88,188),new Point(88,195),new Point(88,198),new Point(88,201),new Point(88,207),new Point(89,211),new Point(89,213),new Point(89,217),new Point(89,222),new Point(88,225),new Point(88,229),new Point(88,231),new Point(88,233),new Point(88,235),new Point(89,237),new Point(89,240),new Point(89,242),new Point(91,241),new Point(94,241),new Point(96,240),new Point(98,239),new Point(105,240),new Point(109,240),new Point(113,239),new Point(116,240),new Point(121,239),new Point(130,240),new Point(136,237),new Point(139,237),new Point(144,238),new Point(151,237),new Point(157,236),new Point(159,237)));
-	this.Unistrokes[9] = new Unistroke("right square bracket", new Array(new Point(112,138),new Point(112,136),new Point(115,136),new Point(118,137),new Point(120,136),new Point(123,136),new Point(125,136),new Point(128,136),new Point(131,136),new Point(134,135),new Point(137,135),new Point(140,134),new Point(143,133),new Point(145,132),new Point(147,132),new Point(149,132),new Point(152,132),new Point(153,134),new Point(154,137),new Point(155,141),new Point(156,144),new Point(157,152),new Point(158,161),new Point(160,170),new Point(162,182),new Point(164,192),new Point(166,200),new Point(167,209),new Point(168,214),new Point(168,216),new Point(169,221),new Point(169,223),new Point(169,228),new Point(169,231),new Point(166,233),new Point(164,234),new Point(161,235),new Point(155,236),new Point(147,235),new Point(140,233),new Point(131,233),new Point(124,233),new Point(117,235),new Point(114,238),new Point(112,238)));
-	this.Unistrokes[10] = new Unistroke("v", new Array(new Point(89,164),new Point(90,162),new Point(92,162),new Point(94,164),new Point(95,166),new Point(96,169),new Point(97,171),new Point(99,175),new Point(101,178),new Point(103,182),new Point(106,189),new Point(108,194),new Point(111,199),new Point(114,204),new Point(117,209),new Point(119,214),new Point(122,218),new Point(124,222),new Point(126,225),new Point(128,228),new Point(130,229),new Point(133,233),new Point(134,236),new Point(136,239),new Point(138,240),new Point(139,242),new Point(140,244),new Point(142,242),new Point(142,240),new Point(142,237),new Point(143,235),new Point(143,233),new Point(145,229),new Point(146,226),new Point(148,217),new Point(149,208),new Point(149,205),new Point(151,196),new Point(151,193),new Point(153,182),new Point(155,172),new Point(157,165),new Point(159,160),new Point(162,155),new Point(164,150),new Point(165,148),new Point(166,146)));
-	this.Unistrokes[11] = new Unistroke("delete", new Array(new Point(123,129),new Point(123,131),new Point(124,133),new Point(125,136),new Point(127,140),new Point(129,142),new Point(133,148),new Point(137,154),new Point(143,158),new Point(145,161),new Point(148,164),new Point(153,170),new Point(158,176),new Point(160,178),new Point(164,183),new Point(168,188),new Point(171,191),new Point(175,196),new Point(178,200),new Point(180,202),new Point(181,205),new Point(184,208),new Point(186,210),new Point(187,213),new Point(188,215),new Point(186,212),new Point(183,211),new Point(177,208),new Point(169,206),new Point(162,205),new Point(154,207),new Point(145,209),new Point(137,210),new Point(129,214),new Point(122,217),new Point(118,218),new Point(111,221),new Point(109,222),new Point(110,219),new Point(112,217),new Point(118,209),new Point(120,207),new Point(128,196),new Point(135,187),new Point(138,183),new Point(148,167),new Point(157,153),new Point(163,145),new Point(165,142),new Point(172,133),new Point(177,127),new Point(179,127),new Point(180,125)));
-	this.Unistrokes[12] = new Unistroke("left curly brace", new Array(new Point(150,116),new Point(147,117),new Point(145,116),new Point(142,116),new Point(139,117),new Point(136,117),new Point(133,118),new Point(129,121),new Point(126,122),new Point(123,123),new Point(120,125),new Point(118,127),new Point(115,128),new Point(113,129),new Point(112,131),new Point(113,134),new Point(115,134),new Point(117,135),new Point(120,135),new Point(123,137),new Point(126,138),new Point(129,140),new Point(135,143),new Point(137,144),new Point(139,147),new Point(141,149),new Point(140,152),new Point(139,155),new Point(134,159),new Point(131,161),new Point(124,166),new Point(121,166),new Point(117,166),new Point(114,167),new Point(112,166),new Point(114,164),new Point(116,163),new Point(118,163),new Point(120,162),new Point(122,163),new Point(125,164),new Point(127,165),new Point(129,166),new Point(130,168),new Point(129,171),new Point(127,175),new Point(125,179),new Point(123,184),new Point(121,190),new Point(120,194),new Point(119,199),new Point(120,202),new Point(123,207),new Point(127,211),new Point(133,215),new Point(142,219),new Point(148,220),new Point(151,221)));
-	this.Unistrokes[13] = new Unistroke("right curly brace", new Array(new Point(117,132),new Point(115,132),new Point(115,129),new Point(117,129),new Point(119,128),new Point(122,127),new Point(125,127),new Point(127,127),new Point(130,127),new Point(133,129),new Point(136,129),new Point(138,130),new Point(140,131),new Point(143,134),new Point(144,136),new Point(145,139),new Point(145,142),new Point(145,145),new Point(145,147),new Point(145,149),new Point(144,152),new Point(142,157),new Point(141,160),new Point(139,163),new Point(137,166),new Point(135,167),new Point(133,169),new Point(131,172),new Point(128,173),new Point(126,176),new Point(125,178),new Point(125,180),new Point(125,182),new Point(126,184),new Point(128,187),new Point(130,187),new Point(132,188),new Point(135,189),new Point(140,189),new Point(145,189),new Point(150,187),new Point(155,186),new Point(157,185),new Point(159,184),new Point(156,185),new Point(154,185),new Point(149,185),new Point(145,187),new Point(141,188),new Point(136,191),new Point(134,191),new Point(131,192),new Point(129,193),new Point(129,195),new Point(129,197),new Point(131,200),new Point(133,202),new Point(136,206),new Point(139,211),new Point(142,215),new Point(145,220),new Point(147,225),new Point(148,231),new Point(147,239),new Point(144,244),new Point(139,248),new Point(134,250),new Point(126,253),new Point(119,253),new Point(115,253)));
-	this.Unistrokes[14] = new Unistroke("star", new Array(new Point(75,250),new Point(75,247),new Point(77,244),new Point(78,242),new Point(79,239),new Point(80,237),new Point(82,234),new Point(82,232),new Point(84,229),new Point(85,225),new Point(87,222),new Point(88,219),new Point(89,216),new Point(91,212),new Point(92,208),new Point(94,204),new Point(95,201),new Point(96,196),new Point(97,194),new Point(98,191),new Point(100,185),new Point(102,178),new Point(104,173),new Point(104,171),new Point(105,164),new Point(106,158),new Point(107,156),new Point(107,152),new Point(108,145),new Point(109,141),new Point(110,139),new Point(112,133),new Point(113,131),new Point(116,127),new Point(117,125),new Point(119,122),new Point(121,121),new Point(123,120),new Point(125,122),new Point(125,125),new Point(127,130),new Point(128,133),new Point(131,143),new Point(136,153),new Point(140,163),new Point(144,172),new Point(145,175),new Point(151,189),new Point(156,201),new Point(161,213),new Point(166,225),new Point(169,233),new Point(171,236),new Point(174,243),new Point(177,247),new Point(178,249),new Point(179,251),new Point(180,253),new Point(180,255),new Point(179,257),new Point(177,257),new Point(174,255),new Point(169,250),new Point(164,247),new Point(160,245),new Point(149,238),new Point(138,230),new Point(127,221),new Point(124,220),new Point(112,212),new Point(110,210),new Point(96,201),new Point(84,195),new Point(74,190),new Point(64,182),new Point(55,175),new Point(51,172),new Point(49,170),new Point(51,169),new Point(56,169),new Point(66,169),new Point(78,168),new Point(92,166),new Point(107,164),new Point(123,161),new Point(140,162),new Point(156,162),new Point(171,160),new Point(173,160),new Point(186,160),new Point(195,160),new Point(198,161),new Point(203,163),new Point(208,163),new Point(206,164),new Point(200,167),new Point(187,172),new Point(174,179),new Point(172,181),new Point(153,192),new Point(137,201),new Point(123,211),new Point(112,220),new Point(99,229),new Point(90,237),new Point(80,244),new Point(73,250),new Point(69,254),new Point(69,252)));
-	this.Unistrokes[15] = new Unistroke("pigtail", new Array(new Point(81,219),new Point(84,218),new Point(86,220),new Point(88,220),new Point(90,220),new Point(92,219),new Point(95,220),new Point(97,219),new Point(99,220),new Point(102,218),new Point(105,217),new Point(107,216),new Point(110,216),new Point(113,214),new Point(116,212),new Point(118,210),new Point(121,208),new Point(124,205),new Point(126,202),new Point(129,199),new Point(132,196),new Point(136,191),new Point(139,187),new Point(142,182),new Point(144,179),new Point(146,174),new Point(148,170),new Point(149,168),new Point(151,162),new Point(152,160),new Point(152,157),new Point(152,155),new Point(152,151),new Point(152,149),new Point(152,146),new Point(149,142),new Point(148,139),new Point(145,137),new Point(141,135),new Point(139,135),new Point(134,136),new Point(130,140),new Point(128,142),new Point(126,145),new Point(122,150),new Point(119,158),new Point(117,163),new Point(115,170),new Point(114,175),new Point(117,184),new Point(120,190),new Point(125,199),new Point(129,203),new Point(133,208),new Point(138,213),new Point(145,215),new Point(155,218),new Point(164,219),new Point(166,219),new Point(177,219),new Point(182,218),new Point(192,216),new Point(196,213),new Point(199,212),new Point(201,211)));
-	//
+	this.Unistrokes[0] = new Unistroke("Triangle", new Array(new Point(-140.6078548602551,0),new Point(-129.12418961435912,5.4157070005434775),new Point(-115.75319922085748,9.84282256561525),new Point(-101.33466808804633,13.142794507453004),new Point(-87.5774013739624,17.595815350764468),new Point(-73.84166269406728,22.08581770854488),new Point(-61.289074071359664,27.948854369317075),new Point(-49.370406617277126,34.4092488038701),new Point(-37.384788810896225,40.81180853799415),new Point(-26.04319564410764,47.71844838510805),new Point(-13.977928142144378,54.05496658124767),new Point(-2.6151968767796916,60.94495351271584),new Point(9.80934422331893,66.92824395672127),new Point(20.818961685187332,74.06425212905648),new Point(32.81729621940394,80.41609871705376),new Point(44.78249111489663,86.78609047786509),new Point(57.12766548487866,92.7921542465867),new Point(68.8650583016805,99.38408067778036),new Point(81.10709646907355,105.56132798983165),new Point(92.75458622026315,111.94029417725213),new Point(105.58083178478034,117.38725000663757),new Point(109.39214513974491,111.30367688507133),new Point(106.39682326732589,101.2150149729712),new Point(103.02174677355322,91.16500084618482),new Point(99.01479448243401,81.20549477773156),new Point(95.25397399335941,71.19872107179171),new Point(91.62173828229959,61.171035276987396),new Point(87.24157956493298,51.264986215653124),new Point(82.86142084756659,41.35893715431888),new Point(78.48126213020021,31.452888092984665),new Point(74.1011034128336,21.54683903165045),new Point(69.72094469546721,11.640789970316234),new Point(65.34078597810083,1.7347409089819905),new Point(60.96062726073421,-8.171308152352225),new Point(55.716258738661395,-17.86613590965149),new Point(49.61122894069615,-27.34395336994686),new Point(44.76048916089837,-37.13251449564521),new Point(39.47759755726122,-46.81318214725883),new Point(35.059009601302705,-56.7096367470418),new Point(29.397404590388646,-66.29575266257683),new Point(24.81856021137412,-76.14905489206387),new Point(19.32547080117024,-85.7596444440115),new Point(14.945312083803856,-95.66569350534573),new Point(9.31528733555001,-105.08388335563306),new Point(4.935128618183626,-114.98993241696728),new Point(0.5549699008171274,-124.89598147830152),new Point(-5.567647541182737,-132.61274999336246),new Point(-13.593246543325677,-124.15952049918974),new Point(-20.837902122983223,-115.05710487190939),new Point(-27.175206457735044,-105.67768731758567),new Point(-33.54358175104119,-96.29652127472391),new Point(-40.05489755903989,-86.96082553228378),new Point(-46.201895045888136,-77.52087014118867),new Point(-51.87325876515797,-67.92961257835461),new Point(-57.976540262434696,-58.475750848785),new Point(-63.772480154986965,-48.919524484848466),new Point(-69.6224519129371,-39.43389652871656),new Point(-76.03946188034092,-30.11281425650384),new Point(-82.36359873099138,-20.749940747888928),new Point(-89.66345729844204,-11.806756653443387),new Point(-97.65777461017501,-3.283235976284061),new Point(-106.96219984689208,4.840418633737983),new Point(-116.79722415631261,12.594372942041304),new Point(-126.3666042181602,18.949538799483975)));
+  this.Unistrokes[1] = new Unistroke("Triangle", new Array(new Point(-152.40216107736887,3.126388037344441e-13),new Point(-141.80228506883623,-7.491067897460567),new Point(-130.20857535582968,-14.034656956919747),new Point(-119.8500093528753,-21.45164739416299),new Point(-107.61263849442571,-27.09072670609342),new Point(-97.34056404834428,-35.05996544267788),new Point(-86.60754871080462,-42.482688266608875),new Point(-76.24898270785002,-49.89967870385212),new Point(-65.21494952599846,-56.955273533981966),new Point(-54.80959649087208,-64.32701609857745),new Point(-44.097134289000905,-71.83741168956544),new Point(-33.48808639560434,-79.02549150134752),new Point(-22.161510124558163,-85.82059578643339),new Point(-11.1590502258573,-92.76515317642925),new Point(0.5192226287824724,-98.84762305077837),new Point(11.73770135771656,-104.30754091836411),new Point(23.74699530259818,-109.86176263514828),new Point(34.63625610907593,-116.352516762521),new Point(42.162891971331646,-122.59640829209036),new Point(52.300383917498266,-129.47261772237127),new Point(55.25784513355302,-126.4113957332708),new Point(55.672622612142504,-115.93538552591579),new Point(55.41985735307662,-104.51366603969956),new Point(57.646885948138106,-92.94194947113921),new Point(59.87391454319982,-81.37023290257886),new Point(62.1009431382613,-69.7985163340185),new Point(64.32797173332301,-58.226799765458196),new Point(66.5550003283845,-46.655083196897834),new Point(68.78202892344598,-35.0833666283375),new Point(71.00905751850769,-23.511650059777168),new Point(73.80521341811777,-12.077970502396965),new Point(77.80473817728353,-0.936157877762156),new Point(80.03176677234478,10.635558690798177),new Point(84.55696338285156,21.413538286638953),new Point(86.78399197791305,32.985254855199315),new Point(89.01102057297453,44.55697142375962),new Point(91.23804916803624,56.12868799231998),new Point(93.46507776309772,67.70040456088034),new Point(95.69210635815944,79.27212112944065),new Point(95.37081032756987,90.33775238847593),new Point(97.59783892263135,101.9094689570363),new Point(97.05119688334207,111.80419466581813),new Point(94.56688130358884,120.52738227762879),new Point(81.80070876491095,118.64000097730033),new Point(70.44654572152899,111.7751528556914),new Point(59.09238267814726,104.91030473408242),new Point(47.71422381601474,98.09376087202085),new Point(35.03454017306399,93.89722308157175),new Point(22.656047796669327,88.82650266143887),new Point(10.068311906008375,84.39961287534445),new Point(-2.7087450573026217,79.90859666195601),new Point(-14.840367498185742,74.1615364351679),new Point(-28.06461529866033,70.34373823187147),new Point(-40.83215758749134,65.69014122102143),new Point(-53.65688656550424,61.51770765861565),new Point(-66.44418654717606,57.26992847151328),new Point(-77.34824480993734,50.67721850275288),new Point(-89.13010747377803,45.32005193526888),new Point(-99.38265367280701,37.64041615720069),new Point(-111.81602840037954,33.37017539902439),new Point(-121.06955978907445,28.589572589771706),new Point(-130.84054764417715,22.88920432577453),new Point(-139.0804499449032,18.279680007676006),new Point(-147.32035224562787,13.67015568957595),));
+  this.Unistrokes[2] = new Unistroke("Circle", new Array(new Point(-123.53709269358478,5.684341886080802e-14),new Point(-128.70839810574353,8.71765518595123),new Point(-128.3539791015437,20.595280290547862),new Point(-126.99221729805049,32.736388429256465),new Point(-124.56483415097637,44.56850329580038),new Point(-120.81749718239098,56.01787728269477),new Point(-114.94192010133838,67.02647069722298),new Point(-108.80131759302822,78.03238088595032),new Point(-99.10325794142136,86.64878138876543),new Point(-89.26745903248184,95.29518098171093),new Point(-77.70010999712804,101.73174117403812),new Point(-65.46145907418486,107.70768778108766),new Point(-52.309094576532516,111.29337239734969),new Point(-39.40172089323778,116.2924334360871),new Point(-26.569523977423614,119.88309580383725),new Point(-13.51739371531221,121.96695887244118),new Point(-0.38520003053781693,123.82757388413847),new Point(13.831338772478375,122.66461167902912),new Point(28.047877575494113,121.50164947391977),new Point(42.264416378510305,120.3386872688103),new Point(54.6801215323394,116.27981618600836),new Point(67.54300463335312,111.87703721673972),new Point(77.90608630548468,104.51735566435809),new Point(85.86298157768579,95.8555410043856),new Point(92.88091661139288,85.51459037073937),new Point(99.86747989555215,75.05716899698825),new Point(104.4542763981799,63.75369765453996),new Point(106.52408992364144,51.804464708584305),new Point(110.80312562075733,40.1998828056673),new Point(114.00690924802893,28.314055354565824),new Point(118.28594494514437,16.70947345164882),new Point(119.30410167331593,4.70143752707645),new Point(121.29160189425647,-7.252397935116505),new Point(120.16650638658302,-19.380272970431974),new Point(118.80474458308936,-31.521381109140577),new Point(117.44298277959615,-43.66248924784918),new Point(116.08122097610249,-55.80359738655778),new Point(114.71945917260882,-67.94470552526639),new Point(113.35769736911516,-80.08581366397499),new Point(110.49199998474705,-91.79083258669806),new Point(104.45959576579617,-102.57761623504473),new Point(93.84694410961265,-110.64210994575433),new Point(82.42618799613228,-117.2748805760844),new Point(69.7383871606894,-122.07718596145946),new Point(56.036314714039236,-123.80435636586895),new Point(42.3869605962941,-126.17242611586158),new Point(28.17042179327791,-125.00946391075223),new Point(13.953882990262173,-123.84650170564282),new Point(-0.2626558127540193,-122.68353950053347),new Point(-13.738512210404224,-119.10754050164405),new Point(-27.556914286436495,-116.81650742773678),new Point(-39.66357476140456,-110.34665378531616),new Point(-52.51616495744338,-105.07632487543219),new Point(-64.31843452876046,-98.31009284360101),new Point(-75.08370831218872,-90.53416197467243),new Point(-85.65696863170797,-82.57127203273672),new Point(-92.62761794257267,-72.19699879356),new Point(-97.76745059152472,-60.817569036251314),new Point(-102.90728324047586,-49.4381392789424),new Point(-108.04711588942791,-38.05870952163377),new Point(-112.26358356225182,-26.571105201054024),new Point(-114.51270806070352,-14.853021607170774),new Point(-116.82208645703986,-3.6721458334317276),new Point(-115.46032465354665,8.468962305275454))); 
+  this.Unistrokes[3] = new Unistroke("Circle", new Array(new Point(-122.30219812712846,1.1368683772161603e-13),new Point(-123.76967013366652,-12.036339013088224),new Point(-121.99699804483691,-24.36245471321476),new Point(-120.07745752626693,-36.727344292111525),new Point(-116.66535543545092,-48.903432559071405),new Point(-113.25325334463514,-61.07952082603131),new Point(-109.31135824446528,-73.05784582139586),new Point(-103.00316774754026,-84.0268853370292),new Point(-93.21151213389192,-92.53669380953744),new Point(-82.38564593737829,-99.89142737628544),new Point(-70.93638213551867,-106.16353603983623),new Point(-58.7647974763637,-110.6411203817679),new Point(-46.23502806965837,-114.40381335089577),new Point(-33.14162465268396,-116.40268359254469),new Point(-19.96472903321603,-118.81805326180333),new Point(-6.840054729289022,-120.70785777218461),new Point(6.440618946658105,-122.28211482434855),new Point(19.823023849888614,-122.23871572463898),new Point(32.972537254205236,-120.51664530729758),new Point(46.12205065852186,-118.79457488995612),new Point(59.27156406283825,-117.07250447261472),new Point(72.26978836926764,-113.87621740645733),new Point(83.10552905393502,-106.86870358788792),new Point(92.67825263832106,-98.06776061724756),new Point(100.89649574827763,-88.17585552214601),new Point(106.74991485809915,-77.15604640401932),new Point(111.34885153914843,-65.48576470138289),new Point(116.3326073630833,-53.844871843752486),new Point(119.59738053610181,-41.74630138989781),new Point(122.8068997479495,-29.57148570732906),new Point(125.25352628000019,-17.29888563571322),new Point(126.23032986633348,-4.750133800582688),new Point(125.65681243522863,7.597170336123611),new Point(122.39190686763254,19.786513959047227),new Point(120.40636480475291,32.091066951669745),new Point(116.5139147696757,44.08784900038222),new Point(111.46822118841328,55.65414364625434),new Point(106.77679363924972,67.35268014561632),new Point(100.93077288992254,78.55904291739375),new Point(94.10622285260456,89.15499499612082),new Point(86.12418800853357,99.24410835442916),new Point(76.59136233052868,107.84808567728982),new Point(66.35100510653433,115.84816479781881),new Point(54.65442197312973,121.05142688629019),new Point(42.34805385445247,125.27454428864371),new Point(29.10129650417116,127.21163554088429),new Point(16.004675539875734,127.71788517565147),new Point(2.829011351985855,126.25063761773379),new Point(-10.334257155491969,125.77535032457371),new Point(-23.483770559808477,124.05327990723231),new Point(-36.481994866237756,120.85699284107494),new Point(-49.480219172667034,117.66070577491752),new Point(-61.118067160399846,112.0668502060492),new Point(-70.9952052977726,105.6857171821469),new Point(-81.09523210791235,97.38155890694236),new Point(-89.05192315114039,87.90455807958324),new Point(-94.91724589241994,76.70504722591079),new Point(-99.19245770881889,64.9315502451916),new Point(-103.93284476763836,53.325968679439484),new Point(-106.90709916184619,41.082862000093826),new Point(-109.34081460562732,29.19561969761736),new Point(-111.04553094019957,17.40728905624752),new Point(-112.54101984467593,5.370296689173983),new Point(-112.37747972469015,-6.628007125471129))); 
+
 	// The $1 Gesture Recognizer API begins here -- 3 methods: Recognize(), AddGesture(), and DeleteUserGestures()
 	//
 	this.Recognize = function(points, useProtractor)
@@ -208,8 +195,10 @@ function DollarRecognizer() // constructor
 	}
 	this.AddGesture = function(name, points)
 	{
+    console.log("Point length: %d", points.length);
 		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
 		var num = 0;
+
 		for (var i = 0; i < this.Unistrokes.length; i++) {
 			if (this.Unistrokes[i].Name === name)
 				num++;
@@ -442,16 +431,17 @@ const canvasHeight = window.innerHeight;
 function App() {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
+    const canvasRect = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, /*setLineWidth*/] = useState(5);
     const [lineColor, /*setLineColor*/] = useState("black");
     const [lineOpacity, /*setLineOpacity*/] = useState(1.0);
+    const [drawResult, setDrawResult] = useState("");
     const Recognizer = new DollarRecognizer();
 
     // Initialization when the component
     // mounts for the first time
     useEffect(() => {
-        console.log("Width: %f, Height: %f", canvasWidth, canvasHeight);
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
@@ -460,6 +450,7 @@ function App() {
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
         ctxRef.current = ctx;
+        canvasRect.current = canvas.getBoundingClientRect();
     }, [lineColor, lineOpacity, lineWidth]);
 
     // Function for starting the drawing
@@ -470,8 +461,8 @@ function App() {
           {
               localStorage.removeItem(UserInputKey);
           }
-        let x = (e.touches) ? e.touches[0].clientX : e.nativeEvent.offsetX;
-        let y = (e.touches) ? e.touches[0].clientY : e.nativeEvent.offsetY;
+        let x = (e.touches) ? e.touches[0].clientX - canvasRect.current.left : e.nativeEvent.offsetX;
+        let y = (e.touches) ? e.touches[0].clientY - canvasRect.current.top: e.nativeEvent.offsetY;
         ctxRef.current.beginPath();
         ctxRef.current.moveTo(
             x,
@@ -508,16 +499,17 @@ function App() {
           }
       
           let DrawResult = Recognizer.Recognize(pointArray, true);
-          console.log("Draw Result name: %s, score: %f, time: %f", DrawResult.Name, DrawResult.Score, DrawResult.Time);
+          let DrawResStr = new String("Draw Result name: %s, score: %f, time: %f", DrawResult.Name, DrawResult.Score, DrawResult.Time);
+          console.log(DrawResult);
+          setDrawResult(DrawResult.Name);
     };
 
     const draw = (e) => {
         if (!isDrawing) {
             return;
         }
-        let x = (e.touches) ? e.touches[0].clientX : e.nativeEvent.offsetX;
-        let y = (e.touches) ? e.touches[0].clientY : e.nativeEvent.offsetY;
-        console.log("X: %f, Y: %f", x, y);
+        let x = (e.touches) ? e.touches[0].clientX - canvasRect.current.left : e.nativeEvent.offsetX;
+        let y = (e.touches) ? e.touches[0].clientY - canvasRect.current.top: e.nativeEvent.offsetY;
         if(storageAvailable("localStorage"))
           {
               // If no user input exists create a new one
@@ -541,43 +533,70 @@ function App() {
         ctxRef.current.stroke();
     };
 
-    const touchBegin = (e) =>{
-      alert("begin");
-    };
-    const touchEnd = (e) =>{
-      alert("end");
-    };
-    const touchMove = (e) =>{
-      alert("move");
+    const AddTemplate = () => {
+      let pointArray = new Array();
+
+      if(storageAvailable("localStorage"))
+        {
+            if(!localStorage.getItem(UserInputKey))
+            {
+                return;
+            }
+            let existingInputString = localStorage.getItem(UserInputKey);
+    
+            let existingInputObj = JSON.parse(existingInputString);
+    
+            for(let i = 0; i < existingInputObj['Input'].length; i++)
+            {
+                let X = existingInputObj['Input'][i]['x'];
+                let Y = existingInputObj['Input'][i]['y'];
+    
+
+                pointArray.push(new Point(X,Y));
+            }
+        }
+        let newUnistroke = new Unistroke("Temp", pointArray);
+
+        let newJsonArray = {"Points":[]};
+        for(let j = 0; j < newUnistroke.Points.length; j++)
+        {
+          let newPoint = {"x":newUnistroke.Points[j].X, "y":newUnistroke.Points[j].Y};
+          newJsonArray["Points"].push(newPoint);
+        }
+        console.log(newJsonArray);
+
     };
 
     return (
-        <div className="App">
-			<div>
-        		<section class="ipcon">   
+      <div className="App">
+      <div>
+        <section class="ipcon">   
 				<h1>Drawing of the Dead WebSocket Connection</h1>
 				<input type="text" id="ipAddress" value="10.232.73.129" />
 				<button onClick={connectToServer}>Connect</button>
 				</section>
 			</div>  
+          <button type="button" onClick={AddTemplate}>Add Template</button>
+          <span>{drawResult}</span>
+          <div className="draw-area">
+              <canvas
+                  onMouseDown={startDrawing}
+                  onMouseUp={endDrawing}
+                  onMouseMove={draw}
+                  onTouchStart={startDrawing}
+                  onTouchEnd={endDrawing}
+                  onTouchMove={draw}
+                  ref={canvasRef}
+                  width={canvasWidth}
+                  height={canvasHeight}
+              />
+          </div>
 
-            <h1>Drawing of the Dead</h1>
-            <div className="draw-area">
-                <canvas
-                    onMouseDown={startDrawing}
-                    onMouseUp={endDrawing}
-                    onMouseMove={draw}
-                    onTouchStart={startDrawing}
-                    onTouchEnd={endDrawing}
-                    onTouchMove={draw}
-                    ref={canvasRef}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                />
-            </div>
+      </div>
+  );
 
-        </div>
-    );
+
+    
 }
 
 export default App;
