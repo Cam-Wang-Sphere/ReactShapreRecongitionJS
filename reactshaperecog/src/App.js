@@ -509,7 +509,7 @@ function App() {
 
     return (
         <div className="App">
-            <h1>Paint App</h1>
+            <h1>Drawing of the Dead</h1>
             <div className="draw-area">
                 {/* <Menu
                     setLineColor={setLineColor}
@@ -520,6 +520,9 @@ function App() {
                     onMouseDown={startDrawing}
                     onMouseUp={endDrawing}
                     onMouseMove={draw}
+                    onTouchStart={startDrawing}
+                    onTouchEnd={endDrawing}
+                    onTouchMove={draw}
                     ref={canvasRef}
                     width={`1280px`}
                     height={`720px`}
