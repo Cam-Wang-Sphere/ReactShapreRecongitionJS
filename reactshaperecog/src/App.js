@@ -75,6 +75,35 @@ import "./App.css";
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
+
+//
+//	ConnectToServer functionality
+//
+function connectToServer() {
+	let ip = document.getElementById("ipAddress").value;
+	if (ip.trim() === "") {
+		alert("Empty IP address");
+		return;
+	}
+
+	var socket = new WebSocket("wss://" + ip + ":3004");
+
+	window.sessionId = -1;
+
+	socket.onopen = function () {
+		alert("Connected to websocket with ip = " + ip);
+	};
+
+	socket.onerror = function () {
+		alert("Could not connect to ip = " + ip);
+	};
+
+	socket.onmessage = function (event) {
+		console.log("Received message = ", event.data);
+	};
+
+	window.currentSocket = socket;
+}
 //
 // Point class
 //
@@ -524,6 +553,14 @@ function App() {
 
     return (
         <div className="App">
+			<div>
+        		<section class="ipcon">   
+				<h1>Drawing of the Dead WebSocket Connection</h1>
+				<input type="text" id="ipAddress" value="10.232.73.129" />
+				<button onClick={connectToServer}>Connect</button>
+				</section>
+			</div>  
+
             <h1>Drawing of the Dead</h1>
             <div className="draw-area">
                 <canvas
