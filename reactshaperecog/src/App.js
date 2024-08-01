@@ -471,6 +471,16 @@ function App() {
         setIsDrawing(true);
     };
 
+    const ShapeToEnum = {
+      "Circle":0,
+      "Star":1,
+      "Bow":2,
+      "Arrow":3,
+      "Volcano":4,
+      "Lava":5,
+      "Triangle":6
+      };
+
     // Function for ending the drawing
     const endDrawing = () => {
         ctxRef.current.closePath();
@@ -500,6 +510,8 @@ function App() {
       
           let DrawResult = Recognizer.Recognize(pointArray, false);
           let DrawResStr = new String("Draw Result name: %s, score: %f, time: %f", DrawResult.Name, DrawResult.Score, DrawResult.Time);
+          let enumResult = ShapeToEnum[DrawResult.Name];
+          console.log("Enum result: %d", enumResult);
           console.log(DrawResult);
           setDrawResult(DrawResult.Name);
     };
@@ -567,12 +579,13 @@ function App() {
 
     };
 
+    
     return (
       <div className="App">
       <div>
         <section class="ipcon">   
-				<h1>Drawing of the Dead WebSocket Connection</h1>
-				<input type="text" id="ipAddress" value="10.232.73.129" />
+				<h1>Drawing of the Dead Web</h1>
+				<input type="text" id="ipAddress" defaultValue="10.232.73.129" />
 				<button onClick={connectToServer}>Connect</button>
 				</section>
 			</div>  
