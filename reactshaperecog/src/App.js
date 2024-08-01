@@ -498,7 +498,7 @@ function App() {
               }
           }
       
-          let DrawResult = Recognizer.Recognize(pointArray, true);
+          let DrawResult = Recognizer.Recognize(pointArray, false);
           let DrawResStr = new String("Draw Result name: %s, score: %f, time: %f", DrawResult.Name, DrawResult.Score, DrawResult.Time);
           console.log(DrawResult);
           setDrawResult(DrawResult.Name);
