@@ -175,14 +175,14 @@ function DollarRecognizer() // constructor
 			}
 		}
 		var t1 = Date.now();
-		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
+		return (u === -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
 	}
 	this.AddGesture = function(name, points)
 	{
 		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
 		var num = 0;
 		for (var i = 0; i < this.Unistrokes.length; i++) {
-			if (this.Unistrokes[i].Name == name)
+			if (this.Unistrokes[i].Name === name)
 				num++;
 		}
 		return num;
@@ -215,7 +215,7 @@ function Resample(points, n)
 		}
 		else D += d;
 	}
-	if (newpoints.length == n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
+	if (newpoints.length === n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
 		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
 	return newpoints;
 }
@@ -269,8 +269,8 @@ function Vectorize(points) // for Protractor
 		sum += points[i].X * points[i].X + points[i].Y * points[i].Y;
 	}
 	var magnitude = Math.sqrt(sum);
-	for (var i = 0; i < vector.length; i++)
-		vector[i] /= magnitude;
+	for (var j = 0; j < vector.length; j++)
+		vector[j] /= magnitude;
 	return vector;
 }
 function OptimalCosineDistance(v1, v2) // for Protractor
@@ -407,6 +407,9 @@ function AppendNexInput(X,Y)
 }
 
 
+const canvasWidth = window.innerHeight;
+const canvasHeight = window.innerHeight;
+
 function App() {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -419,6 +422,7 @@ function App() {
     // Initialization when the component
     // mounts for the first time
     useEffect(() => {
+        console.log("Width: %f, Height: %f", canvasWidth, canvasHeight);
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
@@ -431,18 +435,18 @@ function App() {
 
     // Function for starting the drawing
     const startDrawing = (e) => {
-        
       // Reseting all the info
         ctxRef.current.clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
         if(storageAvailable("localStorage"))
           {
               localStorage.removeItem(UserInputKey);
           }
-        
+        let x = (e.touches) ? e.touches[0].clientX : e.nativeEvent.offsetX;
+        let y = (e.touches) ? e.touches[0].clientY : e.nativeEvent.offsetY;
         ctxRef.current.beginPath();
         ctxRef.current.moveTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
+            x,
+            y
         );
         setIsDrawing(true);
     };
@@ -482,40 +486,46 @@ function App() {
         if (!isDrawing) {
             return;
         }
-        console.log("X: %f Y: %f",e.nativeEvent.offsetX,e.nativeEvent.offsetY);
-
+        let x = (e.touches) ? e.touches[0].clientX : e.nativeEvent.offsetX;
+        let y = (e.touches) ? e.touches[0].clientY : e.nativeEvent.offsetY;
+        console.log("X: %f, Y: %f", x, y);
         if(storageAvailable("localStorage"))
           {
               // If no user input exists create a new one
               if(!localStorage.getItem(UserInputKey))
               {
-                  AddNewInput(e.nativeEvent.offsetX,e.nativeEvent.offsetY);
+                  AddNewInput(x,y);
               }
               // If it exists append to existing data
               else
               {
-                  AppendNexInput(e.nativeEvent.offsetX,e.nativeEvent.offsetY);
+                  AppendNexInput(x,y);
               }
           }
 
         ctxRef.current.lineTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
+            x,
+            y
             
         );
 
         ctxRef.current.stroke();
     };
 
+    const touchBegin = (e) =>{
+      alert("begin");
+    };
+    const touchEnd = (e) =>{
+      alert("end");
+    };
+    const touchMove = (e) =>{
+      alert("move");
+    };
+
     return (
         <div className="App">
             <h1>Drawing of the Dead</h1>
             <div className="draw-area">
-                {/* <Menu
-                    setLineColor={setLineColor}
-                    setLineWidth={setLineWidth}
-                    setLineOpacity={setLineOpacity}
-                /> */}
                 <canvas
                     onMouseDown={startDrawing}
                     onMouseUp={endDrawing}
@@ -524,10 +534,11 @@ function App() {
                     onTouchEnd={endDrawing}
                     onTouchMove={draw}
                     ref={canvasRef}
-                    width={`1280px`}
-                    height={`720px`}
+                    width={canvasWidth}
+                    height={canvasHeight}
                 />
             </div>
+
         </div>
     );
 }
