@@ -75,50 +75,7 @@ import "./App.css";
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-//
-//	ConnectToServer functionality
-//
-function connectToServer() {
-	let ip = document.getElementById("ipAddress").value;
-	if (ip.trim() === "") {
-		alert("Empty IP address");
-		return;
-	}
 
-	var socket = new WebSocket("wss://" + ip + ":3004");
-
-	window.sessionId = -1;
-
-	socket.onopen = function () {
-		alert("Connected to websocket with ip = " + ip);
-	};
-
-	socket.onerror = function () {
-		alert("Could not connect to ip = " + ip);
-	};
-
-	socket.onmessage = function (event) {
-		console.log("Received message = ", event.data);
-
-		const obj = JSON.parse(event.data)
-		if (obj.type == "login") {
-			window.SessionId = obj.value;
-		}
-		// @TODO NATHAN: more handlers here...
-	};
-
-	window.currentSocket = socket;
-}
-//
-// Function to send shape request
-//
-function sendShapeRequest(shape_int) {
-	const message = { id: window.SessionId, type: "shape", value: shape_int };
-  if(window.currentSocket)
-  {
-    window.currentSocket.send(JSON.stringify(message));
-  }
-}
 //
 // Point class
 //
@@ -454,6 +411,7 @@ function AppendNexInput(X,Y)
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
+
 function App() {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -643,6 +601,54 @@ function App() {
         }
       }
     };
+
+	//
+	//	ConnectToServer functionality
+	//
+	function connectToServer() {
+		let ip = document.getElementById("ipAddress").value;
+		if (ip.trim() === "") {
+			alert("Empty IP address");
+			return;
+		}
+
+		var socket = new WebSocket("wss://" + ip + ":3004");
+
+		window.sessionId = -1;
+
+		socket.onopen = function () {
+			alert("Connected to websocket with ip = " + ip);
+		};
+
+		socket.onerror = function () {
+			alert("Could not connect to ip = " + ip);
+		};
+
+		socket.onmessage = function (event) {
+			console.log("Received message = ", event.data);
+
+			const obj = JSON.parse(event.data)
+			if (obj.type == "login") {
+				window.SessionId = obj.value;
+			}
+			if (obj.type == "team") {
+				SetTeamLineColor(obj.value);
+			}
+			// @TODO NATHAN: more handlers here...
+		};
+
+		window.currentSocket = socket;
+	}
+	//
+	// Function to send shape request
+	//
+	function sendShapeRequest(shape_int) {
+		const message = { id: window.SessionId, type: "shape", value: shape_int };
+	if(window.currentSocket)
+	{
+		window.currentSocket.send(JSON.stringify(message));
+	}
+	}
 
     return (
       <div className="App">
