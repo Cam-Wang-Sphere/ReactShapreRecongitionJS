@@ -114,7 +114,10 @@ function connectToServer() {
 //
 function sendShapeRequest(shape_int) {
 	const message = { id: window.SessionId, type: "shape", value: shape_int };
-	window.currentSocket.send(JSON.stringify(message));
+  if(window.currentSocket)
+  {
+    window.currentSocket.send(JSON.stringify(message));
+  }
 }
 //
 // Point class
@@ -457,7 +460,7 @@ function App() {
     const canvasRect = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, /*setLineWidth*/] = useState(5);
-    const [lineColor, /*setLineColor*/] = useState("black");
+    const [lineColor, setLineColor] = useState("black");
     const [lineOpacity, /*setLineOpacity*/] = useState(1.0);
     const [drawResult, setDrawResult] = useState("No Match.");
     const [score, setScore] = useState(0);
@@ -617,7 +620,28 @@ function App() {
     };
 
     const AddSetScore = () => {
-      AddScore(10);
+      SetTeamLineColor(1);
+    };
+
+    const SetTeamLineColor = (x) => {
+      switch(x)
+      {
+        case 0:
+        {
+          setLineColor("red");
+          break;
+        }
+        case 1:
+        {
+          setLineColor("blue");
+          break;
+        }
+        default:
+        {
+          setLineColor("yellow");
+          break;
+        }
+      }
     };
 
     return (
@@ -629,7 +653,6 @@ function App() {
 				<button onClick={connectToServer}>Connect</button>
 				</section>
 			</div>  
-          <button type="button" onClick={AddSetScore}>Add Template</button>
           <span class="resultText">{drawResult}</span>
           <span class="resultText">{scoreText}</span>
           <div className="draw-area">
@@ -648,6 +671,8 @@ function App() {
 
       </div>
   );
+
+  // <button type="button" onClick={AddSetScore}>Add Template</button>
 
 
     
