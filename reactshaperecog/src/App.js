@@ -655,7 +655,7 @@ function App() {
       <div>
         <section class="ipcon">   
 				<h1>Drawing of the Dead Web</h1>
-				<input type="text" id="ipAddress" defaultValue="10.232.73.129" />
+				<input type="text" id="ipAddress" defaultValue="10.232.64.22" />
 				<button onClick={connectToServer}>Connect</button>
 				</section>
 			</div>  
