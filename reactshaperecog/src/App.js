@@ -99,9 +99,22 @@ function connectToServer() {
 
 	socket.onmessage = function (event) {
 		console.log("Received message = ", event.data);
+
+		const obj = JSON.parse(event.data)
+		if (obj.type == "login") {
+			window.SessionId = obj.value;
+		}
+		// @TODO NATHAN: more handlers here...
 	};
 
 	window.currentSocket = socket;
+}
+//
+// Function to send shape request
+//
+function sendShapeRequest(shape_int) {
+	const message = { id: window.SessionId, type: "shape", value: shape_int };
+	window.currentSocket.send(JSON.stringify(message));
 }
 //
 // Point class
@@ -525,6 +538,7 @@ function App() {
           if(DrawResult.Score >= 0.5)
           {
             let enumResult = ShapeToEnum[DrawResult.Name];
+			sendShapeRequest(enumResult);
             setDrawResult(DrawResult.Name);
           }
           else
