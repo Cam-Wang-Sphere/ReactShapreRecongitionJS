@@ -5,7 +5,6 @@ import "./App.css";
 //#region ShapeRecognition
  //// Shape recognition below ////
 
-
   /**
  * The $1 Unistroke Recognizer (JavaScript version)
  *
@@ -652,28 +651,30 @@ function App() {
 
     return (
       <div className="App">
-      <div>
-        <section class="ipcon">   
-				<h1>Drawing of the Dead Web</h1>
-				<input type="text" id="ipAddress" defaultValue="10.232.64.22" />
-				<button onClick={connectToServer}>Connect</button>
-				</section>
-			</div>  
-          <span class="resultText">{drawResult}</span>
-          <span class="resultText">{scoreText}</span>
-          <div className="draw-area">
-              <canvas
-                  onMouseDown={startDrawing}
-                  onMouseUp={endDrawing}
-                  onMouseMove={draw}
-                  onTouchStart={startDrawing}
-                  onTouchEnd={endDrawing}
-                  onTouchMove={draw}
-                  ref={canvasRef}
-                  width={canvasWidth}
-                  height={canvasHeight}
-              />
-          </div>
+        <div>
+          <section class="ipcon">   
+          <h1>Drawing of the Dead Web</h1>
+          <input type="text" id="ipAddress" defaultValue="10.232.64.22" />
+          <button onClick={connectToServer}>Connect</button>
+          </section>
+        </div>  
+
+        <span class="resultText">{drawResult}</span>
+        <span class="resultText">{scoreText}</span>
+        
+        <div className="draw-area">
+            <canvas
+                onMouseDown={startDrawing}
+                onMouseUp={endDrawing}
+                onMouseMove={draw}
+                onTouchStart={startDrawing}
+                onTouchEnd={endDrawing}
+                onTouchMove={draw}
+                ref={canvasRef}
+                width={canvasWidth}
+                height={canvasHeight}
+            />
+        </div>
 
       </div>
   );
