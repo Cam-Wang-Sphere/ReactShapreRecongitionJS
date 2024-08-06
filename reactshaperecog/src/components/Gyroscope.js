@@ -6,12 +6,29 @@ const Gyroscope = () => {
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);
 
+    const sendOrientationRequest = (inPitch, inYaw) => {
+		const message = { id: window.sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
+		if (window.currentSocket)
+		{
+			window.currentSocket.send(JSON.stringify(message));
+		}
+	}
+
+    const sendResetOrientationRequest = () => {
+        const message = { id: window.sessionId, type: 'resetOrientation'};
+        if (window.currentSocket)
+        {
+            window.currentSocket.send(JSON.stringify(message));
+        }
+    }
+
     const handleOrientationEvent = (event) => {
         setOrientation({
             yaw: event.alpha ? event.alpha.toFixed(2) : 0,
             pitch: event.beta ? event.beta.toFixed(2) : 0,
             roll: event.gamma ? event.gamma.toFixed(2) : 0,
         });
+        sendOrientationRequest(event.beta, event.alpha);
     };
 
     const startRecording = () => {
@@ -58,6 +75,10 @@ const Gyroscope = () => {
                     Pitch: {orientation.pitch} Yaw: {orientation.yaw}  Roll: {orientation.roll} 
                 </p>
 			</div>
+            
+            <div>
+                <button onClick={sendResetOrientationRequest}>Reset Pointer</button>
+            </div>
         </div>  
         </section>
     )

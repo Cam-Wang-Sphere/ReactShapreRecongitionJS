@@ -606,6 +606,7 @@ function App() {
 
 	//
 	//	ConnectToServer functionality
+	//  @TODO NATHAN: move to seperate react component...
 	//
 	function connectToServer() {
 		let ip = document.getElementById("ipAddress").value;
