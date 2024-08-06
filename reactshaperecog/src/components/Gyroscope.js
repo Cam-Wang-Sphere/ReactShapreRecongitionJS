@@ -8,9 +8,9 @@ const Gyroscope = () => {
 
     const handleOrientationEvent = (event) => {
         setOrientation({
-            yaw: event.alpha ? event.alpha.tofixed(2) : 0,
-            pitch: event.beta ? event.beta.tofixed(2) : 0,
-            roll: event.gamma ? event.gamma.tofixed(2) : 0,
+            yaw: event.alpha ? event.alpha.toFixed(2) : 0,
+            pitch: event.beta ? event.beta.toFixed(2) : 0,
+            roll: event.gamma ? event.gamma.toFixed(2) : 0,
         });
     };
 

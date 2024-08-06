@@ -2,7 +2,7 @@
 
 cd ../
 
-npm start
+set HTTPS=true&&npm start
 pause
 
 exit
