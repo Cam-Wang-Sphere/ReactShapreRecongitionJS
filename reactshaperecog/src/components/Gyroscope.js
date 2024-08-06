@@ -19,6 +19,14 @@ const Gyroscope = () => {
             window.addEventListener('deviceorientation', handleOrientationEvent);
             setHasStarted(true);
             alert('Started gyroscope recording');
+
+            // this is to request permission for IMU access on IOS
+            if (
+                DeviceMotionEvent &&
+                typeof DeviceMotionEvent.requestPermission === "function"
+              ) {
+                DeviceMotionEvent.requestPermission();
+              }
         };
     };
 
