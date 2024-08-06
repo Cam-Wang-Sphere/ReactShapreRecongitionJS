@@ -21,7 +21,6 @@ h1 {
 
 .draw-area {
     border: 2px solid #808080;
-    position: absolute;
     top : 25%;
     bottom:10%;
     left: 2.5%;
