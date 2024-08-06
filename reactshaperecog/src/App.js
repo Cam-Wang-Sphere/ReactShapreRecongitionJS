@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 // import Menu from "./components/Menu";
 import "./App.css";
+import Gyroscope from './components/Gyroscope';
+
 //#region ShapeRecognition
  //// Shape recognition below ////
 
@@ -405,6 +407,7 @@ function AppendNexInput(X,Y)
 
   localStorage.setItem(UserInputKey, newInputString);
 }
+  
 
 
 const canvasWidth = window.innerHeight;
@@ -649,19 +652,20 @@ function App() {
 	}
 	}
 
-    return (
+	return (
       <div className="App">
         <div>
           <section class="ipcon">   
           <h1>Drawing of the Dead Web</h1>
           <input type="text" id="ipAddress" defaultValue="10.232.64.22" />
           <button onClick={connectToServer}>Connect</button>
+		  <Gyroscope />
           </section>
         </div>  
 
         <span class="resultText">{drawResult}</span>
         <span class="resultText">{scoreText}</span>
-        
+		
         <div className="draw-area">
             <canvas
                 onMouseDown={startDrawing}
@@ -675,7 +679,6 @@ function App() {
                 height={canvasHeight}
             />
         </div>
-
       </div>
   );
 
