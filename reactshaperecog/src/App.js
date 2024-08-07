@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 // import Menu from "./components/Menu";
 import "./App.css";
 import Gyroscope from './components/Gyroscope';
+import NameEntry from './components/NameEntry';
 
 //#region ShapeRecognition
  //// Shape recognition below ////
@@ -665,6 +666,7 @@ function App() {
           <h1>Drawing of the Dead Web</h1>
           <input type="text" id="ipAddress" defaultValue="10.232.64.22" />
           <button onClick={connectToServer}>Connect</button>
+		  <NameEntry sessionId={sessionId}/>
 		  <Gyroscope sessionId={sessionId}/>
           </section>
         </div>  
