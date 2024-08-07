@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-
-const Gyroscope = () => {
+const Gyroscope = ({ sessionId }) => {
 
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);
 
     const sendOrientationRequest = (inPitch, inYaw) => {
-		const message = { id: window.sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
+		const message = { id: sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
 		if (window.currentSocket)
 		{
 			window.currentSocket.send(JSON.stringify(message));
@@ -15,7 +15,7 @@ const Gyroscope = () => {
 	}
 
     const sendResetOrientationRequest = () => {
-        const message = { id: window.sessionId, type: 'resetOrientation'};
+        const message = { id: sessionId, type: 'resetOrientation'};
         if (window.currentSocket)
         {
             window.currentSocket.send(JSON.stringify(message));
@@ -66,7 +66,7 @@ const Gyroscope = () => {
     }, []);
 
     return (
-        <section class="ipcon">   
+        <section className="ipcon">   
         <div>
 			<div>
 				<button onClick={startRecording}>Start IMU Readings</button>
@@ -82,6 +82,10 @@ const Gyroscope = () => {
         </div>  
         </section>
     )
+}
+
+Gyroscope.propTypes = {
+    sessionId: PropTypes.number.isRequired,
 }
 
 export default Gyroscope;

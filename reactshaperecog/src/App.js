@@ -425,7 +425,10 @@ function App() {
     const [drawResult, setDrawResult] = useState("No Match.");
     const [score, setScore] = useState(0);
     const [scoreText, setScoreText] = useState("Score: ");
+	const [sessionId, setSessionId] = useState(-1);
     const Recognizer = new DollarRecognizer();
+
+	window.sessionId = -1;
 
     // Initialization when the component
     // mounts for the first time
@@ -617,7 +620,7 @@ function App() {
 
 		var socket = new WebSocket("wss://" + ip + ":3004");
 
-		window.sessionId = -1;
+		
 
 		socket.onopen = function () {
 			alert("Connected to websocket with ip = " + ip);
@@ -633,6 +636,8 @@ function App() {
 			const obj = JSON.parse(event.data)
 			if (obj.type == "login") {
 				window.SessionId = obj.value;
+				setSessionId(obj.value);
+				console.log("set SessionId to = " + window.SessionId);
 			}
 			if (obj.type == "team") {
 				SetTeamLineColor(obj.value);
@@ -656,16 +661,16 @@ function App() {
 	return (
       <div className="App">
         <div>
-          <section class="ipcon">   
+          <section className="ipcon">   
           <h1>Drawing of the Dead Web</h1>
           <input type="text" id="ipAddress" defaultValue="10.232.64.22" />
           <button onClick={connectToServer}>Connect</button>
-		  <Gyroscope />
+		  <Gyroscope sessionId={sessionId}/>
           </section>
         </div>  
 
-        <span class="resultText">{drawResult}</span>
-        <span class="resultText">{scoreText}</span>
+        <span className="resultText">{drawResult}</span>
+        <span className="resultText">{scoreText}</span>
 		
         <div className="draw-area">
             <canvas
