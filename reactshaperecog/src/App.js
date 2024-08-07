@@ -5,6 +5,9 @@ import "./App.css";
 import Gyroscope from './components/Gyroscope';
 import NameEntry from './components/NameEntry';
 
+// hello world from sphere Nathan
+
+
 //#region ShapeRecognition
  //// Shape recognition below ////
 
@@ -691,8 +694,6 @@ function App() {
   );
 
   // <button type="button" onClick={AddSetScore}>Add Template</button>
-
-
     
 }
 
