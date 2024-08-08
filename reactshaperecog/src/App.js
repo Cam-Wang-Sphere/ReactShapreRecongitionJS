@@ -1,11 +1,16 @@
 // App.js
 import { useEffect, useRef, useState } from "react";
 // import Menu from "./components/Menu";
+// import { flatbuffers } from 'flatbuffers';
 import "./App.css";
 import Gyroscope from './components/Gyroscope';
 import NameEntry from './components/NameEntry';
 
 // hello world from sphere Nathan
+const flatbuffers = require('flatbuffers');
+const PingServerRequest = require('./generated/dot-dschema/ping-server-request');
+const FlatBufferType = require('./generated/dot-dschema/flat-buffer-type');
+const Message = require('./generated/dot-dschema/message');
 
 
 //#region ShapeRecognition
@@ -411,6 +416,27 @@ function AppendNexInput(X,Y)
 
   localStorage.setItem(UserInputKey, newInputString);
 }
+
+function FlatbufferPingTest(inSessionId)
+{
+  const builder = new flatbuffers.Builder(1024);
+
+  PingServerRequest.PingServerRequest.startPingServerRequest(builder);
+  PingServerRequest.PingServerRequest.addSessionId(builder, inSessionId);
+  const pingServerRequest = PingServerRequest.PingServerRequest.endPingServerRequest(builder);
+
+  FlatBufferType.FlatBufferType.startFlatBufferType(builder);
+  FlatBufferType.FlatBufferType.addMessageType(builder, 1);
+  FlatBufferType.FlatBufferType.addMessage(builder, pingServerRequest);
+  const typeWrapper = FlatBufferType.FlatBufferType.endFlatBufferType(builder);
+
+  builder.finish(typeWrapper);
+
+  const buf = builder.asUint8Array();
+  console.log('Flatbuffer created:', buf);
+
+  window.currentSocket.send(buf);
+}
   
 
 
@@ -616,6 +642,9 @@ function App() {
 	//  @TODO NATHAN: move to seperate react component...
 	//
 	function connectToServer() {
+
+    
+
 		let ip = document.getElementById("ipAddress").value;
 		if (ip.trim() === "") {
 			alert("Empty IP address");
@@ -639,9 +668,11 @@ function App() {
 
 			const obj = JSON.parse(event.data)
 			if (obj.type == "login") {
-				window.SessionId = obj.value;
+				window.sessionId = obj.value;
 				setSessionId(obj.value);
-				console.log("set SessionId to = " + window.SessionId);
+				console.log("set SessionId to = " + window.sessionId);
+
+        FlatbufferPingTest(window.sessionId);
 			}
 			if (obj.type == "team") {
 				SetTeamLineColor(obj.value);
