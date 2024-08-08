@@ -6,7 +6,7 @@ const Gyroscope = ({ sessionId }) => {
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);
 
-    const sendOrientationRequest = (inPitch, inYaw) => {
+    const sendOrientationRequest = (inPitch: number, inYaw: number) => {
 		const message = { id: sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
 		if (window.currentSocket)
 		{
