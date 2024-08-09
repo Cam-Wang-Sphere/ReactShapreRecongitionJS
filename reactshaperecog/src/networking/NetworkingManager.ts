@@ -117,6 +117,11 @@ export class NetworkingManager extends EventEmitter {
         this.socket?.send(JSON.stringify(message));
     }
 
+    sendWillMessage = () => {
+        const message = {id: this.sessionId, type: 'Will', value: 'hello'};
+        this.socket?.send(JSON.stringify(message));
+    }
+
     protected handleMessage = (data: any) =>
     {
         if (typeof data === 'string')
@@ -181,13 +186,14 @@ export class NetworkingManager extends EventEmitter {
         const MediaPlaneToMobileLoginResponseMessage = new MediaPlaneToMobileLoginResponse();
         typeWrapper.message(MediaPlaneToMobileLoginResponseMessage);
 
-        const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId;
-        const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId;
+        const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId();
+        const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId();
 
         console.log('received teamId = ', correspondingTeamId, 'for sessionId = ', correspondingSessionId);
 
         // @NOTE NATHAN: this is actually awesome... we need something like this in Unreal !
-        this.emit(Message.MediaPlaneToMobileLoginResponse, correspondingSessionId, correspondingTeamId);
+        console.log('emit string = ', Message.MediaPlaneToMobileLoginResponse.toString());
+        this.emit(Message.MediaPlaneToMobileLoginResponse.toString(), correspondingTeamId);
     }
 
     protected handleClientLoginResponse = (typeWrapper: FlatBufferType) =>
@@ -199,6 +205,6 @@ export class NetworkingManager extends EventEmitter {
 
         console.log('received sessionId = ', this.sessionId);
 
-        this.emit(Message.ClientLoginResponse, this.sessionId);
+        this.emit(Message.ClientLoginResponse.toString(), this.sessionId);
     }
 }

@@ -8,6 +8,8 @@ import Gyroscope from './components/Gyroscope';
 import NameEntry from './components/NameEntry';
 import ConnectWidget from './components/ConnectWidget';
 import { NetworkingManager } from './networking/NetworkingManager';
+import { MediaPlaneToMobileLoginResponse } from './schema/dot-dschema/media-plane-to-mobile-login-response';
+import { Message } from './schema/dot-dschema/message';
 
 //#region ShapeRecognition
  //// Shape recognition below ////
@@ -429,17 +431,31 @@ const App = () =>
   const [drawResult, setDrawResult] = useState("No Match.");
   const [score, setScore] = useState(0);
   const [scoreText, setScoreText] = useState("Score: ");
-	const [sessionId, setSessionId] = useState(-1);
   const Recognizer = new DollarRecognizer();
 
   // networking stuff
   const [networkingManager, setNetworkingManager] = useState<NetworkingManager | null>(null);
+
+  const HandleLineColor = (teamId: number) =>
+    {
+      console.log('received teamid = ', teamId, ' from event emit');
+    }
+
+  const setupNetworkingBindings = (inNetworkingManager: NetworkingManager) =>
+  {
+    if (networkingManager)
+    {
+      networkingManager.addListener(Message.MediaPlaneToMobileLoginResponse.toString(), HandleLineColor);
+      console.log('setup bindings');
+    }
+  }
 
   // networking function
   // to be passed in as a prop to a component
   const connectToServer = (address: string) =>
   {
     const newNetworkingManager = new NetworkingManager(address);
+    setupNetworkingBindings(newNetworkingManager);
     newNetworkingManager.connect().then(() =>
     {
       setNetworkingManager(newNetworkingManager);
@@ -607,7 +623,9 @@ const App = () =>
       SetTeamLineColor(1);
     };
 
-    const SetTeamLineColor = (x) => {
+    const SetTeamLineColor = (x: number) => {
+
+      console.log('setting team line color to = ', x)
       switch(x)
       {
         case 0:
