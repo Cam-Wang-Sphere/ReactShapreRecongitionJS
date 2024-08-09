@@ -6,6 +6,7 @@ import { PingServerRequest } from '../schema/dot-dschema/ping-server-request';
 import { EventEmitter } from 'events';
 import { MediaPlaneLoginRequest } from '../schema/dot-dschema/media-plane-login-request';
 import { MediaPlaneToMobileLoginResponse } from '../schema/dot-dschema/media-plane-to-mobile-login-response';
+import { ClientLoginResponse } from '../schema/dot-dschema/client-login-response';
 
 export class NetworkingManager extends EventEmitter {
 
@@ -22,6 +23,10 @@ export class NetworkingManager extends EventEmitter {
         return new Promise((resolve, reject) =>
         {
             this.socket = new WebSocket(this.url);
+
+            // setting the binary type to an array buffer
+            this.socket.binaryType = 'arraybuffer';
+
             // socket bindings
             this.socket.onopen = () => 
             {
@@ -114,13 +119,15 @@ export class NetworkingManager extends EventEmitter {
 
     protected handleMessage = (data: any) =>
     {
-        if (data instanceof ArrayBuffer) 
+        if (typeof data === 'string')
         {
-            this.handleBinaryMessage(data);
-        }
-        else if (typeof data === 'string')
-        {
+            console.log('received string message');
             this.handleStringMessage(data);
+        }
+        else  // @TODO NATHAN: handle this better. could be ping opcode or pong opcode...
+        {
+            console.log('received binary message');
+            this.handleBinaryMessage(data);
         }
     };
 
@@ -135,11 +142,18 @@ export class NetworkingManager extends EventEmitter {
         const root = FlatBufferType.getRootAsFlatBufferType(buf);
         const messageType = root.messageType();
 
+        console.log('message type = ', messageType);
         switch (messageType)
         {
             case Message.MediaPlaneToMobileLoginResponse:
             {
-                this.handleMediaPlaneToMobileLoginResponse(buf);
+                this.handleMediaPlaneToMobileLoginResponse(root);
+                break;
+            }
+            case Message.ClientLoginResponse:
+            {
+                this.handleClientLoginResponse(root);
+                break;
             }
         }
     };
@@ -162,9 +176,11 @@ export class NetworkingManager extends EventEmitter {
     };
 
     // binary handlers
-    protected handleMediaPlaneToMobileLoginResponse = (buf: flatbuffers.ByteBuffer) =>
+    protected handleMediaPlaneToMobileLoginResponse = (typeWrapper: FlatBufferType) =>
     {
-        const MediaPlaneToMobileLoginResponseMessage = MediaPlaneToMobileLoginResponse.getRootAsMediaPlaneToMobileLoginResponse(buf);
+        const MediaPlaneToMobileLoginResponseMessage = new MediaPlaneToMobileLoginResponse();
+        typeWrapper.message(MediaPlaneToMobileLoginResponseMessage);
+
         const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId;
         const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId;
 
@@ -172,5 +188,17 @@ export class NetworkingManager extends EventEmitter {
 
         // @NOTE NATHAN: this is actually awesome... we need something like this in Unreal !
         this.emit(Message.MediaPlaneToMobileLoginResponse, correspondingSessionId, correspondingTeamId);
+    }
+
+    protected handleClientLoginResponse = (typeWrapper: FlatBufferType) =>
+    {
+        const clientLoginResponseMessage = new ClientLoginResponse();
+        typeWrapper.message(clientLoginResponseMessage);
+
+        this.sessionId = clientLoginResponseMessage.assignedSessionId();
+
+        console.log('received sessionId = ', this.sessionId);
+
+        this.emit(Message.ClientLoginResponse, this.sessionId);
     }
 }

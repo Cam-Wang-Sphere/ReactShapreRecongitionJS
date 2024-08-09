@@ -18,6 +18,8 @@ export { PingServerRequest } from './dot-dschema/ping-server-request.js';
 export { PingServerResponse } from './dot-dschema/ping-server-response.js';
 export { PingServerUnreliableRequest } from './dot-dschema/ping-server-unreliable-request.js';
 export { PingServerUnreliableResponse } from './dot-dschema/ping-server-unreliable-response.js';
+export { RepeaterBinaryResponse } from './dot-dschema/repeater-binary-response.js';
+export { RepeaterBroadcastBinaryResponse } from './dot-dschema/repeater-broadcast-binary-response.js';
 export { RepeaterLoginRequest } from './dot-dschema/repeater-login-request.js';
 export { ScoreUpdateResponse } from './dot-dschema/score-update-response.js';
 export { ShapeRequest } from './dot-dschema/shape-request.js';

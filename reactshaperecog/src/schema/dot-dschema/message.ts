@@ -16,6 +16,8 @@ import { PingServerRequest } from '../dot-dschema/ping-server-request.js';
 import { PingServerResponse } from '../dot-dschema/ping-server-response.js';
 import { PingServerUnreliableRequest } from '../dot-dschema/ping-server-unreliable-request.js';
 import { PingServerUnreliableResponse } from '../dot-dschema/ping-server-unreliable-response.js';
+import { RepeaterBinaryResponse } from '../dot-dschema/repeater-binary-response.js';
+import { RepeaterBroadcastBinaryResponse } from '../dot-dschema/repeater-broadcast-binary-response.js';
 import { RepeaterLoginRequest } from '../dot-dschema/repeater-login-request.js';
 import { ScoreUpdateResponse } from '../dot-dschema/score-update-response.js';
 import { ShapeRequest } from '../dot-dschema/shape-request.js';
@@ -43,17 +45,19 @@ export enum Message {
   RepeaterLoginRequest = 15,
   WebClientLoginRequest = 16,
   WebClientLoginResponse = 17,
-  ShapeRequest = 18,
-  ShapeResponse = 19,
-  ScoreUpdateResponse = 20,
-  HealthPercentResponse = 21,
-  MediaPlaneToMobileLoginResponse = 22
+  RepeaterBinaryResponse = 18,
+  RepeaterBroadcastBinaryResponse = 19,
+  ShapeRequest = 20,
+  ShapeResponse = 21,
+  ScoreUpdateResponse = 22,
+  HealthPercentResponse = 23,
+  MediaPlaneToMobileLoginResponse = 24
 }
 
 export function unionToMessage(
   type: Message,
-  accessor: (obj:ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse) => ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null
-): ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null {
+  accessor: (obj:ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse) => ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null
+): ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(new PingServerRequest())! as PingServerRequest;
@@ -73,6 +77,8 @@ export function unionToMessage(
     case 'RepeaterLoginRequest': return accessor(new RepeaterLoginRequest())! as RepeaterLoginRequest;
     case 'WebClientLoginRequest': return accessor(new WebClientLoginRequest())! as WebClientLoginRequest;
     case 'WebClientLoginResponse': return accessor(new WebClientLoginResponse())! as WebClientLoginResponse;
+    case 'RepeaterBinaryResponse': return accessor(new RepeaterBinaryResponse())! as RepeaterBinaryResponse;
+    case 'RepeaterBroadcastBinaryResponse': return accessor(new RepeaterBroadcastBinaryResponse())! as RepeaterBroadcastBinaryResponse;
     case 'ShapeRequest': return accessor(new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(new ShapeResponse())! as ShapeResponse;
     case 'ScoreUpdateResponse': return accessor(new ScoreUpdateResponse())! as ScoreUpdateResponse;
@@ -84,9 +90,9 @@ export function unionToMessage(
 
 export function unionListToMessage(
   type: Message, 
-  accessor: (index: number, obj:ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse) => ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null, 
+  accessor: (index: number, obj:ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse) => ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null, 
   index: number
-): ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null {
+): ClientLoginResponse|HealthPercentResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MediaPlaneToMobileLoginResponse|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ScoreUpdateResponse|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(index, new PingServerRequest())! as PingServerRequest;
@@ -106,6 +112,8 @@ export function unionListToMessage(
     case 'RepeaterLoginRequest': return accessor(index, new RepeaterLoginRequest())! as RepeaterLoginRequest;
     case 'WebClientLoginRequest': return accessor(index, new WebClientLoginRequest())! as WebClientLoginRequest;
     case 'WebClientLoginResponse': return accessor(index, new WebClientLoginResponse())! as WebClientLoginResponse;
+    case 'RepeaterBinaryResponse': return accessor(index, new RepeaterBinaryResponse())! as RepeaterBinaryResponse;
+    case 'RepeaterBroadcastBinaryResponse': return accessor(index, new RepeaterBroadcastBinaryResponse())! as RepeaterBroadcastBinaryResponse;
     case 'ShapeRequest': return accessor(index, new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(index, new ShapeResponse())! as ShapeResponse;
     case 'ScoreUpdateResponse': return accessor(index, new ScoreUpdateResponse())! as ScoreUpdateResponse;

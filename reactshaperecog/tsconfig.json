@@ -9,6 +9,6 @@
     },
     "compileOnSave": false,
     "include": [
-        "src/schema/*.ts"
+        "./src/schema/*.ts"
     ]
 }

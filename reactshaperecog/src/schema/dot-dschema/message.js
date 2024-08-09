@@ -20,6 +20,8 @@ var ping_server_request_js_1 = require("../dot-dschema/ping-server-request.js");
 var ping_server_response_js_1 = require("../dot-dschema/ping-server-response.js");
 var ping_server_unreliable_request_js_1 = require("../dot-dschema/ping-server-unreliable-request.js");
 var ping_server_unreliable_response_js_1 = require("../dot-dschema/ping-server-unreliable-response.js");
+var repeater_binary_response_js_1 = require("../dot-dschema/repeater-binary-response.js");
+var repeater_broadcast_binary_response_js_1 = require("../dot-dschema/repeater-broadcast-binary-response.js");
 var repeater_login_request_js_1 = require("../dot-dschema/repeater-login-request.js");
 var score_update_response_js_1 = require("../dot-dschema/score-update-response.js");
 var shape_request_js_1 = require("../dot-dschema/shape-request.js");
@@ -46,11 +48,13 @@ var Message;
     Message[Message["RepeaterLoginRequest"] = 15] = "RepeaterLoginRequest";
     Message[Message["WebClientLoginRequest"] = 16] = "WebClientLoginRequest";
     Message[Message["WebClientLoginResponse"] = 17] = "WebClientLoginResponse";
-    Message[Message["ShapeRequest"] = 18] = "ShapeRequest";
-    Message[Message["ShapeResponse"] = 19] = "ShapeResponse";
-    Message[Message["ScoreUpdateResponse"] = 20] = "ScoreUpdateResponse";
-    Message[Message["HealthPercentResponse"] = 21] = "HealthPercentResponse";
-    Message[Message["MediaPlaneToMobileLoginResponse"] = 22] = "MediaPlaneToMobileLoginResponse";
+    Message[Message["RepeaterBinaryResponse"] = 18] = "RepeaterBinaryResponse";
+    Message[Message["RepeaterBroadcastBinaryResponse"] = 19] = "RepeaterBroadcastBinaryResponse";
+    Message[Message["ShapeRequest"] = 20] = "ShapeRequest";
+    Message[Message["ShapeResponse"] = 21] = "ShapeResponse";
+    Message[Message["ScoreUpdateResponse"] = 22] = "ScoreUpdateResponse";
+    Message[Message["HealthPercentResponse"] = 23] = "HealthPercentResponse";
+    Message[Message["MediaPlaneToMobileLoginResponse"] = 24] = "MediaPlaneToMobileLoginResponse";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -72,6 +76,8 @@ function unionToMessage(type, accessor) {
         case 'RepeaterLoginRequest': return accessor(new repeater_login_request_js_1.RepeaterLoginRequest());
         case 'WebClientLoginRequest': return accessor(new web_client_login_request_js_1.WebClientLoginRequest());
         case 'WebClientLoginResponse': return accessor(new web_client_login_response_js_1.WebClientLoginResponse());
+        case 'RepeaterBinaryResponse': return accessor(new repeater_binary_response_js_1.RepeaterBinaryResponse());
+        case 'RepeaterBroadcastBinaryResponse': return accessor(new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
         case 'ShapeRequest': return accessor(new shape_request_js_1.ShapeRequest());
         case 'ShapeResponse': return accessor(new shape_response_js_1.ShapeResponse());
         case 'ScoreUpdateResponse': return accessor(new score_update_response_js_1.ScoreUpdateResponse());
@@ -100,6 +106,8 @@ function unionListToMessage(type, accessor, index) {
         case 'RepeaterLoginRequest': return accessor(index, new repeater_login_request_js_1.RepeaterLoginRequest());
         case 'WebClientLoginRequest': return accessor(index, new web_client_login_request_js_1.WebClientLoginRequest());
         case 'WebClientLoginResponse': return accessor(index, new web_client_login_response_js_1.WebClientLoginResponse());
+        case 'RepeaterBinaryResponse': return accessor(index, new repeater_binary_response_js_1.RepeaterBinaryResponse());
+        case 'RepeaterBroadcastBinaryResponse': return accessor(index, new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
         case 'ShapeRequest': return accessor(index, new shape_request_js_1.ShapeRequest());
         case 'ShapeResponse': return accessor(index, new shape_response_js_1.ShapeResponse());
         case 'ScoreUpdateResponse': return accessor(index, new score_update_response_js_1.ScoreUpdateResponse());
