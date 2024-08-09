@@ -1,17 +1,13 @@
 // App.js
 import { useEffect, useRef, useState } from "react";
+import React from 'react';
 // import Menu from "./components/Menu";
 // import { flatbuffers } from 'flatbuffers';
 import "./App.css";
 import Gyroscope from './components/Gyroscope';
 import NameEntry from './components/NameEntry';
-
-// hello world from sphere Nathan
-const flatbuffers = require('flatbuffers');
-const PingServerRequest = require('./generated/dot-dschema/ping-server-request');
-const FlatBufferType = require('./generated/dot-dschema/flat-buffer-type');
-const Message = require('./generated/dot-dschema/message');
-
+import ConnectWidget from './components/ConnectWidget';
+import { NetworkingManager } from './networking/NetworkingManager';
 
 //#region ShapeRecognition
  //// Shape recognition below ////
@@ -417,48 +413,42 @@ function AppendNexInput(X,Y)
   localStorage.setItem(UserInputKey, newInputString);
 }
 
-function FlatbufferPingTest(inSessionId)
-{
-  const builder = new flatbuffers.Builder(1024);
-
-  PingServerRequest.PingServerRequest.startPingServerRequest(builder);
-  PingServerRequest.PingServerRequest.addSessionId(builder, inSessionId);
-  const pingServerRequest = PingServerRequest.PingServerRequest.endPingServerRequest(builder);
-
-  FlatBufferType.FlatBufferType.startFlatBufferType(builder);
-  FlatBufferType.FlatBufferType.addMessageType(builder, 1);
-  FlatBufferType.FlatBufferType.addMessage(builder, pingServerRequest);
-  const typeWrapper = FlatBufferType.FlatBufferType.endFlatBufferType(builder);
-
-  builder.finish(typeWrapper);
-
-  const buf = builder.asUint8Array();
-  console.log('Flatbuffer created:', buf);
-
-  window.currentSocket.send(buf);
-}
-  
-
-
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
 
-function App() {
-    const canvasRef = useRef(null);
-    const ctxRef = useRef(null);
-    const canvasRect = useRef(null);
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [lineWidth, /*setLineWidth*/] = useState(5);
-    const [lineColor, setLineColor] = useState("black");
-    const [lineOpacity, /*setLineOpacity*/] = useState(1.0);
-    const [drawResult, setDrawResult] = useState("No Match.");
-    const [score, setScore] = useState(0);
-    const [scoreText, setScoreText] = useState("Score: ");
+const App = () =>
+{
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const canvasRect = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [lineWidth, /*setLineWidth*/] = useState(5);
+  const [lineColor, setLineColor] = useState("black");
+  const [lineOpacity, /*setLineOpacity*/] = useState(1.0);
+  const [drawResult, setDrawResult] = useState("No Match.");
+  const [score, setScore] = useState(0);
+  const [scoreText, setScoreText] = useState("Score: ");
 	const [sessionId, setSessionId] = useState(-1);
-    const Recognizer = new DollarRecognizer();
+  const Recognizer = new DollarRecognizer();
 
-	window.sessionId = -1;
+  // networking stuff
+  const [networkingManager, setNetworkingManager] = useState<NetworkingManager | null>(null);
+
+  // networking function
+  // to be passed in as a prop to a component
+  const connectToServer = (address: string) =>
+  {
+    const newNetworkingManager = new NetworkingManager(address);
+    newNetworkingManager.connect().then(() =>
+    {
+      setNetworkingManager(newNetworkingManager);
+    })
+    .catch(() =>
+    {
+      console.log('failed to connect');
+    })
+  }
 
     // Initialization when the component
     // mounts for the first time
@@ -534,7 +524,8 @@ function App() {
           if(DrawResult.Score >= 0.5)
           {
             let enumResult = ShapeToEnum[DrawResult.Name];
-			sendShapeRequest(enumResult);
+			      // sendShapeRequest(enumResult);
+            networkingManager?.sendShapeRequest(enumResult);
             setDrawResult(DrawResult.Name);
           }
           else
@@ -637,71 +628,13 @@ function App() {
       }
     };
 
-	//
-	//	ConnectToServer functionality
-	//  @TODO NATHAN: move to seperate react component...
-	//
-	function connectToServer() {
-
-    
-
-		let ip = document.getElementById("ipAddress").value;
-		if (ip.trim() === "") {
-			alert("Empty IP address");
-			return;
-		}
-
-		var socket = new WebSocket("wss://" + ip + ":3004");
-
-		
-
-		socket.onopen = function () {
-			alert("Connected to websocket with ip = " + ip);
-		};
-
-		socket.onerror = function () {
-			alert("Could not connect to ip = " + ip);
-		};
-
-		socket.onmessage = function (event) {
-			console.log("Received message = ", event.data);
-
-			const obj = JSON.parse(event.data)
-			if (obj.type == "login") {
-				window.sessionId = obj.value;
-				setSessionId(obj.value);
-				console.log("set SessionId to = " + window.sessionId);
-
-        FlatbufferPingTest(window.sessionId);
-			}
-			if (obj.type == "team") {
-				SetTeamLineColor(obj.value);
-			}
-			// @TODO NATHAN: more handlers here...
-		};
-
-		window.currentSocket = socket;
-	}
-	//
-	// Function to send shape request
-	//
-	function sendShapeRequest(shape_int) {
-		const message = { id: window.SessionId, type: "shape", value: shape_int };
-	if(window.currentSocket)
-	{
-		window.currentSocket.send(JSON.stringify(message));
-	}
-	}
-
 	return (
       <div className="App">
         <div>
           <section className="ipcon">   
-          <h1>Drawing of the Dead Web</h1>
-          <input type="text" id="ipAddress" defaultValue="10.232.64.22" />
-          <button onClick={connectToServer}>Connect</button>
-		  <NameEntry sessionId={sessionId}/>
-		  <Gyroscope sessionId={sessionId}/>
+            <h1>Drawing of the Dead Web</h1>
+            <ConnectWidget connectFunction={connectToServer}/>
+            <NameEntry inNetworkingManager={networkingManager}/>
           </section>
         </div>  
 

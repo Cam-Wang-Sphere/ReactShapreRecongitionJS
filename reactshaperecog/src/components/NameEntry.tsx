@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { NetworkingManager } from "./../networking/NetworkingManager";
 
-const NameEntry = ({ sessionId }) => {
+interface NameEntryProps
+{
+    inNetworkingManager: NetworkingManager;
+}
+
+const NameEntry = ({ inNetworkingManager }) => {
 
     const [name, setName] = useState('');
 
-    const handleNameChange = (event) => {
+    const handleNameChange = (event : any) => {
         setName(event.target.value);
     }
 
     const sendNameRequest = () => {
-        const message = { id: sessionId, type: "name", value: name};
-		if (window.currentSocket)
-		{
-			window.currentSocket.send(JSON.stringify(message));
-		}
+        inNetworkingManager.sendNameRequestString(name);
     }
 
     return (
@@ -27,10 +28,6 @@ const NameEntry = ({ sessionId }) => {
         </div>  
         </section>
     )
-}
-
-NameEntry.propTypes = {
-    sessionId: PropTypes.number.isRequired,
 }
 
 export default NameEntry;

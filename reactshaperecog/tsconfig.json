@@ -5,9 +5,10 @@
       "strict": true,
       "outDir": "./src/generated",
       "rootDir": "./src/schema",
-      "sourceMap": true
+      "sourceMap": true,
     },
+    "compileOnSave": false,
     "include": [
-        "src/**/*.ts",
+        "src/schema/*.ts"
     ]
 }

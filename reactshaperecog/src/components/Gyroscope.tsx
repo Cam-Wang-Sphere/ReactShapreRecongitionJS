@@ -1,34 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { NetworkingManager } from "./../networking/NetworkingManager";
 
-const Gyroscope = ({ sessionId }) => {
+interface NameEntryProps
+{
+    inNetworkingManager: NetworkingManager;
+}
+
+const Gyroscope = ({ inNetworkingManager }) => {
 
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);
 
-    const sendOrientationRequest = (inPitch: number, inYaw: number) => {
-		const message = { id: sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
-		if (window.currentSocket)
-		{
-			window.currentSocket.send(JSON.stringify(message));
-		}
-	}
-
-    const sendResetOrientationRequest = () => {
-        const message = { id: sessionId, type: 'resetOrientation'};
-        if (window.currentSocket)
-        {
-            window.currentSocket.send(JSON.stringify(message));
-        }
-    }
-
-    const handleOrientationEvent = (event) => {
+    const handleOrientationEvent = (event: any) => {
         setOrientation({
             yaw: event.alpha ? event.alpha.toFixed(2) : 0,
             pitch: event.beta ? event.beta.toFixed(2) : 0,
             roll: event.gamma ? event.gamma.toFixed(2) : 0,
         });
-        sendOrientationRequest(event.beta, event.alpha);
+        inNetworkingManager?.sendOrientationRequestString(event.beta, event.alpha);
     };
 
     const startRecording = () => {
@@ -77,15 +66,11 @@ const Gyroscope = ({ sessionId }) => {
 			</div>
             
             <div>
-                <button onClick={sendResetOrientationRequest}>Reset Pointer</button>
+                <button onClick={inNetworkingManager?.SendResetOrientationRequestString}>Reset Pointer</button>
             </div>
         </div>  
         </section>
     )
-}
-
-Gyroscope.propTypes = {
-    sessionId: PropTypes.number.isRequired,
 }
 
 export default Gyroscope;
