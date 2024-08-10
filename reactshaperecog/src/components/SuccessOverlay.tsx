@@ -13,6 +13,7 @@ const SuccessOverlay = ({ inNetworkingManager }) =>
 
     // @TODO NATHAN: cvar?
     const flashBangTime = 200; // in milliseconds
+    const hapticTime = 100; // in milliseconds
 
     useEffect(() =>
     {
@@ -21,6 +22,12 @@ const SuccessOverlay = ({ inNetworkingManager }) =>
             if (inScore < 0)
             {
                 return;
+            }
+
+            // playing haptics if possible
+            if ('vibrate' in navigator)
+            {
+                navigator.vibrate(hapticTime);
             }
 
             setIsVisible(true);
@@ -50,6 +57,7 @@ const SuccessOverlay = ({ inNetworkingManager }) =>
         backgroundColor: 'rgba(0, 128, 0, 0.6)',  // last parameter is translucency
         display: isVisible ? 'block' : 'none',
         zIndex: 9999,
+        pointerEvents: 'none',
     } as const;
 
     return <div style={greenScreenStyle}></div>;
