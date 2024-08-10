@@ -6,11 +6,13 @@ import React from 'react';
 import "./App.css";
 import Gyroscope from './components/Gyroscope';
 import NameEntry from './components/NameEntry';
+import SuccessOverlay from "./components/SuccessOverlay";
+import ScoreWidget from "./components/ScoreWidget";
 import ConnectWidget from './components/ConnectWidget';
 import { NetworkingManager } from './networking/NetworkingManager';
 import { MediaPlaneToMobileLoginResponse } from './schema/dot-dschema/media-plane-to-mobile-login-response';
 import { Message } from './schema/dot-dschema/message';
-import SuccessOverlay from "./components/SuccessOverlay";
+
 
 //#region ShapeRecognition
  //// Shape recognition below ////
@@ -659,7 +661,7 @@ const App = () =>
 
         <SuccessOverlay inNetworkingManager={networkingManager}/>
         <span className="resultText">{drawResult}</span>
-        <span className="resultText">{scoreText}</span>
+        <ScoreWidget inNetworkingManager={networkingManager}/>
 		
         <div className="draw-area">
             <canvas
