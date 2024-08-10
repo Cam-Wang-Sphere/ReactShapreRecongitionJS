@@ -10,6 +10,7 @@ import ConnectWidget from './components/ConnectWidget';
 import { NetworkingManager } from './networking/NetworkingManager';
 import { MediaPlaneToMobileLoginResponse } from './schema/dot-dschema/media-plane-to-mobile-login-response';
 import { Message } from './schema/dot-dschema/message';
+import SuccessOverlay from "./components/SuccessOverlay";
 
 //#region ShapeRecognition
  //// Shape recognition below ////
@@ -656,6 +657,7 @@ const App = () =>
           </section>
         </div>  
 
+        <SuccessOverlay inNetworkingManager={networkingManager}/>
         <span className="resultText">{drawResult}</span>
         <span className="resultText">{scoreText}</span>
 		

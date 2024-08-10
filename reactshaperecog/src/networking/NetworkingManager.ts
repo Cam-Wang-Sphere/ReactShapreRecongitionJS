@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { MediaPlaneLoginRequest } from '../schema/dot-dschema/media-plane-login-request';
 import { MediaPlaneToMobileLoginResponse } from '../schema/dot-dschema/media-plane-to-mobile-login-response';
 import { ClientLoginResponse } from '../schema/dot-dschema/client-login-response';
+import { ScoreUpdateResponse } from '../schema/dot-dschema/score-update-response';
 
 export class NetworkingManager extends EventEmitter {
 
@@ -160,6 +161,11 @@ export class NetworkingManager extends EventEmitter {
                 this.handleClientLoginResponse(root);
                 break;
             }
+            case Message.ScoreUpdateResponse:
+            {
+                this.handleScoreUpdateResponse(root);
+                break;
+            }
         }
     };
 
@@ -206,5 +212,16 @@ export class NetworkingManager extends EventEmitter {
         console.log('received sessionId = ', this.sessionId);
 
         this.emit(Message.ClientLoginResponse.toString(), this.sessionId);
+    }
+
+    protected handleScoreUpdateResponse = (typeWrapper: FlatBufferType) =>
+    {
+        const scoreUpdateResponse = new ScoreUpdateResponse();
+        typeWrapper.message(scoreUpdateResponse);
+
+        const receivedScore = scoreUpdateResponse.score();
+        console.log('received score update response. ' + scoreUpdateResponse.score());
+
+        this.emit(Message.ScoreUpdateResponse.toString(), receivedScore);
     }
 }
