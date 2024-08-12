@@ -167,6 +167,7 @@ const App = () => {
     Volcano: 4,
     Lava: 5,
     Triangle: 5,
+    Parenthesis: 2
   };
 
   // Function for ending the drawing
