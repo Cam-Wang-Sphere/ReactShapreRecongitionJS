@@ -7,7 +7,7 @@ interface ScoreWidgetProps
     inNetworkingManager: NetworkingManager;
 }
 
-const ScoreWidget = ({ inNetworkingManager }) =>
+const ScoreWidget = ({ inNetworkingManager }): ScoreWidgetProps =>
 {
     const [score, setScore] = useState(0);
 
