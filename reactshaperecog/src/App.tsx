@@ -101,14 +101,7 @@ const App = () => {
   // to be passed in as a prop to a component
   const connectToServer = (address: string) => {
 
-    templateManager.LoadTemplates()
-    .then((result) => {
-      for(let i = 0; i < result.length; i++)
-      {
-        console.log(result[i]);
-        Recognizer.AddGesture(result[i]);
-      }
-    });
+
 
     const newNetworkingManager = new NetworkingManager(address);
     setupNetworkingBindings(newNetworkingManager);
@@ -125,6 +118,15 @@ const App = () => {
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
+
+    templateManager.LoadTemplates()
+    .then((result) => {
+      for(let i = 0; i < result.length; i++)
+      {
+        Recognizer.AddGesture(result[i]);
+      }
+    });
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
