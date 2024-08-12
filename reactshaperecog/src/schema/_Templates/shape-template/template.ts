@@ -2,7 +2,7 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { Vec2 } from '../shape-template/vec2.js';
+import { Vec2 } from '../shape-template/vec2.ts';
 
 
 export class Template {
