@@ -20,16 +20,13 @@ export class TemplateManager {
 
         if(typeof Input === 'string'){
             const Builder = new flatbuffers.Builder(256);
-            Template.startTemplate(Builder);
 
             const JsonInput = JSON.parse(Input);
 
-            let i: number;
-            let MyOffsetList: flatbuffers.Offset[] = [];
-
-
+            // Build array
             Template.startPointsVector(Builder, JsonInput['Input'].length);
 
+            let i: number;
             for(i = JsonInput['Input'].length - 1; i >= 0 ; i--)
             {
                 let X = JsonInput['Input'][i]['x'];
@@ -40,15 +37,37 @@ export class TemplateManager {
 
             const PointsOffset = Builder.endVector();
 
-            Template.addPoints(Builder,PointsOffset);
-            
+            // Create the string
             const TempString = Builder.createString(TemplateName);
+
+            // Start the template object building
+            Template.startTemplate(Builder);
+
+            // Add points and name
+            Template.addPoints(Builder,PointsOffset);
             Template.addName(Builder, TempString);
 
+            // Get the offset for the finish template
             const TemplateOffset = Template.endTemplate(Builder);
 
-            const Built = Builder.finish(TemplateOffset);
+            Builder.finish(TemplateOffset);
+            const Built = Builder.asUint8Array();
+
+            this.LoadTemplate(Built);
         }
+    }
+
+    LoadTemplate = (Data: Uint8Array) => {
+
+        // Log the result
+        console.log(Data);
+
+        const buf = new flatbuffers.ByteBuffer(Data);
+
+        const template = Template.getRootAsTemplate(buf);
+
+        const newName = template.name();
+        console.log(newName);
     }
 }
 
