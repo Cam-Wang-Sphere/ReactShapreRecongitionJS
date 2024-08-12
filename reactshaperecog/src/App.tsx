@@ -19,6 +19,7 @@ import { Message } from "./schema/dot-dschema/message";
 import { TemplateManager } from "./Template/TemplateManager";
 import { Result, Point, DollarRecognizer } from "./Template/Recognizer";
 import { HStack, Grid, GridItem, ButtonGroup, Button } from "@chakra-ui/react";
+import AddTemplateWidget from "./components/AddTemplate";
 
 const UserInputKey = "UserInput";
 
@@ -75,7 +76,7 @@ const App = () => {
   const [drawResult, setDrawResult] = useState("No Match.");
   const [score, setScore] = useState(0);
   const [scoreText, setScoreText] = useState("Score: ");
-  const Recognizer = new DollarRecognizer();
+  const [Recognizer] = useState<DollarRecognizer>(new DollarRecognizer());
   const templateManager = new TemplateManager();
 
   // networking stuff
@@ -99,6 +100,16 @@ const App = () => {
   // networking function
   // to be passed in as a prop to a component
   const connectToServer = (address: string) => {
+
+    templateManager.LoadTemplates()
+    .then((result) => {
+      for(let i = 0; i < result.length; i++)
+      {
+        console.log(result[i]);
+        Recognizer.AddGesture(result[i]);
+      }
+    });
+
     const newNetworkingManager = new NetworkingManager(address);
     setupNetworkingBindings(newNetworkingManager);
     newNetworkingManager
@@ -220,35 +231,8 @@ const App = () => {
     ctxRef.current.stroke();
   };
 
-  const AddTemplate = () => {
-    let pointArray = new Array();
-
-    if (storageAvailable("localStorage")) {
-      if (!localStorage.getItem(UserInputKey)) {
-        return;
-      }
-      let existingInputString = localStorage.getItem(UserInputKey);
-
-      let existingInputObj = JSON.parse(existingInputString);
-
-      for (let i = 0; i < existingInputObj["Input"].length; i++) {
-        let X = existingInputObj["Input"][i]["x"];
-        let Y = existingInputObj["Input"][i]["y"];
-
-        pointArray.push(new Point(X, Y));
-      }
-    }
-    let newUnistroke = new Unistroke("Temp", pointArray);
-
-    let newJsonArray = { Points: [] };
-    for (let j = 0; j < newUnistroke.Points.length; j++) {
-      let newPoint = {
-        x: newUnistroke.Points[j].X,
-        y: newUnistroke.Points[j].Y,
-      };
-      newJsonArray["Points"].push(newPoint);
-    }
-    console.log(newJsonArray);
+  const AddTemplate = (TemplateName : string) => {
+    templateManager.SaveTemplate(TemplateName);
   };
 
   const AddScore = (x) => {
@@ -294,6 +278,7 @@ const App = () => {
             <GridItem area="Connections">
               <ConnectWidget connectFunction={connectToServer} />
               <NameEntry inNetworkingManager={networkingManager} />
+              <AddTemplateWidget AddTemplateFunction={AddTemplate} />
             </GridItem>
 
             <GridItem area="InputSelect">
