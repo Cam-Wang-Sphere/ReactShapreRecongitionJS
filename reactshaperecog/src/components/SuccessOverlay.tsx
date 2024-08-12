@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from '../schema/dot-dschema/message';
 
+import SucessSound from '../assets/sounds/SuccessSound.wav';
+import FailSound from "../assets/sounds/IncorrectSound.wav"
+
 interface SuccessOverlayProps
 {
     inNetworkingManager: NetworkingManager;
@@ -14,6 +17,7 @@ const SuccessOverlay = ({ inNetworkingManager }): SuccessOverlayProps =>
     // @TODO NATHAN: cvar?
     const flashBangTime = 200; // in milliseconds
     const hapticTime = 100; // in milliseconds
+    const shouldPlaySounds = true;
 
     useEffect(() =>
     {
@@ -21,6 +25,12 @@ const SuccessOverlay = ({ inNetworkingManager }): SuccessOverlayProps =>
         {
             if (inScore < 0)
             {
+                if (shouldPlaySounds)
+                {
+                    const failAudio = new Audio(FailSound);
+                    failAudio.play();
+                }
+
                 return;
             }
 
@@ -28,6 +38,13 @@ const SuccessOverlay = ({ inNetworkingManager }): SuccessOverlayProps =>
             if ('vibrate' in navigator)
             {
                 navigator.vibrate(hapticTime);
+            }
+
+            // play sounds if possible
+            if (shouldPlaySounds)
+            {
+                const successAudio = new Audio(SucessSound);
+                successAudio.play();
             }
 
             setIsVisible(true);
