@@ -3,6 +3,10 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
-    "framer-motion": "^11.3.24"
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "framer-motion": "^11.3.24",
+    "styled-components": "^6.1.12"
   }
 }
