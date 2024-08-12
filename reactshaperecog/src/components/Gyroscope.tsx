@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { NetworkingManager } from "./../networking/NetworkingManager";
 
-interface NameEntryProps
+interface GyroscopeProps
 {
     inNetworkingManager: NetworkingManager;
 }
 
-const Gyroscope = ({ inNetworkingManager }) => {
+const Gyroscope = ({ inNetworkingManager }): GyroscopeProps => {
 
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);

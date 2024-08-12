@@ -7,7 +7,7 @@ interface SuccessOverlayProps
     inNetworkingManager: NetworkingManager;
 }
 
-const SuccessOverlay = ({ inNetworkingManager }) =>
+const SuccessOverlay = ({ inNetworkingManager }): SuccessOverlayProps =>
 {
     const [isVisible, setIsVisible] = useState(false);
 
