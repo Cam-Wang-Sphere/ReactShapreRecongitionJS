@@ -7,10 +7,10 @@ import FailSound from "../assets/sounds/IncorrectSound.wav"
 
 interface SuccessOverlayProps
 {
-    inNetworkingManager: NetworkingManager;
+    inNetworkingManager: NetworkingManager | null;
 }
 
-const SuccessOverlay = ({ inNetworkingManager }): SuccessOverlayProps =>
+const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) =>
 {
     const [isVisible, setIsVisible] = useState(false);
 

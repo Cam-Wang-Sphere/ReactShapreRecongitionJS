@@ -3,10 +3,10 @@ import { NetworkingManager } from "./../networking/NetworkingManager";
 
 interface GyroscopeProps
 {
-    inNetworkingManager: NetworkingManager;
+    inNetworkingManager: NetworkingManager | null;
 }
 
-const Gyroscope = ({ inNetworkingManager }): GyroscopeProps => {
+const Gyroscope = ({ inNetworkingManager }: GyroscopeProps) => {
 
     const [orientation, setOrientation] = useState({ yaw: 0, pitch: 0, roll: 0});
     const [hasStarted, setHasStarted] = useState(false);

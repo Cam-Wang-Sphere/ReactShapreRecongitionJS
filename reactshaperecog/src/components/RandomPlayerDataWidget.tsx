@@ -4,10 +4,10 @@ import { Message } from '../schema/dot-dschema/message';
 
 interface RandomPlayerDataWidgetProps
 {
-    inNetworkingManager: NetworkingManager;
+    inNetworkingManager: NetworkingManager | null;
 }
 
-const RandomPlayerDataWidget = ({ inNetworkingManager }): RandomPlayerDataWidgetProps =>
+const RandomPlayerDataWidget = ({ inNetworkingManager }: RandomPlayerDataWidgetProps) =>
 {
     const [stringData, setStringData] = useState("");
 

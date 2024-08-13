@@ -216,7 +216,7 @@ const App = () => {
   const [_index, setIndex] = useState(0);
   const inputTypes = [
     <DrawingWidget drawEndFunction={endDrawing} />,
-    <TilesInput />,
+    <TilesInput inNetworkingManager={networkingManager}/>,
     <TapnSlashInput />,
   ];
 
