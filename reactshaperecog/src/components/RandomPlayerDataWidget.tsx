@@ -24,13 +24,13 @@ const RandomPlayerDataWidget = ({ inNetworkingManager }): RandomPlayerDataWidget
         }
 
         inNetworkingManager?.on(Message.ClientDataResponse.toString(), handleClientDataResponse);
-        inNetworkingManager?.on(Message.ClientDataResponse.toString(), resetStringData);
+        inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
 
         // cleaning up
         return () =>
         {
             inNetworkingManager?.off(Message.ClientDataResponse.toString(), handleClientDataResponse);
-            inNetworkingManager?.off(Message.ClientDataResponse.toString(), resetStringData);
+            inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
         };
     }, [inNetworkingManager]);
 

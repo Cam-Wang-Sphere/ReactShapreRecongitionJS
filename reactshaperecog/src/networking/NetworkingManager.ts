@@ -169,7 +169,7 @@ export class NetworkingManager extends EventEmitter {
             }
             case Message.ClientDataResponse:
             {
-                this.handleClientLoginResponse(root);
+                this.handleClientDataResponse(root);
                 break;
             }
         }
