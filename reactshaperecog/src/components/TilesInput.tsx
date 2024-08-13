@@ -88,8 +88,6 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
             >
               {Icon}
             </Box>
-
-            // </animated.div>
           ))}
         </SimpleGrid>
       </animated.div>
