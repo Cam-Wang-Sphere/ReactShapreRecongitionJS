@@ -20,12 +20,13 @@ import { TemplateManager } from "./Template/TemplateManager";
 import { Result, Point, DollarRecognizer } from "./Template/Recognizer";
 import {
   HStack,
+  VStack,
   Grid,
   GridItem,
   ButtonGroup,
   Button,
-  VStack,
 } from "@chakra-ui/react";
+import AddTemplateWidget from "./components/AddTemplate";
 
 const UserInputKey = "UserInput";
 
@@ -82,7 +83,7 @@ const App = () => {
   const [drawResult, setDrawResult] = useState("No Match.");
   const [score, setScore] = useState(0);
   const [scoreText, setScoreText] = useState("Score: ");
-  const Recognizer = new DollarRecognizer();
+  const [Recognizer] = useState<DollarRecognizer>(new DollarRecognizer());
   const templateManager = new TemplateManager();
 
   // networking stuff
@@ -121,6 +122,12 @@ const App = () => {
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
+    templateManager.LoadTemplates().then((result) => {
+      for (let i = 0; i < result.length; i++) {
+        Recognizer.AddGesture(result[i]);
+      }
+    });
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
@@ -163,6 +170,7 @@ const App = () => {
     Volcano: 4,
     Lava: 5,
     Triangle: 5,
+    Parenthesis: 2,
   };
 
   // Function for ending the drawing
@@ -227,35 +235,8 @@ const App = () => {
     ctxRef.current.stroke();
   };
 
-  const AddTemplate = () => {
-    let pointArray = new Array();
-
-    if (storageAvailable("localStorage")) {
-      if (!localStorage.getItem(UserInputKey)) {
-        return;
-      }
-      let existingInputString = localStorage.getItem(UserInputKey);
-
-      let existingInputObj = JSON.parse(existingInputString);
-
-      for (let i = 0; i < existingInputObj["Input"].length; i++) {
-        let X = existingInputObj["Input"][i]["x"];
-        let Y = existingInputObj["Input"][i]["y"];
-
-        pointArray.push(new Point(X, Y));
-      }
-    }
-    let newUnistroke = new Unistroke("Temp", pointArray);
-
-    let newJsonArray = { Points: [] };
-    for (let j = 0; j < newUnistroke.Points.length; j++) {
-      let newPoint = {
-        x: newUnistroke.Points[j].X,
-        y: newUnistroke.Points[j].Y,
-      };
-      newJsonArray["Points"].push(newPoint);
-    }
-    console.log(newJsonArray);
+  const AddTemplate = (TemplateName: string) => {
+    templateManager.SaveTemplate(TemplateName);
   };
 
   const AddScore = (x) => {
@@ -301,6 +282,7 @@ const App = () => {
               <VStack spacing={2} alignItems={"left"}>
                 <ConnectWidget connectFunction={connectToServer} />
                 <NameEntry inNetworkingManager={networkingManager} />
+                <AddTemplateWidget AddTemplateFunction={AddTemplate} />
               </VStack>
             </GridItem>
 

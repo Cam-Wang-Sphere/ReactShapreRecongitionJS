@@ -1,15 +1,31 @@
 import * as flatbuffers from 'flatbuffers';
 import { Template } from './../schema/_Templates/shape-template/template';
 import { Vec2 } from './../schema/_Templates/shape-template/vec2';
+import { Unistroke, Point, DollarRecognizer } from './Recognizer';
+import helloworld from './../assets/Templates/testtemplate.txt';
 
-function setItem<T>(key: string, value: T): void {
-    localStorage.setItem(key, JSON.stringify(value));
-}
+const download = async ({filename, blob}: {filename: string; blob: Blob}) => {
+    const a: HTMLAnchorElement = document.createElement('a');
+    a.style.display = 'none';
+    document.body.appendChild(a);
   
-function getItem<T>(key: string): T | null {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) as T : null;
-}
+    const url: string = window.URL.createObjectURL(blob);
+  
+    a.href = url;
+    a.download = `${filename}.txt`;
+  
+    a.click();
+  
+    window.URL.revokeObjectURL(url);
+    a.parentElement?.removeChild(a);
+  };
+
+
+export const save = (data: {blob: Blob, filename: string}) => {
+
+    return download(data);
+
+};
 
 export class TemplateManager {
 
@@ -53,21 +69,106 @@ export class TemplateManager {
             Builder.finish(TemplateOffset);
             const Built = Builder.asUint8Array();
 
-            this.LoadTemplate(Built);
+            console.log(Built.byteLength);
+
+            const newBlob = new Blob([Built]);
+            save({ blob: newBlob, filename: TemplateName} );
+
+            // this.LoadTemplate(Built);
         }
     }
 
-    LoadTemplate = (Data: Uint8Array) => {
+    LoadTemplates = () : Promise<Unistroke[]>  => {
+        let NewTemplates : Unistroke[] = [];
 
-        // Log the result
-        console.log(Data);
+        const allTemplates = require.context('./../assets/Templates',true);
+        const templateList = allTemplates.keys().map(text => allTemplates(text));
 
-        const buf = new flatbuffers.ByteBuffer(Data);
+        return new Promise((resolve, reject) =>
+        {
+            for(let i = 0; i < templateList.length; i++)
+            {
+                fetch(templateList[i])
+                .then(r => r.arrayBuffer())
+                .then(data => {
+                    const Data = new Uint8Array(data);
+                    const buf = new flatbuffers.ByteBuffer(Data);
+        
+                    const template = Template.getRootAsTemplate(buf);
+                    const newName = template.name();
+                    const points = template.points;
+                    let newPoints: Array<Point> = [];
+        
+                    let j: number = 0;
+                    for(j = 0; j < template.pointsLength(); j++)
+                    {
+                        const point = template.points(j);
+                        if(point)
+                        {
+                            const tempPoint = new Point(point.x(),point.y());
+                            newPoints.push(tempPoint);
+                        }
+                    }
+                    
+                    if(typeof newName === 'string')
+                    {
+                        const newUnistroke = new Unistroke(newName,newPoints);
+                        NewTemplates.push(newUnistroke);
+                    }
+                    else
+                    {
+                        reject();
+                    }
 
-        const template = Template.getRootAsTemplate(buf);
+                    if(i === templateList.length - 1)
+                    {
+                        resolve(NewTemplates);
+                    }
+               });
+            }
 
-        const newName = template.name();
-        console.log(newName);
+
+        });
     }
+
+    // TestLoading()
+    // {
+    //     const alltext = require.context('./../assets/Templates',true);
+    //     const textList = alltext.keys().map(text => alltext(text));
+
+    //     for(let i = 0; i < textList.length; i++)
+    //     {
+    //         fetch(textList[i])
+    //         .then(r => r.arrayBuffer())
+    //         .then(data => {
+    //             const Data = new Uint8Array(data);
+    //             const buf = new flatbuffers.ByteBuffer(Data);
+    
+    //             const template = Template.getRootAsTemplate(buf);
+    //             const newName = template.name();
+    //             const points = template.points;
+    //             let newPoints: Array<Point> = [];
+    
+    //             let i: number = 0;
+    //             for(i = 0; i < template.pointsLength(); i++)
+    //             {
+    //                 const point = template.points(i);
+    //                 if(point)
+    //                 {
+    //                     const tempPoint = new Point(point.x(),point.y());
+    //                     newPoints.push(tempPoint);
+    //                 }
+    //             }
+                
+    //             if(typeof newName === 'string')
+    //             {
+    //                 const newUnistroke = new Unistroke(newName,newPoints);
+    
+    //                 console.log(newUnistroke);
+    //             }
+    //         });
+    //     }
+    //     //const textFiles = alltext.keys().map(text => text(text));
+    // }
 }
 
