@@ -1,0 +1,40 @@
+import React, { useState, useEffect } from 'react';
+import { NetworkingManager } from "./../networking/NetworkingManager";
+import { Message } from '../schema/dot-dschema/message';
+
+interface RandomPlayerDataWidgetProps
+{
+    inNetworkingManager: NetworkingManager;
+}
+
+const RandomPlayerDataWidget = ({ inNetworkingManager }): RandomPlayerDataWidgetProps =>
+{
+    const [stringData, setStringData] = useState("");
+
+    useEffect(() =>
+    {
+        const handleClientDataResponse = (inStringData: string) =>
+        {
+            setStringData(inStringData);
+        };
+
+        const resetStringData = () =>
+        {
+            setStringData("");
+        }
+
+        inNetworkingManager?.on(Message.ClientDataResponse.toString(), handleClientDataResponse);
+        inNetworkingManager?.on(Message.ClientDataResponse.toString(), resetStringData);
+
+        // cleaning up
+        return () =>
+        {
+            inNetworkingManager?.off(Message.ClientDataResponse.toString(), handleClientDataResponse);
+            inNetworkingManager?.off(Message.ClientDataResponse.toString(), resetStringData);
+        };
+    }, [inNetworkingManager]);
+
+    return <span className="resultText">Player Data = {stringData}</span>
+}
+
+export default RandomPlayerDataWidget;

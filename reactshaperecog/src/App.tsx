@@ -31,6 +31,7 @@ import {
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
+import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget"
 
 const UserInputKey = "UserInput";
 
@@ -252,6 +253,7 @@ const App = () => {
               <SuccessOverlay inNetworkingManager={networkingManager} />
               <span className="resultText">{drawResult}</span>
               <ScoreWidget inNetworkingManager={networkingManager} />
+              <RandomPlayerDataWidget inNetworkingManager={networkingManager} />
             </VStack>
           </GridItem>
 

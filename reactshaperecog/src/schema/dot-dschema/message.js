@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 exports.unionToMessage = unionToMessage;
 exports.unionListToMessage = unionListToMessage;
+var client_data_response_js_1 = require("../dot-dschema/client-data-response.js");
 var client_login_response_js_1 = require("../dot-dschema/client-login-response.js");
 var health_percent_response_js_1 = require("../dot-dschema/health-percent-response.js");
 var json_to_binary_request_js_1 = require("../dot-dschema/json-to-binary-request.js");
@@ -55,6 +56,7 @@ var Message;
     Message[Message["ScoreUpdateResponse"] = 22] = "ScoreUpdateResponse";
     Message[Message["HealthPercentResponse"] = 23] = "HealthPercentResponse";
     Message[Message["MediaPlaneToMobileLoginResponse"] = 24] = "MediaPlaneToMobileLoginResponse";
+    Message[Message["ClientDataResponse"] = 25] = "ClientDataResponse";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -83,6 +85,7 @@ function unionToMessage(type, accessor) {
         case 'ScoreUpdateResponse': return accessor(new score_update_response_js_1.ScoreUpdateResponse());
         case 'HealthPercentResponse': return accessor(new health_percent_response_js_1.HealthPercentResponse());
         case 'MediaPlaneToMobileLoginResponse': return accessor(new media_plane_to_mobile_login_response_js_1.MediaPlaneToMobileLoginResponse());
+        case 'ClientDataResponse': return accessor(new client_data_response_js_1.ClientDataResponse());
         default: return null;
     }
 }
@@ -113,6 +116,7 @@ function unionListToMessage(type, accessor, index) {
         case 'ScoreUpdateResponse': return accessor(index, new score_update_response_js_1.ScoreUpdateResponse());
         case 'HealthPercentResponse': return accessor(index, new health_percent_response_js_1.HealthPercentResponse());
         case 'MediaPlaneToMobileLoginResponse': return accessor(index, new media_plane_to_mobile_login_response_js_1.MediaPlaneToMobileLoginResponse());
+        case 'ClientDataResponse': return accessor(index, new client_data_response_js_1.ClientDataResponse());
         default: return null;
     }
 }
