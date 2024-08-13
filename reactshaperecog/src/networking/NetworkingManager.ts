@@ -8,6 +8,7 @@ import { MediaPlaneLoginRequest } from '../schema/dot-dschema/media-plane-login-
 import { MediaPlaneToMobileLoginResponse } from '../schema/dot-dschema/media-plane-to-mobile-login-response';
 import { ClientLoginResponse } from '../schema/dot-dschema/client-login-response';
 import { ScoreUpdateResponse } from '../schema/dot-dschema/score-update-response';
+import { ClientDataResponse } from '../schema/dot-dschema/client-data-response';
 
 export class NetworkingManager extends EventEmitter {
 
@@ -166,6 +167,11 @@ export class NetworkingManager extends EventEmitter {
                 this.handleScoreUpdateResponse(root);
                 break;
             }
+            case Message.ClientDataResponse:
+            {
+                this.handleClientDataResponse(root);
+                break;
+            }
         }
     };
 
@@ -223,5 +229,16 @@ export class NetworkingManager extends EventEmitter {
         console.log('received score update response. ' + scoreUpdateResponse.score());
 
         this.emit(Message.ScoreUpdateResponse.toString(), receivedScore);
+    }
+
+    protected handleClientDataResponse = (typeWrapper: FlatBufferType) =>
+    {
+        const clientDataResponse = new ClientDataResponse();
+        typeWrapper.message(clientDataResponse);
+
+        const receivedDataString = clientDataResponse.stringData();
+        console.log('received client data response with string data = ', receivedDataString);
+
+        this.emit(Message.ClientDataResponse.toString(), receivedDataString);
     }
 }

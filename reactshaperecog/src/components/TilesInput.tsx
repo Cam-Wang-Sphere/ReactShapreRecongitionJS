@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NetworkingManager } from "./../networking/NetworkingManager";
 import {
   Flex,
   Grid,
@@ -38,8 +39,21 @@ const Icons = [
   <SvgBow />,
 ];
 
-const TilesInput = () => {
+interface TilesInputProps
+{
+    inNetworkingManager: NetworkingManager;
+}
+
+const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const handleButtonClick = (index: number) =>
+  {
+    setSelectedIndex(index);
+    inNetworkingManager?.sendShapeRequest(selectedIndex);
+    console.log("selected index = ", index);
+  }
+
   return (
     <>
       <SimpleGrid columns={2} spacing={10} mt="10%" pb="15%">
@@ -50,7 +64,7 @@ const TilesInput = () => {
             bg={selectedIndex === index ? "red.500" : "white"}
             height="150px"
             borderRadius="md"
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => handleButtonClick(index)}
           >
             {Icon}
           </Box>

@@ -4,10 +4,10 @@ import { Message } from '../schema/dot-dschema/message';
 
 interface ScoreWidgetProps
 {
-    inNetworkingManager: NetworkingManager;
+    inNetworkingManager: NetworkingManager | null;
 }
 
-const ScoreWidget = ({ inNetworkingManager }): ScoreWidgetProps =>
+const ScoreWidget = ({ inNetworkingManager }: ScoreWidgetProps) =>
 {
     const [score, setScore] = useState(0);
 
