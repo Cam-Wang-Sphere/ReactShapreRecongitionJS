@@ -27,6 +27,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
+import DrawingWidget from "./components/DrawingWidget";
 
 const UserInputKey = "UserInput";
 
@@ -128,40 +129,9 @@ const App = () => {
       }
     });
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.globalAlpha = lineOpacity;
-    ctx.strokeStyle = lineColor;
-    ctx.lineWidth = lineWidth;
-    ctxRef.current = ctx;
-    canvasRect.current = canvas.getBoundingClientRect();
-  }, [lineColor, lineOpacity, lineWidth]);
+  });
 
-  // Function for starting the drawing
-  const startDrawing = (e) => {
-    // Reseting all the info
-    ctxRef.current.clearRect(
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
-    if (storageAvailable("localStorage")) {
-      localStorage.removeItem(UserInputKey);
-    }
-    let x = e.touches
-      ? e.touches[0].clientX - canvasRect.current.left
-      : e.nativeEvent.offsetX;
-    let y = e.touches
-      ? e.touches[0].clientY - canvasRect.current.top
-      : e.nativeEvent.offsetY;
-    ctxRef.current.beginPath();
-    ctxRef.current.moveTo(x, y);
-    setIsDrawing(true);
-  };
-
+  // TODO maybe look into a more robust way to handle this...
   const ShapeToEnum = {
     Circle: 0,
     Star: 1,
@@ -175,9 +145,6 @@ const App = () => {
 
   // Function for ending the drawing
   const endDrawing = () => {
-    ctxRef.current.closePath();
-    setIsDrawing(false);
-
     let pointArray = new Array();
 
     if (storageAvailable("localStorage")) {
@@ -209,31 +176,6 @@ const App = () => {
     }
   };
 
-  const draw = (e) => {
-    if (!isDrawing) {
-      return;
-    }
-    let x = e.touches
-      ? e.touches[0].clientX - canvasRect.current.left
-      : e.nativeEvent.offsetX;
-    let y = e.touches
-      ? e.touches[0].clientY - canvasRect.current.top
-      : e.nativeEvent.offsetY;
-    if (storageAvailable("localStorage")) {
-      // If no user input exists create a new one
-      if (!localStorage.getItem(UserInputKey)) {
-        AddNewInput(x, y);
-      }
-      // If it exists append to existing data
-      else {
-        AppendNexInput(x, y);
-      }
-    }
-
-    ctxRef.current.lineTo(x, y);
-
-    ctxRef.current.stroke();
-  };
 
   const AddTemplate = (TemplateName: string) => {
     templateManager.SaveTemplate(TemplateName);
@@ -305,19 +247,7 @@ const App = () => {
       <span className="resultText">{drawResult}</span>
       <ScoreWidget inNetworkingManager={networkingManager} />
 
-      <div className="draw-area">
-        <canvas
-          onMouseDown={startDrawing}
-          onMouseUp={endDrawing}
-          onMouseMove={draw}
-          onTouchStart={startDrawing}
-          onTouchEnd={endDrawing}
-          onTouchMove={draw}
-          ref={canvasRef}
-          width={canvasWidth}
-          height={canvasHeight}
-        />
-      </div>
+      <DrawingWidget drawEndFunction={endDrawing} />
     </div>
   );
 
