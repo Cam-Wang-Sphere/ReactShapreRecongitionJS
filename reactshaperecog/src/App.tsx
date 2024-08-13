@@ -18,7 +18,14 @@ import { MediaPlaneToMobileLoginResponse } from "./schema/dot-dschema/media-plan
 import { Message } from "./schema/dot-dschema/message";
 import { TemplateManager } from "./Template/TemplateManager";
 import { Result, Point, DollarRecognizer } from "./Template/Recognizer";
-import { HStack, Grid, GridItem, ButtonGroup, Button } from "@chakra-ui/react";
+import {
+  HStack,
+  Grid,
+  GridItem,
+  ButtonGroup,
+  Button,
+  VStack,
+} from "@chakra-ui/react";
 
 const UserInputKey = "UserInput";
 
@@ -288,12 +295,13 @@ const App = () => {
       <div>
         <section className="ipcon">
           <h1>Drawing of the Dead Web</h1>
-          {/* <VStack spacing={4}> */}
-          {/* </VStack> */}
+
           <Grid templateAreas={`"Connections" "InputSelect" "main"`} gap={4}>
             <GridItem area="Connections">
-              <ConnectWidget connectFunction={connectToServer} />
-              <NameEntry inNetworkingManager={networkingManager} />
+              <VStack spacing={2} alignItems={"left"}>
+                <ConnectWidget connectFunction={connectToServer} />
+                <NameEntry inNetworkingManager={networkingManager} />
+              </VStack>
             </GridItem>
 
             <GridItem area="InputSelect">

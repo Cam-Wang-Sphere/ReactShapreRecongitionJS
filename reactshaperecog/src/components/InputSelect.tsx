@@ -10,7 +10,7 @@ const InputSelect = ({ Names, onSelect }: Props) => {
   const [selectIndex, setSelectedIndex] = useState(1);
   return (
     <HStack spacing={4} justifyContent="space-evenly">
-      <ButtonGroup variant="outline">
+      <ButtonGroup isAttached variant="outline">
         {Names.map((Name, index) => (
           <Button
             key={index}
