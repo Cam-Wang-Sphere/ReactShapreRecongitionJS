@@ -21,13 +21,21 @@ import {
   MinusIcon,
 } from "@chakra-ui/icons";
 
+import SvgArrow from "../assets/Icons/arrow.tsx";
+import SvgStar from "../assets/Icons/star.tsx";
+import SvgCircle from "../assets/Icons/circle.tsx";
+import SvgLava from "../assets/Icons/lava.tsx";
+import SvgVolcano from "../assets/Icons/volcano.tsx";
+import SvgBow from "../assets/Icons/bow.tsx";
+
 const Icons = [
-  <ArrowUpIcon boxSize={9} />,
-  <ArrowBackIcon boxSize={9} />,
-  <CloseIcon boxSize={6} />,
-  <AddIcon boxSize={6} />,
-  <CheckIcon boxSize={7} />,
-  <MinusIcon boxSize={8} />,
+  // <ArrowUpIcon boxSize={9} />,
+  <SvgArrow />,
+  <SvgStar />,
+  <SvgCircle />,
+  <SvgLava />,
+  <SvgVolcano />,
+  <SvgBow />,
 ];
 
 const TilesInput = () => {
