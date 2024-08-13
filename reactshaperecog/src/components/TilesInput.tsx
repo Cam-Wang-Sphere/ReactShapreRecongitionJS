@@ -28,6 +28,10 @@ import SvgCircle from "../assets/Icons/circle.tsx";
 import SvgLava from "../assets/Icons/lava.tsx";
 import SvgVolcano from "../assets/Icons/volcano.tsx";
 import SvgBow from "../assets/Icons/bow.tsx";
+import { useSpring, animated } from "react-spring";
+import { Opacity } from "@mui/icons-material";
+import { Fade } from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
 
 const Icons = [
   // <ArrowUpIcon boxSize={9} />,
@@ -39,37 +43,56 @@ const Icons = [
   <SvgBow />,
 ];
 
-interface TilesInputProps
-{
-    inNetworkingManager: NetworkingManager;
+interface TilesInputProps {
+  inNetworkingManager: NetworkingManager;
 }
 
 const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  const handleButtonClick = (index: number) =>
-  {
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  async function DelayAction() {
+    await delay(200);
+    setSelectedIndex(-1);
+  }
+
+  const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
     inNetworkingManager?.sendShapeRequest(selectedIndex);
     console.log("selected index = ", index);
-  }
+    DelayAction();
+  };
+
+  const animate = useSpring({
+    to: { opacity: 1 },
+    from: { opacity: 0 },
+    // reset: false,
+    // reverse: false,
+    delay: 200,
+    // config: { duration: 3000 },
+  });
 
   return (
     <>
-      <SimpleGrid columns={2} spacing={10} mt="10%" pb="15%">
-        {Icons.map((Icon, index) => (
-          <Box
-            key={index}
-            as="button"
-            bg={selectedIndex === index ? "red.500" : "white"}
-            height="150px"
-            borderRadius="md"
-            onClick={() => handleButtonClick(index)}
-          >
-            {Icon}
-          </Box>
-        ))}
-      </SimpleGrid>
+      <animated.div style={animate}>
+        <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
+          {Icons.map((Icon, index) => (
+            // <animated.div>
+
+            <Box
+              key={index}
+              bg={selectedIndex === index ? "teal" : "white"}
+              height="150px"
+              borderRadius="md"
+              onClick={() => handleButtonClick(index)}
+            >
+              {Icon}
+            </Box>
+
+            // </animated.div>
+          ))}
+        </SimpleGrid>
+      </animated.div>
     </>
   );
 };

@@ -31,7 +31,8 @@ import {
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
-import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget"
+import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
+import NavMenu from "./components/NavMenu";
 
 const UserInputKey = "UserInput";
 
@@ -216,7 +217,7 @@ const App = () => {
   const [_index, setIndex] = useState(0);
   const inputTypes = [
     <DrawingWidget drawEndFunction={endDrawing} />,
-    <TilesInput inNetworkingManager={networkingManager}/>,
+    <TilesInput inNetworkingManager={networkingManager} />,
     <TapnSlashInput />,
   ];
 
@@ -229,9 +230,12 @@ const App = () => {
         >
           <GridItem area="Heading">
             <Center>
-              <Heading color="red.500" mt="1%">
-                PreFE
-              </Heading>
+              <HStack>
+                <Heading color="red.500" mt="1%">
+                  PreFE
+                </Heading>
+                {/* <NavMenu /> */}
+              </HStack>
             </Center>
           </GridItem>
           <GridItem area="Connections" justifyContent="space-evenly">
