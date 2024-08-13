@@ -25,6 +25,9 @@ import {
   GridItem,
   ButtonGroup,
   Button,
+  Box,
+  Heading,
+  Center,
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
@@ -128,7 +131,6 @@ const App = () => {
         Recognizer.AddGesture(result[i]);
       }
     });
-
   });
 
   // TODO maybe look into a more robust way to handle this...
@@ -176,7 +178,6 @@ const App = () => {
     }
   };
 
-
   const AddTemplate = (TemplateName: string) => {
     templateManager.SaveTemplate(TemplateName);
   };
@@ -212,42 +213,53 @@ const App = () => {
     setIndex(index);
   };
   const [_index, setIndex] = useState(0);
+  const inputTypes = [
+    <DrawingWidget drawEndFunction={endDrawing} />,
+    <TilesInput />,
+    <TapnSlashInput />,
+  ];
 
   return (
     <div className="App">
-      <div>
-        <section className="ipcon">
-          <h1>Drawing of the Dead Web</h1>
-
-          <Grid templateAreas={`"Connections" "InputSelect" "main"`} gap={4}>
-            <GridItem area="Connections">
-              <VStack spacing={2} alignItems={"left"}>
+      <section className="ipcon">
+        <Grid
+          templateAreas={`"Heading" "Connections" "InputSelect" "Main"`}
+          gap={4}
+        >
+          <GridItem area="Heading">
+            <Center>
+              <Heading color="red.500" mt="1%">
+                PreFE
+              </Heading>
+            </Center>
+          </GridItem>
+          <GridItem area="Connections" justifyContent="space-evenly">
+            <VStack alignItems={"center"}>
+              <Box>
                 <ConnectWidget connectFunction={connectToServer} />
                 <NameEntry inNetworkingManager={networkingManager} />
                 <AddTemplateWidget AddTemplateFunction={AddTemplate} />
-              </VStack>
-            </GridItem>
+              </Box>
+            </VStack>
+          </GridItem>
 
-            <GridItem area="InputSelect">
+          <GridItem area="InputSelect">
+            <VStack alignItems={"center"}>
               <InputSelect
                 Names={["Draw", "Tiles", "Tap n Slash"]}
                 onSelect={selectHandle}
               />
+              <SuccessOverlay inNetworkingManager={networkingManager} />
+              <span className="resultText">{drawResult}</span>
+              <ScoreWidget inNetworkingManager={networkingManager} />
+            </VStack>
+          </GridItem>
 
-              {_index === 0 && <DrawInput />}
-              {_index === 1 && <TilesInput />}
-              {_index === 2 && <TapnSlashInput />}
-            </GridItem>
-            <GridItem area="main" bg="blue"></GridItem>
-          </Grid>
-        </section>
-      </div>
-
-      <SuccessOverlay inNetworkingManager={networkingManager} />
-      <span className="resultText">{drawResult}</span>
-      <ScoreWidget inNetworkingManager={networkingManager} />
-
-      <DrawingWidget drawEndFunction={endDrawing} />
+          <GridItem area="Main" maxH="600px">
+            {inputTypes[_index]}
+          </GridItem>
+        </Grid>
+      </section>
     </div>
   );
 
