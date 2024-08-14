@@ -23,10 +23,10 @@ import {
 } from "@chakra-ui/icons";
 
 import SvgArrow from "../assets/Icons/arrow.tsx";
-import SvgStar from "../assets/Icons/star.tsx";
+import Svgtick from "../assets/Icons/tick.tsx";
 import SvgCircle from "../assets/Icons/circle.tsx";
-import SvgLava from "../assets/Icons/lava.tsx";
-import SvgVolcano from "../assets/Icons/volcano.tsx";
+import Svgtriangle from "../assets/Icons/triangle.tsx";
+import SvgLightning from "../assets/Icons/lightning.tsx";
 import SvgBow from "../assets/Icons/bow.tsx";
 import { useSpring, animated } from "react-spring";
 import { Opacity } from "@mui/icons-material";
@@ -34,13 +34,12 @@ import { Fade } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 
 const Icons = [
-  // <ArrowUpIcon boxSize={9} />,
   <SvgArrow />,
-  <SvgStar />,
-  <SvgCircle />,
-  <SvgLava />,
-  <SvgVolcano />,
   <SvgBow />,
+  <Svgtick />,
+  <Svgtriangle />,
+  <SvgLightning />,
+  <SvgCircle />,
 ];
 
 interface TilesInputProps {

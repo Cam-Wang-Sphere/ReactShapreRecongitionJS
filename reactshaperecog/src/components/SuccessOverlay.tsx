@@ -10,7 +10,7 @@ interface SuccessOverlayProps {
 }
 
 const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   // @TODO NATHAN: cvar?
   const flashBangTime = 200; // in milliseconds
