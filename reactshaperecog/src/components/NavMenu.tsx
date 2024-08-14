@@ -1,32 +1,56 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const NavMenu = () => {
-  const [isOpen, setOpen] = React.useState(false);
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Button,
+  Input,
+  MenuButton,
+  IconButton,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { grey } from "@mui/material/colors";
+
+function NavMenu() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
 
   return (
-    <div>
-      <button
-        onClick={() => setOpen(!isOpen)}
-        className={`hamburger-button ${isOpen ? "open" : "close"}`}
-      />
-      <div className={`panel ${isOpen ? "open" : "close"}`}>
-        <ul>
-          <li>
-            <a href="#">You</a>
-          </li>
-          <li>
-            <a href="#">Look</a>
-          </li>
-          <li>
-            <a href="#">Nice</a>
-          </li>
-          <li>
-            <a href="#">Today</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <>
+      <Button
+        as={IconButton}
+        icon={<HamburgerIcon />}
+        variant="outline"
+        onClick={onOpen}
+        color={"teal"}
+        bg={"black"}
+        borderColor={"teal"}
+      ></Button>
+      <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent bg={"teal"}>
+          <DrawerCloseButton />
+          <DrawerHeader>Navigate to</DrawerHeader>
+
+          <DrawerBody>
+            <ul>
+              <li>Connection</li>
+              <li>Enter Name</li>
+              <li>Game</li>
+            </ul>
+          </DrawerBody>
+
+          <DrawerFooter></DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
-};
+}
 
 export default NavMenu;

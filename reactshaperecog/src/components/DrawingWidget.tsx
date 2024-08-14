@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { background } from "@chakra-ui/react";
+import React, { useState, useEffect, useRef } from "react";
 
-interface DrawingProps
-{
-    drawEndFunction: () => void;
+interface DrawingProps {
+  drawEndFunction: () => void;
 }
 
 const UserInputKey = "UserInput";
@@ -26,7 +26,7 @@ function storageAvailable(type) {
   }
 }
 
-function AddNewInput(X : number, Y : number) {
+function AddNewInput(X: number, Y: number) {
   let newInput = {
     Input: [{ x: X, y: Y }],
   };
@@ -35,16 +35,15 @@ function AddNewInput(X : number, Y : number) {
   localStorage.setItem(UserInputKey, newInputString);
 }
 
-function AppendNexInput(X : number, Y : number) {
+function AppendNexInput(X: number, Y: number) {
   let existingInputString = localStorage.getItem(UserInputKey);
 
-  if(typeof existingInputString === 'string')
-  {
+  if (typeof existingInputString === "string") {
     let existingInputObj = JSON.parse(existingInputString);
     existingInputObj["Input"].push({ x: X, y: Y });
-  
+
     let newInputString = JSON.stringify(existingInputObj);
-  
+
     localStorage.setItem(UserInputKey, newInputString);
   }
 }
@@ -52,30 +51,28 @@ function AppendNexInput(X : number, Y : number) {
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
+const DrawingWidget = ({ drawEndFunction }: DrawingProps) => {
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const canvasRect = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [lineWidth /*setLineWidth*/] = useState(5);
+  const [lineColor, setLineColor] = useState("black");
+  const [lineOpacity /*setLineOpacity*/] = useState(1.0);
 
-const DrawingWidget = ( {drawEndFunction} : DrawingProps) => {
- 
-    const canvasRef = useRef(null);
-    const ctxRef = useRef(null);
-    const canvasRect = useRef(null);
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [lineWidth /*setLineWidth*/] = useState(5);
-    const [lineColor, setLineColor] = useState("black");
-    const [lineOpacity /*setLineOpacity*/] = useState(1.0);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.globalAlpha = lineOpacity;
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = lineWidth;
-        ctxRef.current = ctx;
-        canvasRect.current = canvas.getBoundingClientRect();
-    }, [lineColor, lineOpacity, lineWidth]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.globalAlpha = lineOpacity;
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = lineWidth;
+    ctxRef.current = ctx;
+    canvasRect.current = canvas.getBoundingClientRect();
+  }, [lineColor, lineOpacity, lineWidth]);
   // Function for starting the drawing
- const startDrawing = (e) => {
+  const startDrawing = (e) => {
     // Reseting all the info
     ctxRef.current.clearRect(
       0,
@@ -129,25 +126,23 @@ const DrawingWidget = ( {drawEndFunction} : DrawingProps) => {
     ctxRef.current.lineTo(x, y);
 
     ctxRef.current.stroke();
-  }; 
+  };
 
-
-
-    return (
-        <div className="draw-area">
-            <canvas
-                onMouseDown={startDrawing}
-                onMouseUp={endDrawing}
-                onMouseMove={draw}
-                onTouchStart={startDrawing}
-                onTouchEnd={endDrawing}
-                onTouchMove={draw}
-                ref={canvasRef}
-                width={canvasWidth}
-                height={canvasHeight}
-            />
-        </div>
-    )
-}
+  return (
+    <div className="draw-area">
+      <canvas
+        onMouseDown={startDrawing}
+        onMouseUp={endDrawing}
+        onMouseMove={draw}
+        onTouchStart={startDrawing}
+        onTouchEnd={endDrawing}
+        onTouchMove={draw}
+        ref={canvasRef}
+        width={canvasWidth}
+        height={canvasHeight}
+      />
+    </div>
+  );
+};
 
 export default DrawingWidget;

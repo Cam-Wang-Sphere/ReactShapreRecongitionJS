@@ -28,6 +28,8 @@ import {
   Box,
   Heading,
   Center,
+  Spacer,
+  Container,
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
@@ -69,23 +71,19 @@ const App = () => {
 
   const HandleLineColor = (teamId: number) => {
     console.log("received teamid = ", teamId, " from event emit");
-    switch(teamId)
-    {
-      case 0:
-        {
-          setTextColor("red.500");
-          break;
-        }
-      case 1:
-        {
-          setTextColor("blue.500");
-          break;
-        }
-      default:
-        {
-          setTextColor("yellow.500");
-          break;
-        }
+    switch (teamId) {
+      case 0: {
+        setTextColor("red.500");
+        break;
+      }
+      case 1: {
+        setTextColor("blue.500");
+        break;
+      }
+      default: {
+        setTextColor("yellow.500");
+        break;
+      }
     }
   };
 
@@ -176,8 +174,7 @@ const App = () => {
     setScoreText("Score: " + score);
   };
 
-  const AddSetScore = () => {
-  };
+  const AddSetScore = () => {};
 
   const selectHandle = (index: number) => {
     setIndex(index);
@@ -190,23 +187,25 @@ const App = () => {
   ];
 
   return (
-    <div className="App">
+    <Container className="App" maxW={"sm"}>
       <section className="ipcon">
         <Grid
+          templateRows="repeat(4, 0.6fr)"
+          templateColumns="repeat(5, 1fr)"
           templateAreas={`"Heading" "Connections" "InputSelect" "Main"`}
           gap={4}
+          p={"10px"}
         >
-          <GridItem area="Heading">
+          <GridItem rowSpan={1} colSpan={1} area="Heading" mt="1%">
+            <NavMenu />
+          </GridItem>
+          <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
             <Center>
-              <HStack>
-                <Heading color={textColor} mt="1%">
-                  PreFE
-                </Heading>
-                {/* <NavMenu /> */}
-              </HStack>
+              <Heading color={textColor}>PreFE</Heading>
             </Center>
           </GridItem>
-          <GridItem area="Connections" justifyContent="space-evenly">
+
+          <GridItem area="Connections" rowSpan={2} colSpan={5}>
             <VStack alignItems={"center"}>
               <Box>
                 <ConnectWidget connectFunction={connectToServer} />
@@ -216,25 +215,27 @@ const App = () => {
             </VStack>
           </GridItem>
 
-          <GridItem area="InputSelect">
+          <GridItem area="InputSelect" rowSpan={3} colSpan={5}>
             <VStack alignItems={"center"}>
               <InputSelect
                 Names={["Draw", "Tiles", "Tap n Slash"]}
                 onSelect={selectHandle}
               />
               <SuccessOverlay inNetworkingManager={networkingManager} />
-              <span color={textColor} className="resultText">{drawResult}</span>
+              <span color={textColor} className="resultText">
+                {drawResult}
+              </span>
               <ScoreWidget inNetworkingManager={networkingManager} />
               <RandomPlayerDataWidget inNetworkingManager={networkingManager} />
             </VStack>
           </GridItem>
 
-          <GridItem area="Main" maxH="600px">
+          <GridItem area="Main" maxH="600px" rowSpan={4} colSpan={5}>
             {inputTypes[_index]}
           </GridItem>
         </Grid>
       </section>
-    </div>
+    </Container>
   );
 
   // <button type="button" onClick={AddSetScore}>Add Template</button>
