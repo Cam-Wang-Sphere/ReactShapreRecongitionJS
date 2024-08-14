@@ -55,40 +55,11 @@ function storageAvailable(type) {
   }
 }
 
-function AddNewInput(X, Y) {
-  let newInput = {
-    Input: [{ x: X, y: Y }],
-  };
-
-  let newInputString = JSON.stringify(newInput);
-  localStorage.setItem(UserInputKey, newInputString);
-}
-
-function AppendNexInput(X, Y) {
-  let existingInputString = localStorage.getItem(UserInputKey);
-
-  let existingInputObj = JSON.parse(existingInputString);
-  existingInputObj["Input"].push({ x: X, y: Y });
-
-  let newInputString = JSON.stringify(existingInputObj);
-
-  localStorage.setItem(UserInputKey, newInputString);
-}
-
-const canvasWidth = window.innerHeight;
-const canvasHeight = window.innerHeight;
-
 const App = () => {
-  const canvasRef = useRef(null);
-  const ctxRef = useRef(null);
-  const canvasRect = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [lineWidth /*setLineWidth*/] = useState(5);
-  const [lineColor, setLineColor] = useState("black");
-  const [lineOpacity /*setLineOpacity*/] = useState(1.0);
   const [drawResult, setDrawResult] = useState("No Match.");
   const [score, setScore] = useState(0);
   const [scoreText, setScoreText] = useState("Score: ");
+  const [textColor, setTextColor] = useState("red.500");
   const [Recognizer] = useState<DollarRecognizer>(new DollarRecognizer());
   const templateManager = new TemplateManager();
 
@@ -98,6 +69,24 @@ const App = () => {
 
   const HandleLineColor = (teamId: number) => {
     console.log("received teamid = ", teamId, " from event emit");
+    switch(teamId)
+    {
+      case 0:
+        {
+          setTextColor("red.500");
+          break;
+        }
+      case 1:
+        {
+          setTextColor("blue.500");
+          break;
+        }
+      default:
+        {
+          setTextColor("yellow.500");
+          break;
+        }
+    }
   };
 
   const setupNetworkingBindings = (inNetworkingManager: NetworkingManager) => {
@@ -190,25 +179,6 @@ const App = () => {
   };
 
   const AddSetScore = () => {
-    SetTeamLineColor(1);
-  };
-
-  const SetTeamLineColor = (x: number) => {
-    console.log("setting team line color to = ", x);
-    switch (x) {
-      case 0: {
-        setLineColor("red");
-        break;
-      }
-      case 1: {
-        setLineColor("blue");
-        break;
-      }
-      default: {
-        setLineColor("yellow");
-        break;
-      }
-    }
   };
 
   const selectHandle = (index: number) => {
@@ -231,7 +201,7 @@ const App = () => {
           <GridItem area="Heading">
             <Center>
               <HStack>
-                <Heading color="red.500" mt="1%">
+                <Heading color={textColor} mt="1%">
                   PreFE
                 </Heading>
                 {/* <NavMenu /> */}
@@ -255,7 +225,7 @@ const App = () => {
                 onSelect={selectHandle}
               />
               <SuccessOverlay inNetworkingManager={networkingManager} />
-              <span className="resultText">{drawResult}</span>
+              <span color={textColor} className="resultText">{drawResult}</span>
               <ScoreWidget inNetworkingManager={networkingManager} />
               <RandomPlayerDataWidget inNetworkingManager={networkingManager} />
             </VStack>
