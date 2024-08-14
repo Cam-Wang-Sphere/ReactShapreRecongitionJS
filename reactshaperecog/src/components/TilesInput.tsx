@@ -80,23 +80,19 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
 
   return (
     <>
-      <animated.div style={animate}>
-        <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
-          {Icons.map((Icon, index) => (
-            // <animated.div>
-
-            <Box
-              key={index}
-              bg={selectedIndex === index ? "teal" : "white"}
-              height="150px"
-              borderRadius="md"
-              onClick={() => handleButtonClick(index)}
-            >
-              {Icon}
-            </Box>
-          ))}
-        </SimpleGrid>
-      </animated.div>
+      <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
+        {Icons.map((Icon, index) => (
+          <Box
+            key={index}
+            bg={selectedIndex === index ? "teal" : "white"}
+            height="150px"
+            borderRadius="md"
+            onClick={() => handleButtonClick(index)}
+          >
+            {Icon}
+          </Box>
+        ))}
+      </SimpleGrid>
     </>
   );
 };
