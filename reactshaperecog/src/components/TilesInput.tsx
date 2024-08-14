@@ -43,7 +43,7 @@ const Icons = [
 ];
 
 interface TilesInputProps {
-  inNetworkingManager: NetworkingManager;
+  inNetworkingManager: NetworkingManager | null;
 }
 
 const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
