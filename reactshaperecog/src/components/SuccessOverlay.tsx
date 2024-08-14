@@ -66,7 +66,7 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
     width: "100vw",
     height: "100vh",
     border: "1.5rem solid",
-    borderColor: "##7aff73",
+    borderColor: "green",
     backgroundColor: "rgba(0, 128, 0, 0)", // last parameter is translucency
     display: isVisible ? "block" : "none",
     zIndex: 9999,
