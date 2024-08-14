@@ -57,7 +57,7 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
 
   const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
-    inNetworkingManager?.sendShapeRequest(selectedIndex);
+    inNetworkingManager?.sendShapeRequest(index);
     console.log("selected index = ", index);
     DelayAction();
   };
@@ -70,6 +70,13 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
     delay: 200,
     // config: { duration: 3000 },
   });
+
+  // react method for sending index...
+  useEffect(() => {
+    return () => {
+      inNetworkingManager?.sendShapeRequest(selectedIndex);
+    };
+  }, []);
 
   return (
     <>
