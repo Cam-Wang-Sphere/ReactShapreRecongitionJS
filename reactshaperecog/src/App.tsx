@@ -130,7 +130,7 @@ const App = () => {
     Parenthesis: 1,
     Check: 2,
     Triangle: 3,
-    Zag: 4,
+    Pigtail: 4,
     Circle: 5,
   };
 
