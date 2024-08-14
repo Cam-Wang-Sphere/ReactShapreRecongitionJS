@@ -126,14 +126,12 @@ const App = () => {
 
   // TODO maybe look into a more robust way to handle this...
   const ShapeToEnum = {
-    Circle: 0,
-    Star: 1,
-    Bow: 2,
-    Arrow: 3,
-    Volcano: 4,
-    Lava: 5,
-    Triangle: 5,
-    Parenthesis: 2,
+    Arrow: 0,
+    Parenthesis: 1,
+    Check: 2,
+    Triangle: 3,
+    Zag: 4,
+    Circle: 5,
   };
 
   // Function for ending the drawing
