@@ -33,6 +33,7 @@ import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
 import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
+import ConnectBigDomeWidget from "./components/ConnectBigDomeWidget"
 
 const UserInputKey = "UserInput";
 
@@ -130,7 +131,7 @@ const App = () => {
     Parenthesis: 1,
     Check: 2,
     Triangle: 3,
-    Zag: 4,
+    Pigtail: 4,
     Circle: 5,
   };
 
@@ -184,7 +185,7 @@ const App = () => {
   };
   const [_index, setIndex] = useState(0);
   const inputTypes = [
-    <DrawingWidget drawEndFunction={endDrawing} />,
+    <DrawingWidget drawEndFunction={endDrawing} inNetworkingManager={networkingManager} />,
     <TilesInput inNetworkingManager={networkingManager} />,
     <TapnSlashInput />,
   ];
@@ -211,7 +212,8 @@ const App = () => {
               <Box>
                 <ConnectWidget connectFunction={connectToServer} />
                 <NameEntry inNetworkingManager={networkingManager} />
-                <AddTemplateWidget AddTemplateFunction={AddTemplate} />
+                {/* {<AddTemplateWidget AddTemplateFunction={AddTemplate} />} */}
+                <ConnectBigDomeWidget connectFunction={connectToServer} />
               </Box>
             </VStack>
           </GridItem>

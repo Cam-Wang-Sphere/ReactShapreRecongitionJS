@@ -43,7 +43,7 @@ const Icons = [
 ];
 
 interface TilesInputProps {
-  inNetworkingManager: NetworkingManager;
+  inNetworkingManager: NetworkingManager | null;
 }
 
 const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
@@ -57,7 +57,7 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
 
   const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
-    inNetworkingManager?.sendShapeRequest(selectedIndex);
+    inNetworkingManager?.sendShapeRequest(index);
     console.log("selected index = ", index);
     DelayAction();
   };
@@ -71,25 +71,28 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
     // config: { duration: 3000 },
   });
 
+  // react method for sending index...
+  useEffect(() => {
+    return () => {
+      inNetworkingManager?.sendShapeRequest(selectedIndex);
+    };
+  }, []);
+
   return (
     <>
-      <animated.div style={animate}>
-        <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
-          {Icons.map((Icon, index) => (
-            // <animated.div>
-
-            <Box
-              key={index}
-              bg={selectedIndex === index ? "teal" : "white"}
-              height="150px"
-              borderRadius="md"
-              onClick={() => handleButtonClick(index)}
-            >
-              {Icon}
-            </Box>
-          ))}
-        </SimpleGrid>
-      </animated.div>
+      <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
+        {Icons.map((Icon, index) => (
+          <Box
+            key={index}
+            bg={selectedIndex === index ? "teal" : "white"}
+            height="150px"
+            borderRadius="md"
+            onClick={() => handleButtonClick(index)}
+          >
+            {Icon}
+          </Box>
+        ))}
+      </SimpleGrid>
     </>
   );
 };
