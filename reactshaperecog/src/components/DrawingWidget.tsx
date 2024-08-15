@@ -1,8 +1,11 @@
 import { background } from "@chakra-ui/react";
 import React, { useState, useEffect, useRef } from "react";
+import { NetworkingManager } from "./../networking/NetworkingManager";
+import { Message } from "../schema/dot-dschema/message";
 
 interface DrawingProps {
   drawEndFunction: () => void;
+  inNetworkingManager: NetworkingManager | null;
 }
 
 const UserInputKey = "UserInput";
@@ -51,7 +54,10 @@ function AppendNexInput(X: number, Y: number) {
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
-const DrawingWidget = ({ drawEndFunction }: DrawingProps) => {
+const DrawingWidget = ({
+  drawEndFunction,
+  inNetworkingManager,
+}: DrawingProps) => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const canvasRect = useRef(null);
@@ -60,7 +66,29 @@ const DrawingWidget = ({ drawEndFunction }: DrawingProps) => {
   const [lineColor, setLineColor] = useState("black");
   const [lineOpacity /*setLineOpacity*/] = useState(1.0);
 
+  const setLineColorFromTeamId = (teamId: number) => {
+    switch (teamId) {
+      case 0: {
+        setLineColor("red");
+        break;
+      }
+      case 1: {
+        setLineColor("blue");
+        break;
+      }
+      default: {
+        setLineColor("black");
+        break;
+      }
+    }
+  };
+
   useEffect(() => {
+    inNetworkingManager?.on(
+      Message.MediaPlaneToMobileLoginResponse.toString(),
+      setLineColorFromTeamId
+    );
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
@@ -70,7 +98,15 @@ const DrawingWidget = ({ drawEndFunction }: DrawingProps) => {
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
     canvasRect.current = canvas.getBoundingClientRect();
-  }, [lineColor, lineOpacity, lineWidth]);
+
+    return () => {
+      inNetworkingManager?.off(
+        Message.MediaPlaneToMobileLoginResponse.toString(),
+        setLineColorFromTeamId
+      );
+    };
+  }, [lineColor, lineOpacity, lineWidth, inNetworkingManager]);
+
   // Function for starting the drawing
   const startDrawing = (e) => {
     // Reseting all the info
