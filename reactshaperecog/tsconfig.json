@@ -6,6 +6,8 @@
       "outDir": "./src/generated",
       "rootDir": "./src/schema",
       "sourceMap": true,
+      "jsx": "react",
+	    "esModuleInterop": true,
     },
     "compileOnSave": false,
     "include": [
