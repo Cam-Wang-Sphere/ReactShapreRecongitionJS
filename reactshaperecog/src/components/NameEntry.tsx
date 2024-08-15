@@ -12,7 +12,7 @@ interface NameEntryProps {
   inNetworkingManager: NetworkingManager;
 }
 
-const NameEntry = ({ inNetworkingManager }) => {
+const NameEntry = ({ inNetworkingManager }: NameEntryProps) => {
   const [name, setName] = useState("");
 
   const handleNameChange = (event: any) => {
