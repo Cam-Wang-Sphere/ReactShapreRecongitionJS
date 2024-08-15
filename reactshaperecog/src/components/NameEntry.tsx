@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 interface NameEntryProps {
-  inNetworkingManager: NetworkingManager;
+  inNetworkingManager: NetworkingManager | null;
 }
 
 const NameEntry = ({ inNetworkingManager }: NameEntryProps) => {
@@ -20,7 +20,7 @@ const NameEntry = ({ inNetworkingManager }: NameEntryProps) => {
   };
 
   const sendNameRequest = () => {
-    inNetworkingManager.sendNameRequestString(name);
+    inNetworkingManager?.sendNameRequestString(name);
   };
 
   return (
