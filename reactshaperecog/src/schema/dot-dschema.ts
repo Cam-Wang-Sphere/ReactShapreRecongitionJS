@@ -27,3 +27,4 @@ export { ShapeRequest } from './dot-dschema/shape-request.js';
 export { ShapeResponse } from './dot-dschema/shape-response.js';
 export { WebClientLoginRequest } from './dot-dschema/web-client-login-request.js';
 export { WebClientLoginResponse } from './dot-dschema/web-client-login-response.js';
+export { WebClientLogoutRequest } from './dot-dschema/web-client-logout-request.js';

@@ -29,6 +29,7 @@ var shape_request_js_1 = require("../dot-dschema/shape-request.js");
 var shape_response_js_1 = require("../dot-dschema/shape-response.js");
 var web_client_login_request_js_1 = require("../dot-dschema/web-client-login-request.js");
 var web_client_login_response_js_1 = require("../dot-dschema/web-client-login-response.js");
+var web_client_logout_request_js_1 = require("../dot-dschema/web-client-logout-request.js");
 var Message;
 (function (Message) {
     Message[Message["NONE"] = 0] = "NONE";
@@ -49,14 +50,15 @@ var Message;
     Message[Message["RepeaterLoginRequest"] = 15] = "RepeaterLoginRequest";
     Message[Message["WebClientLoginRequest"] = 16] = "WebClientLoginRequest";
     Message[Message["WebClientLoginResponse"] = 17] = "WebClientLoginResponse";
-    Message[Message["RepeaterBinaryResponse"] = 18] = "RepeaterBinaryResponse";
-    Message[Message["RepeaterBroadcastBinaryResponse"] = 19] = "RepeaterBroadcastBinaryResponse";
-    Message[Message["ShapeRequest"] = 20] = "ShapeRequest";
-    Message[Message["ShapeResponse"] = 21] = "ShapeResponse";
-    Message[Message["ScoreUpdateResponse"] = 22] = "ScoreUpdateResponse";
-    Message[Message["HealthPercentResponse"] = 23] = "HealthPercentResponse";
-    Message[Message["MediaPlaneToMobileLoginResponse"] = 24] = "MediaPlaneToMobileLoginResponse";
-    Message[Message["ClientDataResponse"] = 25] = "ClientDataResponse";
+    Message[Message["WebClientLogoutRequest"] = 18] = "WebClientLogoutRequest";
+    Message[Message["RepeaterBinaryResponse"] = 19] = "RepeaterBinaryResponse";
+    Message[Message["RepeaterBroadcastBinaryResponse"] = 20] = "RepeaterBroadcastBinaryResponse";
+    Message[Message["ShapeRequest"] = 21] = "ShapeRequest";
+    Message[Message["ShapeResponse"] = 22] = "ShapeResponse";
+    Message[Message["ScoreUpdateResponse"] = 23] = "ScoreUpdateResponse";
+    Message[Message["HealthPercentResponse"] = 24] = "HealthPercentResponse";
+    Message[Message["MediaPlaneToMobileLoginResponse"] = 25] = "MediaPlaneToMobileLoginResponse";
+    Message[Message["ClientDataResponse"] = 26] = "ClientDataResponse";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -78,6 +80,7 @@ function unionToMessage(type, accessor) {
         case 'RepeaterLoginRequest': return accessor(new repeater_login_request_js_1.RepeaterLoginRequest());
         case 'WebClientLoginRequest': return accessor(new web_client_login_request_js_1.WebClientLoginRequest());
         case 'WebClientLoginResponse': return accessor(new web_client_login_response_js_1.WebClientLoginResponse());
+        case 'WebClientLogoutRequest': return accessor(new web_client_logout_request_js_1.WebClientLogoutRequest());
         case 'RepeaterBinaryResponse': return accessor(new repeater_binary_response_js_1.RepeaterBinaryResponse());
         case 'RepeaterBroadcastBinaryResponse': return accessor(new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
         case 'ShapeRequest': return accessor(new shape_request_js_1.ShapeRequest());
@@ -109,6 +112,7 @@ function unionListToMessage(type, accessor, index) {
         case 'RepeaterLoginRequest': return accessor(index, new repeater_login_request_js_1.RepeaterLoginRequest());
         case 'WebClientLoginRequest': return accessor(index, new web_client_login_request_js_1.WebClientLoginRequest());
         case 'WebClientLoginResponse': return accessor(index, new web_client_login_response_js_1.WebClientLoginResponse());
+        case 'WebClientLogoutRequest': return accessor(index, new web_client_logout_request_js_1.WebClientLogoutRequest());
         case 'RepeaterBinaryResponse': return accessor(index, new repeater_binary_response_js_1.RepeaterBinaryResponse());
         case 'RepeaterBroadcastBinaryResponse': return accessor(index, new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
         case 'ShapeRequest': return accessor(index, new shape_request_js_1.ShapeRequest());
