@@ -142,7 +142,7 @@ export class NetworkingManager extends EventEmitter {
         const myBuf = new Uint8Array(data);
         const buf = new flatbuffers.ByteBuffer(myBuf);
 
-        const root = FlatBufferType.getRootAsFlatBufferType(buf);
+        const root = TypeWrapper.getRootAsTypeWrapper(buf);
         const messageType = root.messageType();
 
         console.log('message type = ', messageType);
@@ -189,7 +189,7 @@ export class NetworkingManager extends EventEmitter {
     //     this.emit(Message.MediaPlaneToMobileLoginResponse.toString(), correspondingTeamId);
     // }
 
-    protected handleClientLoginResponse = (typeWrapper: FlatBufferType) =>
+    protected handleClientLoginResponse = (typeWrapper: TypeWrapper) =>
     {
         const clientLoginResponseMessage = new ClientLoginResponse();
         typeWrapper.message(clientLoginResponseMessage);
