@@ -20,26 +20,17 @@ static getSizePrefixedRootAsPhaseResponse(bb:flatbuffers.ByteBuffer, obj?:PhaseR
   return (obj || new PhaseResponse()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-sessionId():number {
-  const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
-}
-
 phaseId():number {
-  const offset = this.bb!.__offset(this.bb_pos, 6);
+  const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
 }
 
 static startPhaseResponse(builder:flatbuffers.Builder) {
-  builder.startObject(2);
-}
-
-static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
-  builder.addFieldInt32(0, sessionId, 0);
+  builder.startObject(1);
 }
 
 static addPhaseId(builder:flatbuffers.Builder, phaseId:number) {
-  builder.addFieldInt8(1, phaseId, 0);
+  builder.addFieldInt8(0, phaseId, 0);
 }
 
 static endPhaseResponse(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -47,9 +38,8 @@ static endPhaseResponse(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createPhaseResponse(builder:flatbuffers.Builder, sessionId:number, phaseId:number):flatbuffers.Offset {
+static createPhaseResponse(builder:flatbuffers.Builder, phaseId:number):flatbuffers.Offset {
   PhaseResponse.startPhaseResponse(builder);
-  PhaseResponse.addSessionId(builder, sessionId);
   PhaseResponse.addPhaseId(builder, phaseId);
   return PhaseResponse.endPhaseResponse(builder);
 }

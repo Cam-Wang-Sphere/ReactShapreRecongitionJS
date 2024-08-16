@@ -43,30 +43,22 @@ var PhaseResponse = /** @class */ (function () {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new PhaseResponse()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     };
-    PhaseResponse.prototype.sessionId = function () {
-        var offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
-    };
     PhaseResponse.prototype.phaseId = function () {
-        var offset = this.bb.__offset(this.bb_pos, 6);
+        var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
     };
     PhaseResponse.startPhaseResponse = function (builder) {
-        builder.startObject(2);
-    };
-    PhaseResponse.addSessionId = function (builder, sessionId) {
-        builder.addFieldInt32(0, sessionId, 0);
+        builder.startObject(1);
     };
     PhaseResponse.addPhaseId = function (builder, phaseId) {
-        builder.addFieldInt8(1, phaseId, 0);
+        builder.addFieldInt8(0, phaseId, 0);
     };
     PhaseResponse.endPhaseResponse = function (builder) {
         var offset = builder.endObject();
         return offset;
     };
-    PhaseResponse.createPhaseResponse = function (builder, sessionId, phaseId) {
+    PhaseResponse.createPhaseResponse = function (builder, phaseId) {
         PhaseResponse.startPhaseResponse(builder);
-        PhaseResponse.addSessionId(builder, sessionId);
         PhaseResponse.addPhaseId(builder, phaseId);
         return PhaseResponse.endPhaseResponse(builder);
     };
