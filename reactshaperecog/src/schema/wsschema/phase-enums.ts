@@ -2,18 +2,19 @@
 
 export enum PhaseEnums {
   Min = 0,
-  Intro = 1,
-  IntroCountdown = 2,
-  Tutorial = 3,
-  WarpVote = 4,
-  AsteroidWaveOne = 5,
-  AsteroidWaveOneLeaderboard = 6,
-  AsteroidWaveTwo = 7,
-  AsteroidWaveTwoLeaderboard = 8,
-  AsteroidWaveThree = 9,
-  AsteroidWaveThreeLeaderboard = 10,
-  SaveTheShip = 11,
-  FinalLeaderboard = 12,
-  Outro = 13,
-  Max = 14
+  None = 1,
+  Intro = 2,
+  IntroCountdown = 3,
+  Tutorial = 4,
+  WarpVote = 5,
+  AsteroidWaveOne = 6,
+  AsteroidWaveOneLeaderboard = 7,
+  AsteroidWaveTwo = 8,
+  AsteroidWaveTwoLeaderboard = 9,
+  AsteroidWaveThree = 10,
+  AsteroidWaveThreeLeaderboard = 11,
+  SaveTheShip = 12,
+  FinalLeaderboard = 13,
+  Outro = 14,
+  Max = 15
 }
