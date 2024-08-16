@@ -5,6 +5,8 @@ import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
 import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
+import { PhaseResponse } from '../schema/wsschema/phase-response';
+import { PhaseEnums } from '../schema/wsschema/phase-enums'
 
 export class NetworkingManager extends EventEmitter {
 
@@ -153,6 +155,11 @@ export class NetworkingManager extends EventEmitter {
                 this.handleClientLoginResponse(root);
                 break;
             }
+            case Message.PhaseResponse:
+            {
+                this.handlePhaseResponse(root);
+                break;
+            }
         }
     };
 
@@ -162,12 +169,12 @@ export class NetworkingManager extends EventEmitter {
 
         // @TODO NATHAN: extend this class and put message handlers there... for now just gonna shove into one class...
         const obj = JSON.parse(data);
-        if (obj.type == "login")
+        if (obj.type === "login")
         {
             this.sessionId = obj.value;
             console.log("set sessionId to = " + this.sessionId);
         }
-        else if (obj.type == "team")
+        else if (obj.type === "team")
         {
             console.log("received team message");
         }
@@ -199,6 +206,16 @@ export class NetworkingManager extends EventEmitter {
         console.log('received sessionId = ', this.sessionId);
 
         this.emit(Message.ClientLoginResponse.toString(), this.sessionId);
+    }
+
+    protected handlePhaseResponse = (typeWrapper: TypeWrapper) =>
+    {
+        const phaseResponse = new PhaseResponse();
+        typeWrapper.message(phaseResponse);
+
+        console.log('received phase response = ', phaseResponse.phaseId());
+
+        this.emit(Message.PhaseResponse.toString(),  PhaseEnums[phaseResponse.phaseId()]);
     }
 
     // protected handleScoreUpdateResponse = (typeWrapper: FlatBufferType) =>
