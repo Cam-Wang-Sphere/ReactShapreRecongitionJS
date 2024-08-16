@@ -1,7 +1,7 @@
 import { background } from "@chakra-ui/react";
 import React, { useState, useEffect, useRef } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
-import { Message } from "../schema/dot-dschema/message";
+import { Message } from "../schema/wsschema/message";
 
 interface DrawingProps {
   drawEndFunction: () => void;
@@ -84,10 +84,10 @@ const DrawingWidget = ({
   };
 
   useEffect(() => {
-    inNetworkingManager?.on(
-      Message.MediaPlaneToMobileLoginResponse.toString(),
-      setLineColorFromTeamId
-    );
+    // inNetworkingManager?.on(
+    //   Message.MediaPlaneToMobileLoginResponse.toString(),
+    //   setLineColorFromTeamId
+    // );
 
     const canvas = canvasRef.current;
     if (canvas) {
@@ -104,10 +104,10 @@ const DrawingWidget = ({
     }
 
     return () => {
-      inNetworkingManager?.off(
-        Message.MediaPlaneToMobileLoginResponse.toString(),
-        setLineColorFromTeamId
-      );
+      // inNetworkingManager?.off(
+      //   Message.MediaPlaneToMobileLoginResponse.toString(),
+      //   setLineColorFromTeamId
+      // );
     };
   }, [lineColor, lineOpacity, lineWidth, inNetworkingManager]);
 

@@ -1,14 +1,10 @@
 import * as flatbuffers from 'flatbuffers';
-import { ShapeRequest } from './../schema/dot-dschema/shape-request';
-import { FlatBufferType } from '../schema/dot-dschema/flat-buffer-type';
-import { Message } from '../schema/dot-dschema/message';
-import { PingServerRequest } from '../schema/dot-dschema/ping-server-request';
+import { ShapeRequest } from './../schema/wsschema/shape-request';
+import { TypeWrapper } from '../schema/wsschema/type-wrapper';
+import { Message } from '../schema/wsschema/message';
+import { PingServerRequest } from '../schema/wsschema/ping-server-request';
 import { EventEmitter } from 'events';
-import { MediaPlaneLoginRequest } from '../schema/dot-dschema/media-plane-login-request';
-import { MediaPlaneToMobileLoginResponse } from '../schema/dot-dschema/media-plane-to-mobile-login-response';
-import { ClientLoginResponse } from '../schema/dot-dschema/client-login-response';
-import { ScoreUpdateResponse } from '../schema/dot-dschema/score-update-response';
-import { ClientDataResponse } from '../schema/dot-dschema/client-data-response';
+import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
 
 export class NetworkingManager extends EventEmitter {
 
@@ -68,14 +64,14 @@ export class NetworkingManager extends EventEmitter {
         const builder = new flatbuffers.Builder(256);
 
         ShapeRequest.startShapeRequest(builder);
-        ShapeRequest.addShapeType(builder, shapeInt);
+        ShapeRequest.addShapeId(builder, shapeInt);
         ShapeRequest.addSessionId(builder, this.sessionId);
         const builtShapeRequest = ShapeRequest.endShapeRequest(builder);
 
-        FlatBufferType.startFlatBufferType(builder);
-        FlatBufferType.addMessageType(builder, Message.ShapeRequest);
-        FlatBufferType.addMessage(builder, builtShapeRequest);
-        const BuiltTypeWrapper = FlatBufferType.endFlatBufferType(builder);
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.ShapeRequest);
+        TypeWrapper.addMessage(builder, builtShapeRequest);
+        const BuiltTypeWrapper = TypeWrapper.endTypeWrapper(builder);
 
         builder.finish(BuiltTypeWrapper);
         const buf = builder.asUint8Array();
@@ -91,10 +87,10 @@ export class NetworkingManager extends EventEmitter {
         PingServerRequest.addSessionId(builder, this.sessionId);
         const pingServerRequest = PingServerRequest.endPingServerRequest(builder);
 
-        FlatBufferType.startFlatBufferType(builder);
-        FlatBufferType.addMessageType(builder, Message.PingServerRequest);
-        FlatBufferType.addMessage(builder, pingServerRequest);
-        const typeWrapper = FlatBufferType.endFlatBufferType(builder);
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.PingServerRequest);
+        TypeWrapper.addMessage(builder, pingServerRequest);
+        const typeWrapper = TypeWrapper.endTypeWrapper(builder);
 
         builder.finish(typeWrapper);
 
@@ -152,24 +148,9 @@ export class NetworkingManager extends EventEmitter {
         console.log('message type = ', messageType);
         switch (messageType)
         {
-            case Message.MediaPlaneToMobileLoginResponse:
-            {
-                this.handleMediaPlaneToMobileLoginResponse(root);
-                break;
-            }
             case Message.ClientLoginResponse:
             {
                 this.handleClientLoginResponse(root);
-                break;
-            }
-            case Message.ScoreUpdateResponse:
-            {
-                this.handleScoreUpdateResponse(root);
-                break;
-            }
-            case Message.ClientDataResponse:
-            {
-                this.handleClientDataResponse(root);
                 break;
             }
         }
@@ -193,20 +174,20 @@ export class NetworkingManager extends EventEmitter {
     };
 
     // binary handlers
-    protected handleMediaPlaneToMobileLoginResponse = (typeWrapper: FlatBufferType) =>
-    {
-        const MediaPlaneToMobileLoginResponseMessage = new MediaPlaneToMobileLoginResponse();
-        typeWrapper.message(MediaPlaneToMobileLoginResponseMessage);
+    // protected handleMediaPlaneToMobileLoginResponse = (typeWrapper: FlatBufferType) =>
+    // {
+    //     const MediaPlaneToMobileLoginResponseMessage = new MediaPlaneToMobileLoginResponse();
+    //     typeWrapper.message(MediaPlaneToMobileLoginResponseMessage);
 
-        const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId();
-        const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId();
+    //     const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId();
+    //     const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId();
 
-        console.log('received teamId = ', correspondingTeamId, 'for sessionId = ', correspondingSessionId);
+    //     console.log('received teamId = ', correspondingTeamId, 'for sessionId = ', correspondingSessionId);
 
-        // @NOTE NATHAN: this is actually awesome... we need something like this in Unreal !
-        console.log('emit string = ', Message.MediaPlaneToMobileLoginResponse.toString());
-        this.emit(Message.MediaPlaneToMobileLoginResponse.toString(), correspondingTeamId);
-    }
+    //     // @NOTE NATHAN: this is actually awesome... we need something like this in Unreal !
+    //     console.log('emit string = ', Message.MediaPlaneToMobileLoginResponse.toString());
+    //     this.emit(Message.MediaPlaneToMobileLoginResponse.toString(), correspondingTeamId);
+    // }
 
     protected handleClientLoginResponse = (typeWrapper: FlatBufferType) =>
     {
@@ -220,25 +201,25 @@ export class NetworkingManager extends EventEmitter {
         this.emit(Message.ClientLoginResponse.toString(), this.sessionId);
     }
 
-    protected handleScoreUpdateResponse = (typeWrapper: FlatBufferType) =>
-    {
-        const scoreUpdateResponse = new ScoreUpdateResponse();
-        typeWrapper.message(scoreUpdateResponse);
+    // protected handleScoreUpdateResponse = (typeWrapper: FlatBufferType) =>
+    // {
+    //     const scoreUpdateResponse = new ScoreUpdateResponse();
+    //     typeWrapper.message(scoreUpdateResponse);
 
-        const receivedScore = scoreUpdateResponse.score();
-        console.log('received score update response. ' + scoreUpdateResponse.score());
+    //     const receivedScore = scoreUpdateResponse.score();
+    //     console.log('received score update response. ' + scoreUpdateResponse.score());
 
-        this.emit(Message.ScoreUpdateResponse.toString(), receivedScore);
-    }
+    //     this.emit(Message.ScoreUpdateResponse.toString(), receivedScore);
+    // }
 
-    protected handleClientDataResponse = (typeWrapper: FlatBufferType) =>
-    {
-        const clientDataResponse = new ClientDataResponse();
-        typeWrapper.message(clientDataResponse);
+    // protected handleClientDataResponse = (typeWrapper: FlatBufferType) =>
+    // {
+    //     const clientDataResponse = new ClientDataResponse();
+    //     typeWrapper.message(clientDataResponse);
 
-        const receivedDataString = clientDataResponse.stringData();
-        console.log('received client data response with string data = ', receivedDataString);
+    //     const receivedDataString = clientDataResponse.stringData();
+    //     console.log('received client data response with string data = ', receivedDataString);
 
-        this.emit(Message.ClientDataResponse.toString(), receivedDataString);
-    }
+    //     this.emit(Message.ClientDataResponse.toString(), receivedDataString);
+    // }
 }

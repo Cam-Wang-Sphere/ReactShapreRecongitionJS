@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NetworkingManager } from "./../networking/NetworkingManager";
-import { Message } from '../schema/dot-dschema/message';
+import { Message } from '../schema/wsschema/message';
 
 interface RandomPlayerDataWidgetProps
 {
@@ -23,14 +23,14 @@ const RandomPlayerDataWidget = ({ inNetworkingManager }: RandomPlayerDataWidgetP
             setStringData("");
         }
 
-        inNetworkingManager?.on(Message.ClientDataResponse.toString(), handleClientDataResponse);
-        inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
+        // inNetworkingManager?.on(Message.ClientDataResponse.toString(), handleClientDataResponse);
+        // inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
 
         // cleaning up
         return () =>
         {
-            inNetworkingManager?.off(Message.ClientDataResponse.toString(), handleClientDataResponse);
-            inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
+            // inNetworkingManager?.off(Message.ClientDataResponse.toString(), handleClientDataResponse);
+            // inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetStringData);
         };
     }, [inNetworkingManager]);
 

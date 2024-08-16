@@ -14,8 +14,7 @@ import SuccessOverlay from "./components/SuccessOverlay";
 import ScoreWidget from "./components/ScoreWidget";
 import ConnectWidget from "./components/ConnectWidget";
 import { NetworkingManager } from "./networking/NetworkingManager";
-import { MediaPlaneToMobileLoginResponse } from "./schema/dot-dschema/media-plane-to-mobile-login-response";
-import { Message } from "./schema/dot-dschema/message";
+import { Message } from "./schema/wsschema/message";
 import { TemplateManager } from "./Template/TemplateManager";
 import { Result, Point, DollarRecognizer } from "./Template/Recognizer";
 import {

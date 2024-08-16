@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
-import { Message } from "../schema/dot-dschema/message";
+import { Message } from "../schema/wsschema/message";
 
 import SucessSound from "../assets/sounds/SuccessSound.wav";
 import FailSound from "../assets/sounds/IncorrectSound.wav";
@@ -45,17 +45,17 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
       }, flashBangTime);
     };
 
-    inNetworkingManager?.on(
-      Message.ScoreUpdateResponse.toString(),
-      handleEvent
-    );
+    // inNetworkingManager?.on(
+    //   Message.ScoreUpdateResponse.toString(),
+    //   handleEvent
+    // );
 
     // cleaning up
     return () => {
-      inNetworkingManager?.off(
-        Message.ScoreUpdateResponse.toString(),
-        handleEvent
-      );
+    //   inNetworkingManager?.off(
+    //     Message.ScoreUpdateResponse.toString(),
+    //     handleEvent
+    //   );
     };
   }, [inNetworkingManager]);
 

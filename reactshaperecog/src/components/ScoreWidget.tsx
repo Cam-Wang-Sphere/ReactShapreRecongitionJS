@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NetworkingManager } from "./../networking/NetworkingManager";
-import { Message } from '../schema/dot-dschema/message';
+import { Message } from '../schema/wsschema/message';
 
 interface ScoreWidgetProps
 {
@@ -23,14 +23,14 @@ const ScoreWidget = ({ inNetworkingManager }: ScoreWidgetProps) =>
             setScore(0);
         }
 
-        inNetworkingManager?.on(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
-        inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
+        // inNetworkingManager?.on(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
+        // inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
 
         // cleaning up
         return () =>
         {
-            inNetworkingManager?.off(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
-            inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
+            // inNetworkingManager?.off(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
+            // inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
         };
     }, [inNetworkingManager]);
 
