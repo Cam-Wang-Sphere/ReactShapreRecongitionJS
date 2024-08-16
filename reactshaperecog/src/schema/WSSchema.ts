@@ -7,6 +7,7 @@ export { MediaPlaneLoginRequest } from './wsschema/media-plane-login-request.js'
 export { Message } from './wsschema/message.js';
 export { MobileToMediaPlaneLoginRequest } from './wsschema/mobile-to-media-plane-login-request.js';
 export { MobileToMediaPlaneLogoutRequest } from './wsschema/mobile-to-media-plane-logout-request.js';
+export { PhaseEnums } from './wsschema/phase-enums.js';
 export { PhaseResponse } from './wsschema/phase-response.js';
 export { PingMediaPlaneRequest } from './wsschema/ping-media-plane-request.js';
 export { PingMediaPlaneResponse } from './wsschema/ping-media-plane-response.js';
