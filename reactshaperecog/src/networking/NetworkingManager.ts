@@ -8,6 +8,7 @@ import { PhaseResponse } from '../schema/wsschema/phase-response';
 import { PhaseEnums } from '../schema/wsschema/phase-enums'
 import { PlayerNameRequest } from '../schema/wsschema/player-name-request';
 import { BaseNetworkingManager } from './BaseNetworkingManager';
+import { PlayerNameResponse } from '../schema/wsschema/player-name-response';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -123,6 +124,16 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         this.emit(Message.PhaseResponse.toString(),  PhaseEnums[phaseResponse.phaseId()]);
     }
+
+    protected handlePlayerNameResponse = (typeWrapper: TypeWrapper) =>
+    {
+        const playerNameResponse = new PlayerNameResponse();
+        typeWrapper.message(playerNameResponse);
+
+        console.log('received player name response. name = ', playerNameResponse.name());
+
+        this.emit(Message.PlayerNameResponse.toString(), playerNameResponse.name());
+    }
     // END MESSAGE HANDLERS
 
 
@@ -143,6 +154,11 @@ export class NetworkingManager extends BaseNetworkingManager {
             case Message.PhaseResponse:
             {
                 this.handlePhaseResponse(root);
+                break;
+            }
+            case Message.PlayerNameResponse:
+            {
+                this.handlePlayerNameResponse(root);
                 break;
             }
             default:
