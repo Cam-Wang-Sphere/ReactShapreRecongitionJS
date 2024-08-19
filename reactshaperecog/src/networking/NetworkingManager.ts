@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
 import { PhaseResponse } from '../schema/wsschema/phase-response';
 import { PhaseEnums } from '../schema/wsschema/phase-enums'
+import { PlayerNameRequest } from '../schema/wsschema/player-name-request';
 
 export class NetworkingManager extends EventEmitter {
 
@@ -50,16 +51,27 @@ export class NetworkingManager extends EventEmitter {
     };
 
     // senders
-    sendNameRequestString = (inName: string) => 
+    sendPlayerNameRequest = (inName: string) =>
     {
-        const message = { id: this.sessionId, type: "name", value: inName};
-        console.log("inside send name request string");
-		if (this.socket)
-		{
-            console.log("sent message = ", message);
-			this.socket.send(JSON.stringify(message));
-		};
-    };
+        const builder = new flatbuffers.Builder(256);
+
+        const builtString = builder.createString(inName);
+
+        PlayerNameRequest.startPlayerNameRequest(builder);
+        PlayerNameRequest.addSessionId(builder, this.sessionId);
+        PlayerNameRequest.addName(builder, builtString);
+        const builtPlayerNameRequest = PlayerNameRequest.endPlayerNameRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.PlayerNameRequest);
+        TypeWrapper.addMessage(builder, builtPlayerNameRequest);
+        const BuiltTypeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(BuiltTypeWrapper);
+        const buf = builder.asUint8Array();
+        
+        this.socket?.send(buf);
+    }
 
     sendShapeRequest = (shapeInt : number) => 
     {

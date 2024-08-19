@@ -20,7 +20,7 @@ const NameEntry = ({ inNetworkingManager }: NameEntryProps) => {
   };
 
   const sendNameRequest = () => {
-    inNetworkingManager?.sendNameRequestString(name);
+    inNetworkingManager?.sendPlayerNameRequest(name);
   };
 
   return (

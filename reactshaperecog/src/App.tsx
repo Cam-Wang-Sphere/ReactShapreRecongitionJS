@@ -89,10 +89,10 @@ const App = () => {
 
   const setupNetworkingBindings = (inNetworkingManager: NetworkingManager) => {
     if (networkingManager) {
-      networkingManager.addListener(
-        Message.MediaPlaneToMobileLoginResponse.toString(),
-        HandleLineColor
-      );
+      // networkingManager.addListener(
+      //   Message.MediaPlaneToMobileLoginResponse.toString(),
+      //   HandleLineColor
+      // );
       console.log("setup bindings");
     }
   };
