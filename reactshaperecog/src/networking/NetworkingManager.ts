@@ -3,55 +3,19 @@ import { ShapeRequest } from './../schema/wsschema/shape-request';
 import { TypeWrapper } from '../schema/wsschema/type-wrapper';
 import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
-import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
 import { PhaseResponse } from '../schema/wsschema/phase-response';
 import { PhaseEnums } from '../schema/wsschema/phase-enums'
 import { PlayerNameRequest } from '../schema/wsschema/player-name-request';
+import { BaseNetworkingManager } from './BaseNetworkingManager';
 
-export class NetworkingManager extends EventEmitter {
+// similar to ENET client overrides.
+// just create the senders / message handlers here.
+export class NetworkingManager extends BaseNetworkingManager {
 
-    protected socket: WebSocket | null = null;
-    protected sessionId: number = -1;
 
-    constructor(private url: string)
-    {
-        super();
-    }
-
-    connect = (): Promise<void> =>
-    {
-        return new Promise((resolve, reject) =>
-        {
-            this.socket = new WebSocket(this.url);
-
-            // setting the binary type to an array buffer
-            this.socket.binaryType = 'arraybuffer';
-
-            // socket bindings
-            this.socket.onopen = () => 
-            {
-                alert("Connected to websocket with ip = " + this.url);
-                resolve();
-            };
-            this.socket.onerror = (error) => 
-            {
-                alert("Could not connect to ip = " + this.url);
-                reject(error);
-            };
-            this.socket.onmessage = (event) => 
-            {
-                this.handleMessage(event.data);
-            };
-            this.socket.onclose = () =>
-            {
-                console.log('websocket connection closed');
-            };
-        })
-    };
-
-    // senders
-    sendPlayerNameRequest = (inName: string) =>
+    // START SENDERS
+    public sendPlayerNameRequest = (inName: string) =>
     {
         const builder = new flatbuffers.Builder(256);
 
@@ -73,7 +37,7 @@ export class NetworkingManager extends EventEmitter {
         this.socket?.send(buf);
     }
 
-    sendShapeRequest = (shapeInt : number) => 
+    public sendShapeRequest = (shapeInt : number) => 
     {
         const builder = new flatbuffers.Builder(256);
 
@@ -93,7 +57,7 @@ export class NetworkingManager extends EventEmitter {
         this.socket?.send(buf);
     }
 
-    sendPingServerRequest = () =>
+    public sendPingServerRequest = () =>
     {
         const builder = new flatbuffers.Builder(256);
 
@@ -113,101 +77,31 @@ export class NetworkingManager extends EventEmitter {
         this.socket?.send(buf);
     }
 
-    sendShapeRequestString = (shapeInt: number) =>
+    public sendShapeRequestString = (shapeInt: number) =>
     {
         const message = { id: this.sessionId, type: "shape", value: shapeInt };
         this.socket?.send(JSON.stringify(message));
     }
 
-    sendOrientationRequestString = (inPitch: number, inYaw: number) => {
+    public sendOrientationRequestString = (inPitch: number, inYaw: number) => {
 		const message = { id: this.sessionId, type: "orientation", pitch: inPitch, yaw: inYaw};
 		this.socket?.send(JSON.stringify(message));
 	}
 
-    sendResetOrientationRequestString = () => {
+    public sendResetOrientationRequestString = () => {
         const message = { id: this.sessionId, type: 'resetOrientation'};
         this.socket?.send(JSON.stringify(message));
     }
 
-    sendWillMessage = () => {
+    public sendWillMessage = () => {
         const message = {id: this.sessionId, type: 'Will', value: 'hello'};
         this.socket?.send(JSON.stringify(message));
     }
+    // END SENDERS
 
-    protected handleMessage = (data: any) =>
-    {
-        if (typeof data === 'string')
-        {
-            console.log('received string message');
-            this.handleStringMessage(data);
-        }
-        else  // @TODO NATHAN: handle this better. could be ping opcode or pong opcode...
-        {
-            console.log('received binary message');
-            this.handleBinaryMessage(data);
-        }
-    };
+    
 
-    protected handleBinaryMessage = (data: ArrayBuffer) =>
-    {
-        console.log('Received binary message: ', data);
-
-        // might be unnecessary copy...
-        const myBuf = new Uint8Array(data);
-        const buf = new flatbuffers.ByteBuffer(myBuf);
-
-        const root = TypeWrapper.getRootAsTypeWrapper(buf);
-        const messageType = root.messageType();
-
-        console.log('message type = ', messageType);
-        switch (messageType)
-        {
-            case Message.ClientLoginResponse:
-            {
-                this.handleClientLoginResponse(root);
-                break;
-            }
-            case Message.PhaseResponse:
-            {
-                this.handlePhaseResponse(root);
-                break;
-            }
-        }
-    };
-
-    protected handleStringMessage = (data: string) =>
-    {
-        console.log('Received string message: ', data);
-
-        // @TODO NATHAN: extend this class and put message handlers there... for now just gonna shove into one class...
-        const obj = JSON.parse(data);
-        if (obj.type === "login")
-        {
-            this.sessionId = obj.value;
-            console.log("set sessionId to = " + this.sessionId);
-        }
-        else if (obj.type === "team")
-        {
-            console.log("received team message");
-        }
-    };
-
-    // binary handlers
-    // protected handleMediaPlaneToMobileLoginResponse = (typeWrapper: FlatBufferType) =>
-    // {
-    //     const MediaPlaneToMobileLoginResponseMessage = new MediaPlaneToMobileLoginResponse();
-    //     typeWrapper.message(MediaPlaneToMobileLoginResponseMessage);
-
-    //     const correspondingSessionId = MediaPlaneToMobileLoginResponseMessage.sessionId();
-    //     const correspondingTeamId = MediaPlaneToMobileLoginResponseMessage.teamId();
-
-    //     console.log('received teamId = ', correspondingTeamId, 'for sessionId = ', correspondingSessionId);
-
-    //     // @NOTE NATHAN: this is actually awesome... we need something like this in Unreal !
-    //     console.log('emit string = ', Message.MediaPlaneToMobileLoginResponse.toString());
-    //     this.emit(Message.MediaPlaneToMobileLoginResponse.toString(), correspondingTeamId);
-    // }
-
+    // START MESSAGE HANDLERS:
     protected handleClientLoginResponse = (typeWrapper: TypeWrapper) =>
     {
         const clientLoginResponseMessage = new ClientLoginResponse();
@@ -229,26 +123,48 @@ export class NetworkingManager extends EventEmitter {
 
         this.emit(Message.PhaseResponse.toString(),  PhaseEnums[phaseResponse.phaseId()]);
     }
+    // END MESSAGE HANDLERS
 
-    // protected handleScoreUpdateResponse = (typeWrapper: FlatBufferType) =>
-    // {
-    //     const scoreUpdateResponse = new ScoreUpdateResponse();
-    //     typeWrapper.message(scoreUpdateResponse);
 
-    //     const receivedScore = scoreUpdateResponse.score();
-    //     console.log('received score update response. ' + scoreUpdateResponse.score());
 
-    //     this.emit(Message.ScoreUpdateResponse.toString(), receivedScore);
-    // }
+    // START BASE CLASS OVERRIDE
+    protected handleBinaryMessage(data: ArrayBuffer): void
+    {
+        console.log('Received binary message: ', data);
+        const myBuf = new Uint8Array(data);
+        const buf = new flatbuffers.ByteBuffer(myBuf);
 
-    // protected handleClientDataResponse = (typeWrapper: FlatBufferType) =>
-    // {
-    //     const clientDataResponse = new ClientDataResponse();
-    //     typeWrapper.message(clientDataResponse);
+        const root = TypeWrapper.getRootAsTypeWrapper(buf);
+        const messageType = root.messageType();
+        console.log('message type = ', messageType);
 
-    //     const receivedDataString = clientDataResponse.stringData();
-    //     console.log('received client data response with string data = ', receivedDataString);
+        switch (messageType)
+        {
+            case Message.PhaseResponse:
+            {
+                this.handlePhaseResponse(root);
+                break;
+            }
+            default:
+            {
+                super.handleBinaryMessage(data);
+            }
+        }
+    }
 
-    //     this.emit(Message.ClientDataResponse.toString(), receivedDataString);
-    // }
+    protected handleStringMessage(data: string)
+    {
+        console.log('Received string message: ', data);
+
+        const obj = JSON.parse(data);
+        if (obj.type === "team")
+        {
+            console.log("received team message");
+        }
+        else
+        {
+            super.handleStringMessage(data);
+        }
+    };
+    // END BASE CLASS OVERIDE
 }
