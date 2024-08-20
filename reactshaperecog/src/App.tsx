@@ -186,7 +186,7 @@ const App = () => {
   const inputTypes = [
     <DrawingWidget drawEndFunction={endDrawing} inNetworkingManager={networkingManager} />,
     <TilesInput inNetworkingManager={networkingManager} />,
-    <TapnSlashInput />,
+    <TapnSlashInput inNetworkingManager={networkingManager}/>,
   ];
 
   return (
