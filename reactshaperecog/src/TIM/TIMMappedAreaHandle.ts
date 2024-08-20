@@ -25,6 +25,12 @@ export class FTIMMappedAreaHandle
         return !this.equals(FTIMMappedAreaHandle.Invalid);
     }
 
+
+    public ToInt(): number
+    {
+        return this.Id;
+    }
+
     public ToBytes() : Uint8Array
     {
         let Bytes = new Uint8Array(4);

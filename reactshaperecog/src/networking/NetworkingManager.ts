@@ -9,6 +9,10 @@ import { PhaseEnums } from '../schema/wsschema/phase-enums'
 import { PlayerNameRequest } from '../schema/wsschema/player-name-request';
 import { BaseNetworkingManager } from './BaseNetworkingManager';
 import { PlayerNameResponse } from '../schema/wsschema/player-name-response';
+import { TIMInputEvent } from '../schema/wsschema/timinput-event';
+import { FTIMInputEvent } from '../TIM/TIMInputEvent';
+import { TIMPlayerInput } from '../schema/wsschema/timplayer-input';
+import { ETriggerState } from '../schema/wsschema/etrigger-state';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -56,6 +60,45 @@ export class NetworkingManager extends BaseNetworkingManager {
         const buf = builder.asUint8Array();
         
         this.socket?.send(buf);
+    }
+
+    public sendTIMInputEvents = (inputEvents: FTIMInputEvent[]) =>
+    {
+        if(inputEvents.length === 0)
+        {
+            return;
+        }
+
+        const builder = new flatbuffers.Builder();
+
+        TIMPlayerInput.startInputEventsVector(builder, inputEvents.length);
+
+        inputEvents.forEach((ie: FTIMInputEvent)=>{ 
+            const eventType = ie.EventType as number as ETriggerState;
+            TIMInputEvent.createTIMInputEvent(builder, 
+                ie.AreaHandle.ToInt(), 
+                ie.Index, 
+                ie.Location.x, 
+                ie.Location.y, 
+                eventType, 
+                ie.Time);
+        })
+        const inputEventsOffset = builder.endVector();
+
+        TIMPlayerInput.startTIMPlayerInput(builder);
+        TIMPlayerInput.addSessionId(builder, this.sessionId);
+        TIMPlayerInput.addInputEvents(builder, inputEventsOffset);
+        const playerInputOffset = TIMPlayerInput.endTIMPlayerInput(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.TIMPlayerInput);
+        TypeWrapper.addMessage(builder, playerInputOffset);
+        const wrapperOffset = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(wrapperOffset);
+        const buff = builder.asUint8Array();
+
+        this.socket?.send(buff);
     }
 
     public sendPingServerRequest = () =>
