@@ -7,7 +7,7 @@
       "rootDir": "./src/schema",
       "sourceMap": true,
       "jsx": "react",
-	    "esModuleInterop": true,
+      "esModuleInterop": true,
     },
     "compileOnSave": false,
     "include": [

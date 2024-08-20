@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ScoreWidget from '../components/ScoreWidget';
 import { NetworkingManager } from '../networking/NetworkingManager';
-import { Message } from '../schema/dot-dschema/message';
+import { Message } from '../schema/wsschema/message';
 
 const mockOn = jest.fn();
 const mockOff = jest.fn();
@@ -42,7 +42,7 @@ describe('ScoreWidget Component', () => {
     });
 
     test('should update score when ScoreUpdateResponse event is triggered', async () => {
-        const scoreIncrement = 100;
+        const scoreIncrement = 5555;
 
         mockOn.mockImplementationOnce((event, callback) => {
             if (event === Message.ScoreUpdateResponse.toString()) {
@@ -53,13 +53,13 @@ describe('ScoreWidget Component', () => {
         render(<ScoreWidget inNetworkingManager={ mockNetworkingManager } />);
 
         await waitFor(() => {
-            const scoreText = screen.getByText(/100/);
+            const scoreText = screen.getByText(new RegExp(`${scoreIncrement}`));
             expect(scoreText).toBeInTheDocument();
         });
     });
 
     test('should reset score when MediaPlaneToMobileLoginResponse event is triggered', async () => {
-        const scoreIncrement = 100;
+        const scoreIncrement = 5555;
 
         render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
 
@@ -80,13 +80,13 @@ describe('ScoreWidget Component', () => {
             expect(scoreText).toBeInTheDocument();
         });
 
-        mockOff.mockImplementationOnce((event, callback) => {
+        mockOn.mockImplementationOnce((event, callback) => {
             if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
                 setTimeout(() => callback(), 0);
             }
         });
 
-        mockOff.mock.calls.forEach(([event, callback]) => {
+        mockOn.mock.calls.forEach(([event, callback]) => {
             if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
                 setTimeout(() => callback(), 0);
             }

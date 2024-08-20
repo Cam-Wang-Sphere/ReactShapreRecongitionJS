@@ -38,7 +38,7 @@ import ConnectBigDomeWidget from "./components/ConnectBigDomeWidget"
 
 const UserInputKey = "UserInput";
 
-function storageAvailable(type) {
+function storageAvailable(type: 'localStorage' | 'sessionStorage') {
   let storage;
   try {
     storage = window[type];
@@ -123,13 +123,13 @@ const App = () => {
   });
 
   // TODO maybe look into a more robust way to handle this...
-  const ShapeToEnum = {
-    Arrow: 0,
-    Parenthesis: 1,
-    Check: 2,
-    Triangle: 3,
-    Pigtail: 4,
-    Circle: 5,
+  enum ShapeToEnum {
+    Arrow = 0,
+    Parenthesis = 1,
+    Check = 2,
+    Triangle = 3,
+    Pigtail = 4,
+    Circle = 5,
   };
 
   // Function for ending the drawing
@@ -142,6 +142,9 @@ const App = () => {
       }
       let existingInputString = localStorage.getItem(UserInputKey);
 
+      if (!existingInputString) {
+        return;
+      }
       let existingInputObj = JSON.parse(existingInputString);
 
       for (let i = 0; i < existingInputObj["Input"].length; i++) {
@@ -156,7 +159,7 @@ const App = () => {
     let DrawResult = Recognizer.Recognize(pointArray, false);
 
     if (DrawResult.Score >= 0.5) {
-      let enumResult = ShapeToEnum[DrawResult.Name];
+      let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
       // sendShapeRequest(enumResult);
       networkingManager?.sendShapeRequest(enumResult);
       setDrawResult(DrawResult.Name);
@@ -169,7 +172,7 @@ const App = () => {
     templateManager.SaveTemplate(TemplateName);
   };
 
-  const AddScore = (x) => {
+  const AddScore = (x: number) => {
     setScore(score + x);
     setScoreText("Score: " + score);
   };

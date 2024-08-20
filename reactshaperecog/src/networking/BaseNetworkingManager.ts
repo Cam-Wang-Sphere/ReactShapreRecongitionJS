@@ -10,7 +10,7 @@ export class BaseNetworkingManager extends EventEmitter {
     protected socket: WebSocket | null = null;
     protected sessionId: number = -1;
 
-    protected constructor(private url: string)
+    constructor(private url: string)
     {
         super();
     }

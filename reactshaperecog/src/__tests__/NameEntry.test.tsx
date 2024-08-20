@@ -5,9 +5,9 @@ import NameEntry from '../components/NameEntry';
 import { NetworkingManager } from './../networking/NetworkingManager';
 
 const defaultName = 'Lebron James';
-const mockSendNameRequestString = jest.fn();
+const mockSendPlayerNameRequest = jest.fn();
 const mockNetworkingManager = {
-    sendNameRequestString: mockSendNameRequestString
+    sendPlayerNameRequest: mockSendPlayerNameRequest
 } as unknown as NetworkingManager;
 
 beforeEach(() => {
@@ -46,8 +46,8 @@ describe('NameEntry Component', () => {
         fireEvent.change(nameInput, { target: { value: defaultName} });
         fireEvent.click(sendButton);
 
-        expect(mockSendNameRequestString).toHaveBeenCalledTimes(1);
-        expect(mockSendNameRequestString).toHaveBeenCalledWith(defaultName);
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledTimes(1);
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledWith(defaultName);
     });
 
     test('should handle empty input gracefully', () => {
@@ -59,8 +59,8 @@ describe('NameEntry Component', () => {
         fireEvent.change(nameInput, { target: { value: '' }});
         fireEvent.click(sendButton);
 
-        expect(mockSendNameRequestString).toHaveBeenCalledTimes(1);
-        expect(mockSendNameRequestString).toHaveBeenCalledWith('');
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledTimes(1);
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledWith('');
     });
 
     test('should handle very long input correctly', () => {
@@ -73,7 +73,7 @@ describe('NameEntry Component', () => {
         fireEvent.change(nameInput, { target: { value: longName }});
         fireEvent.click(sendButton);
 
-        expect(mockSendNameRequestString).toHaveBeenCalledTimes(1);
-        expect(mockSendNameRequestString).toHaveBeenCalledWith(longName);
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledTimes(1);
+        expect(mockSendPlayerNameRequest).toHaveBeenCalledWith(longName);
     });
 });
