@@ -22,6 +22,7 @@ import { RepeaterBroadcastBinaryResponse } from '../wsschema/repeater-broadcast-
 import { RepeaterLoginRequest } from '../wsschema/repeater-login-request.js';
 import { ShapeRequest } from '../wsschema/shape-request.js';
 import { ShapeResponse } from '../wsschema/shape-response.js';
+import { TIMPlayerInput } from '../wsschema/timplayer-input.js';
 import { WebClientLoginRequest } from '../wsschema/web-client-login-request.js';
 import { WebClientLoginResponse } from '../wsschema/web-client-login-response.js';
 import { WebClientLogoutRequest } from '../wsschema/web-client-logout-request.js';
@@ -53,13 +54,14 @@ export enum Message {
   ShapeResponse = 22,
   PlayerNameRequest = 23,
   PlayerNameResponse = 24,
-  PhaseResponse = 25
+  PhaseResponse = 25,
+  TIMPlayerInput = 26
 }
 
 export function unionToMessage(
   type: Message,
-  accessor: (obj:ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
-): ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+  accessor: (obj:ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
+): ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(new PingServerRequest())! as PingServerRequest;
@@ -87,15 +89,16 @@ export function unionToMessage(
     case 'PlayerNameRequest': return accessor(new PlayerNameRequest())! as PlayerNameRequest;
     case 'PlayerNameResponse': return accessor(new PlayerNameResponse())! as PlayerNameResponse;
     case 'PhaseResponse': return accessor(new PhaseResponse())! as PhaseResponse;
+    case 'TIMPlayerInput': return accessor(new TIMPlayerInput())! as TIMPlayerInput;
     default: return null;
   }
 }
 
 export function unionListToMessage(
   type: Message, 
-  accessor: (index: number, obj:ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
+  accessor: (index: number, obj:ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
   index: number
-): ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+): ClientLoginResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(index, new PingServerRequest())! as PingServerRequest;
@@ -123,6 +126,7 @@ export function unionListToMessage(
     case 'PlayerNameRequest': return accessor(index, new PlayerNameRequest())! as PlayerNameRequest;
     case 'PlayerNameResponse': return accessor(index, new PlayerNameResponse())! as PlayerNameResponse;
     case 'PhaseResponse': return accessor(index, new PhaseResponse())! as PhaseResponse;
+    case 'TIMPlayerInput': return accessor(index, new TIMPlayerInput())! as TIMPlayerInput;
     default: return null;
   }
 }

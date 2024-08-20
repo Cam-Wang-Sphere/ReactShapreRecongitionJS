@@ -26,6 +26,7 @@ var repeater_broadcast_binary_response_js_1 = require("../wsschema/repeater-broa
 var repeater_login_request_js_1 = require("../wsschema/repeater-login-request.js");
 var shape_request_js_1 = require("../wsschema/shape-request.js");
 var shape_response_js_1 = require("../wsschema/shape-response.js");
+var timplayer_input_js_1 = require("../wsschema/timplayer-input.js");
 var web_client_login_request_js_1 = require("../wsschema/web-client-login-request.js");
 var web_client_login_response_js_1 = require("../wsschema/web-client-login-response.js");
 var web_client_logout_request_js_1 = require("../wsschema/web-client-logout-request.js");
@@ -57,6 +58,7 @@ var Message;
     Message[Message["PlayerNameRequest"] = 23] = "PlayerNameRequest";
     Message[Message["PlayerNameResponse"] = 24] = "PlayerNameResponse";
     Message[Message["PhaseResponse"] = 25] = "PhaseResponse";
+    Message[Message["TIMPlayerInput"] = 26] = "TIMPlayerInput";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -86,6 +88,7 @@ function unionToMessage(type, accessor) {
         case 'PlayerNameRequest': return accessor(new player_name_request_js_1.PlayerNameRequest());
         case 'PlayerNameResponse': return accessor(new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(new phase_response_js_1.PhaseResponse());
+        case 'TIMPlayerInput': return accessor(new timplayer_input_js_1.TIMPlayerInput());
         default: return null;
     }
 }
@@ -117,6 +120,7 @@ function unionListToMessage(type, accessor, index) {
         case 'PlayerNameRequest': return accessor(index, new player_name_request_js_1.PlayerNameRequest());
         case 'PlayerNameResponse': return accessor(index, new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(index, new phase_response_js_1.PhaseResponse());
+        case 'TIMPlayerInput': return accessor(index, new timplayer_input_js_1.TIMPlayerInput());
         default: return null;
     }
 }
