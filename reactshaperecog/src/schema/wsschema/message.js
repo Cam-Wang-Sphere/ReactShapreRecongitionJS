@@ -5,6 +5,8 @@ exports.Message = void 0;
 exports.unionToMessage = unionToMessage;
 exports.unionListToMessage = unionListToMessage;
 var client_login_response_js_1 = require("../wsschema/client-login-response.js");
+var generic_batch_request_js_1 = require("../wsschema/generic-batch-request.js");
+var generic_batch_response_js_1 = require("../wsschema/generic-batch-response.js");
 var json_to_binary_request_js_1 = require("../wsschema/json-to-binary-request.js");
 var json_to_binary_response_js_1 = require("../wsschema/json-to-binary-response.js");
 var media_plane_login_request_js_1 = require("../wsschema/media-plane-login-request.js");
@@ -53,12 +55,14 @@ var Message;
     Message[Message["WebClientLogoutRequest"] = 18] = "WebClientLogoutRequest";
     Message[Message["RepeaterBinaryResponse"] = 19] = "RepeaterBinaryResponse";
     Message[Message["RepeaterBroadcastBinaryResponse"] = 20] = "RepeaterBroadcastBinaryResponse";
-    Message[Message["ShapeRequest"] = 21] = "ShapeRequest";
-    Message[Message["ShapeResponse"] = 22] = "ShapeResponse";
-    Message[Message["PlayerNameRequest"] = 23] = "PlayerNameRequest";
-    Message[Message["PlayerNameResponse"] = 24] = "PlayerNameResponse";
-    Message[Message["PhaseResponse"] = 25] = "PhaseResponse";
-    Message[Message["TIMPlayerInput"] = 26] = "TIMPlayerInput";
+    Message[Message["GenericBatchRequest"] = 21] = "GenericBatchRequest";
+    Message[Message["GenericBatchResponse"] = 22] = "GenericBatchResponse";
+    Message[Message["ShapeRequest"] = 23] = "ShapeRequest";
+    Message[Message["ShapeResponse"] = 24] = "ShapeResponse";
+    Message[Message["PlayerNameRequest"] = 25] = "PlayerNameRequest";
+    Message[Message["PlayerNameResponse"] = 26] = "PlayerNameResponse";
+    Message[Message["PhaseResponse"] = 27] = "PhaseResponse";
+    Message[Message["TIMPlayerInput"] = 28] = "TIMPlayerInput";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -83,6 +87,8 @@ function unionToMessage(type, accessor) {
         case 'WebClientLogoutRequest': return accessor(new web_client_logout_request_js_1.WebClientLogoutRequest());
         case 'RepeaterBinaryResponse': return accessor(new repeater_binary_response_js_1.RepeaterBinaryResponse());
         case 'RepeaterBroadcastBinaryResponse': return accessor(new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
+        case 'GenericBatchRequest': return accessor(new generic_batch_request_js_1.GenericBatchRequest());
+        case 'GenericBatchResponse': return accessor(new generic_batch_response_js_1.GenericBatchResponse());
         case 'ShapeRequest': return accessor(new shape_request_js_1.ShapeRequest());
         case 'ShapeResponse': return accessor(new shape_response_js_1.ShapeResponse());
         case 'PlayerNameRequest': return accessor(new player_name_request_js_1.PlayerNameRequest());
@@ -115,6 +121,8 @@ function unionListToMessage(type, accessor, index) {
         case 'WebClientLogoutRequest': return accessor(index, new web_client_logout_request_js_1.WebClientLogoutRequest());
         case 'RepeaterBinaryResponse': return accessor(index, new repeater_binary_response_js_1.RepeaterBinaryResponse());
         case 'RepeaterBroadcastBinaryResponse': return accessor(index, new repeater_broadcast_binary_response_js_1.RepeaterBroadcastBinaryResponse());
+        case 'GenericBatchRequest': return accessor(index, new generic_batch_request_js_1.GenericBatchRequest());
+        case 'GenericBatchResponse': return accessor(index, new generic_batch_response_js_1.GenericBatchResponse());
         case 'ShapeRequest': return accessor(index, new shape_request_js_1.ShapeRequest());
         case 'ShapeResponse': return accessor(index, new shape_response_js_1.ShapeResponse());
         case 'PlayerNameRequest': return accessor(index, new player_name_request_js_1.PlayerNameRequest());

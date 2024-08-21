@@ -2,6 +2,9 @@
 
 export { ClientLoginResponse } from './wsschema/client-login-response.js';
 export { ETriggerState } from './wsschema/etrigger-state.js';
+export { GenericBatchRequest } from './wsschema/generic-batch-request.js';
+export { GenericBatchResponse } from './wsschema/generic-batch-response.js';
+export { GenericBinaryWrapper } from './wsschema/generic-binary-wrapper.js';
 export { JsonToBinaryRequest } from './wsschema/json-to-binary-request.js';
 export { JsonToBinaryResponse } from './wsschema/json-to-binary-response.js';
 export { MediaPlaneLoginRequest } from './wsschema/media-plane-login-request.js';
