@@ -3,6 +3,7 @@ import { NetworkingManager } from "./../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
+import { Box } from "@chakra-ui/react";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -51,6 +52,8 @@ const TapnSlashInput = ({inNetworkingManager} : TapnSlashProps) => {
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
+    console.log("X: " + x + "Y: " + y);
+
     let Event : ETriggerEvent = ETriggerEvent.Started;
     let Pos : Vector2 = new Vector2(x,y);
     let DateTime : Date = new Date()
@@ -96,6 +99,7 @@ const TapnSlashInput = ({inNetworkingManager} : TapnSlashProps) => {
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
+    console.log("X: " + x + "Y: " + y);
     
     let Event : ETriggerEvent = ETriggerEvent.Ongoing;
     let Pos : Vector2 = new Vector2(x,y);
@@ -111,19 +115,21 @@ const TapnSlashInput = ({inNetworkingManager} : TapnSlashProps) => {
   };
 
   return (
-    <div className="draw-area">
-    <canvas
-      onMouseDown={startDrawing}
-      onMouseUp={endDrawing}
-      onMouseMove={draw}
-      onTouchStart={startDrawing}
-      onTouchEnd={endDrawing}
-      onTouchMove={draw}
-      ref={canvasRef}
-      width={canvasWidth}
-      height={canvasHeight}
-    />
-  </div>
+    <Box
+            h="150px"
+            w="100%"
+            bg="white"
+        >
+          <canvas
+            onMouseDown={startDrawing}
+            onMouseUp={endDrawing}
+            onMouseMove={draw}
+            onTouchStart={startDrawing}
+            onTouchEnd={endDrawing}
+            onTouchMove={draw}
+            ref={canvasRef}
+          />
+    </Box>
   );
 };
 
