@@ -28,6 +28,11 @@ var repeater_broadcast_binary_response_js_1 = require("../wsschema/repeater-broa
 var repeater_login_request_js_1 = require("../wsschema/repeater-login-request.js");
 var shape_request_js_1 = require("../wsschema/shape-request.js");
 var shape_response_js_1 = require("../wsschema/shape-response.js");
+var timinteractable_data_js_1 = require("../wsschema/timinteractable-data.js");
+var timinteractable_update_js_1 = require("../wsschema/timinteractable-update.js");
+var timmapped_area_add_js_1 = require("../wsschema/timmapped-area-add.js");
+var timmapped_area_removed_js_1 = require("../wsschema/timmapped-area-removed.js");
+var timmapped_area_update_js_1 = require("../wsschema/timmapped-area-update.js");
 var timplayer_input_js_1 = require("../wsschema/timplayer-input.js");
 var web_client_login_request_js_1 = require("../wsschema/web-client-login-request.js");
 var web_client_login_response_js_1 = require("../wsschema/web-client-login-response.js");
@@ -63,6 +68,11 @@ var Message;
     Message[Message["PlayerNameResponse"] = 26] = "PlayerNameResponse";
     Message[Message["PhaseResponse"] = 27] = "PhaseResponse";
     Message[Message["TIMPlayerInput"] = 28] = "TIMPlayerInput";
+    Message[Message["TIMMappedAreaAdd"] = 29] = "TIMMappedAreaAdd";
+    Message[Message["TIMMappedAreaUpdate"] = 30] = "TIMMappedAreaUpdate";
+    Message[Message["TIMMappedAreaRemoved"] = 31] = "TIMMappedAreaRemoved";
+    Message[Message["TIMInteractableData"] = 32] = "TIMInteractableData";
+    Message[Message["TIMInteractableUpdate"] = 33] = "TIMInteractableUpdate";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -95,6 +105,11 @@ function unionToMessage(type, accessor) {
         case 'PlayerNameResponse': return accessor(new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(new phase_response_js_1.PhaseResponse());
         case 'TIMPlayerInput': return accessor(new timplayer_input_js_1.TIMPlayerInput());
+        case 'TIMMappedAreaAdd': return accessor(new timmapped_area_add_js_1.TIMMappedAreaAdd());
+        case 'TIMMappedAreaUpdate': return accessor(new timmapped_area_update_js_1.TIMMappedAreaUpdate());
+        case 'TIMMappedAreaRemoved': return accessor(new timmapped_area_removed_js_1.TIMMappedAreaRemoved());
+        case 'TIMInteractableData': return accessor(new timinteractable_data_js_1.TIMInteractableData());
+        case 'TIMInteractableUpdate': return accessor(new timinteractable_update_js_1.TIMInteractableUpdate());
         default: return null;
     }
 }
@@ -129,6 +144,11 @@ function unionListToMessage(type, accessor, index) {
         case 'PlayerNameResponse': return accessor(index, new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(index, new phase_response_js_1.PhaseResponse());
         case 'TIMPlayerInput': return accessor(index, new timplayer_input_js_1.TIMPlayerInput());
+        case 'TIMMappedAreaAdd': return accessor(index, new timmapped_area_add_js_1.TIMMappedAreaAdd());
+        case 'TIMMappedAreaUpdate': return accessor(index, new timmapped_area_update_js_1.TIMMappedAreaUpdate());
+        case 'TIMMappedAreaRemoved': return accessor(index, new timmapped_area_removed_js_1.TIMMappedAreaRemoved());
+        case 'TIMInteractableData': return accessor(index, new timinteractable_data_js_1.TIMInteractableData());
+        case 'TIMInteractableUpdate': return accessor(index, new timinteractable_update_js_1.TIMInteractableUpdate());
         default: return null;
     }
 }
