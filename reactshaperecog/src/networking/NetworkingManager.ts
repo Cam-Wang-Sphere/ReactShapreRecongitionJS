@@ -310,18 +310,22 @@ export class NetworkingManager extends BaseNetworkingManager {
             case Message.TIMMappedAreaAdd:
             {
                 this.handleTIMMappedAreaAdded(root);
+                break;
             }
             case Message.TIMMappedAreaRemoved:
             {
                 this.handleTIMMappedAreaRemoved(root);
+                break;
             }
             case Message.TIMInteractableData:
             {
                 this.handleTIMInteractableData(root);
+                break;
             }
             case Message.TIMInteractableUpdate:
             {
                 this.handleTIMInteractableUpdate(root);
+                break;
             }
             default:
             {
