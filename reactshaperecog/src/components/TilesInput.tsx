@@ -28,7 +28,7 @@ import SvgCircle from "../assets/Icons/circle.tsx";
 import Svgtriangle from "../assets/Icons/triangle.tsx";
 import SvgLightning from "../assets/Icons/lightning.tsx";
 import SvgBow from "../assets/Icons/bow.tsx";
-import { useSpring, animated } from "react-spring";
+
 import { Opacity } from "@mui/icons-material";
 import { Fade } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
@@ -61,15 +61,6 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
     console.log("selected index = ", index);
     DelayAction();
   };
-
-  const animate = useSpring({
-    to: { opacity: 1 },
-    from: { opacity: 0 },
-    // reset: false,
-    // reverse: false,
-    delay: 200,
-    // config: { duration: 3000 },
-  });
 
   // react method for sending index...
   useEffect(() => {
