@@ -307,6 +307,22 @@ export class NetworkingManager extends BaseNetworkingManager {
                 this.handlePlayerNameResponse(root);
                 break;
             }
+            case Message.TIMMappedAreaAdd:
+            {
+                this.handleTIMMappedAreaAdded(root);
+            }
+            case Message.TIMMappedAreaRemoved:
+            {
+                this.handleTIMMappedAreaRemoved(root);
+            }
+            case Message.TIMInteractableData:
+            {
+                this.handleTIMInteractableData(root);
+            }
+            case Message.TIMInteractableUpdate:
+            {
+                this.handleTIMInteractableUpdate(root);
+            }
             default:
             {
                 super.handleBinaryMessage(data);
