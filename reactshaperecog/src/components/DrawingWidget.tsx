@@ -2,6 +2,7 @@ import { background } from "@chakra-ui/react";
 import React, { useState, useEffect, useRef } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from "../schema/wsschema/message";
+import { Box } from "@chakra-ui/react";
 
 interface DrawingProps {
   drawEndFunction: () => void;
@@ -10,7 +11,7 @@ interface DrawingProps {
 
 const UserInputKey = "UserInput";
 
-function storageAvailable(type: 'localStorage' | 'sessionStorage') {
+function storageAvailable(type: "localStorage" | "sessionStorage") {
   let storage;
   try {
     storage = window[type];
@@ -57,7 +58,7 @@ const canvasHeight = window.innerHeight;
 const DrawingWidget = ({
   drawEndFunction,
   inNetworkingManager,
-  }: DrawingProps) => {
+}: DrawingProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
@@ -112,7 +113,9 @@ const DrawingWidget = ({
   }, [lineColor, lineOpacity, lineWidth, inNetworkingManager]);
 
   // Function for starting the drawing
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const startDrawing = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!ctxRef.current || !canvasRect.current) {
       return;
     }
@@ -131,12 +134,16 @@ const DrawingWidget = ({
       localStorage.removeItem(UserInputKey);
     }
 
-    let x = ('touches' in e)
-      ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX - canvasRect.current.left 
-      : (e.nativeEvent as MouseEvent).offsetX;
-    let y = ('touches' in e)
-      ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY - canvasRect.current.top
-      : (e.nativeEvent as MouseEvent).offsetY;
+    let x =
+      "touches" in e
+        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX -
+          canvasRect.current.left
+        : (e.nativeEvent as MouseEvent).offsetX;
+    let y =
+      "touches" in e
+        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY -
+          canvasRect.current.top
+        : (e.nativeEvent as MouseEvent).offsetY;
 
     ctxRef.current.beginPath();
     ctxRef.current.moveTo(x, y);
@@ -151,18 +158,24 @@ const DrawingWidget = ({
     drawEndFunction();
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const draw = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawing || !ctxRef.current || !canvasRect.current) {
       return;
     }
 
-    let x = ('touches' in e)
-      ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX - canvasRect.current.left
-      : (e.nativeEvent as MouseEvent).offsetX;
-    let y = ('touches' in e)
-      ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY - canvasRect.current.top
-      : (e.nativeEvent as MouseEvent).offsetY;
-    
+    let x =
+      "touches" in e
+        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX -
+          canvasRect.current.left
+        : (e.nativeEvent as MouseEvent).offsetX;
+    let y =
+      "touches" in e
+        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY -
+          canvasRect.current.top
+        : (e.nativeEvent as MouseEvent).offsetY;
+
     if (storageAvailable("localStorage")) {
       // If no user input exists create a new one
       if (!localStorage.getItem(UserInputKey)) {
@@ -174,13 +187,15 @@ const DrawingWidget = ({
       }
     }
 
-    ctxRef.current.lineTo(x, y);   
+    ctxRef.current.lineTo(x, y);
     ctxRef.current.stroke();
-  }; 
+  };
 
   return (
-    <div className="draw-area">
+    <Box mb="20px" h="100%" w="100%" bg="white">
+      {/* <div className="draw-area"> */}
       <canvas
+        style={{ position: "relative", width: "100%", height: "100%" }}
         onMouseDown={startDrawing}
         onMouseUp={endDrawing}
         onMouseMove={draw}
@@ -191,7 +206,8 @@ const DrawingWidget = ({
         width={canvasWidth}
         height={canvasHeight}
       />
-    </div>
+      {/* </div> */}
+    </Box>
   );
 };
 

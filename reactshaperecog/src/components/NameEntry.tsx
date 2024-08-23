@@ -43,9 +43,15 @@ const NameEntry = ({ inNetworkingManager }: NameEntryProps) => {
               value={name}
               onChange={handleNameChange}
               placeholder="Enter Name"
+              style={{ height: "38px", padding: "10px" }}
             />
-            <Button colorScheme="teal" onClick={sendNameRequest}>
-              Send Name
+            <Button
+              colorScheme="teal"
+              onClick={sendNameRequest}
+              w={"200px"}
+              bg={"#24a0ed"}
+            >
+              Enter
             </Button>
           </HStack>
         </div>

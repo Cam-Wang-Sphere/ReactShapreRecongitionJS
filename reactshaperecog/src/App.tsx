@@ -5,14 +5,12 @@ import React from "react";
 // import { flatbuffers } from 'flatbuffers';
 import "./App.css";
 import Gyroscope from "./components/Gyroscope";
-import NameEntry from "./components/NameEntry";
 import InputSelect from "./components/InputSelect";
 import TilesInput from "./components/TilesInput";
+import ConnectionScreen from "./components/ConnectionScreen";
 import TapnSlashInput from "./components/TapnSlashInput";
-import DrawInput from "./components/DrawInput";
 import SuccessOverlay from "./components/SuccessOverlay";
 import ScoreWidget from "./components/ScoreWidget";
-import ConnectWidget from "./components/ConnectWidget";
 import { NetworkingManager } from "./networking/NetworkingManager";
 import { Message } from "./schema/wsschema/message";
 import { TemplateManager } from "./Template/TemplateManager";
@@ -34,11 +32,10 @@ import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
 import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
-import ConnectBigDomeWidget from "./components/ConnectBigDomeWidget"
 
 const UserInputKey = "UserInput";
 
-function storageAvailable(type: 'localStorage' | 'sessionStorage') {
+function storageAvailable(type: "localStorage" | "sessionStorage") {
   let storage;
   try {
     storage = window[type];
@@ -130,7 +127,7 @@ const App = () => {
     Triangle = 3,
     Pigtail = 4,
     Circle = 5,
-  };
+  }
 
   // Function for ending the drawing
   const endDrawing = () => {
@@ -184,23 +181,30 @@ const App = () => {
   };
   const [_index, setIndex] = useState(0);
   const inputTypes = [
-    <DrawingWidget drawEndFunction={endDrawing} inNetworkingManager={networkingManager} />,
+    <ConnectionScreen />,
+    <DrawingWidget
+      drawEndFunction={endDrawing}
+      inNetworkingManager={networkingManager}
+    />,
     <TilesInput inNetworkingManager={networkingManager} />,
-    <TapnSlashInput inNetworkingManager={networkingManager}/>,
+    <TapnSlashInput inNetworkingManager={networkingManager} />,
   ];
 
   return (
     <Container className="App" maxW={"sm"}>
       <section className="ipcon">
         <Grid
-          templateRows="repeat(4, 0.6fr)"
+          templateRows="repeat(19, 0.6fr)"
           templateColumns="repeat(5, 1fr)"
-          templateAreas={`"Heading" "Connections" "InputSelect" "Main"`}
+          templateAreas={`"Heading" "Score" "Main"`}
           gap={4}
           p={"10px"}
         >
           <GridItem rowSpan={1} colSpan={1} area="Heading" mt="1%">
-            <NavMenu />
+            <NavMenu
+              Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
+              onSelect={selectHandle}
+            />
           </GridItem>
           <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
             <Center>
@@ -208,33 +212,41 @@ const App = () => {
             </Center>
           </GridItem>
 
-          <GridItem area="Connections" rowSpan={2} colSpan={5}>
-            <VStack alignItems={"center"}>
-              <Box>
-                <ConnectWidget connectFunction={connectToServer} />
-                <NameEntry inNetworkingManager={networkingManager} />
-                {/* {<AddTemplateWidget AddTemplateFunction={AddTemplate} />} */}
-                <ConnectBigDomeWidget connectFunction={connectToServer} />
-              </Box>
-            </VStack>
-          </GridItem>
+          {_index !== 3 && (
+            <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
+              <VStack>
+                <span color={textColor} className="resultText">
+                  {drawResult}
+                </span>
+                <HStack justifyContent="space-evenly">
+                  <SuccessOverlay inNetworkingManager={networkingManager} />
 
-          <GridItem area="InputSelect" rowSpan={3} colSpan={5}>
-            <VStack alignItems={"center"}>
-              <InputSelect
+                  <ScoreWidget inNetworkingManager={networkingManager} />
+                  <RandomPlayerDataWidget
+                    inNetworkingManager={networkingManager}
+                  />
+                </HStack>
+              </VStack>
+            </GridItem>
+          )}
+
+          {/* <GridItem area="InputSelect" rowSpan={0} colSpan={0}> */}
+          {/* <VStack alignItems={"center"}> */}
+          {/* <InputSelect
                 Names={["Draw", "Tiles", "Tap n Slash"]}
                 onSelect={selectHandle}
-              />
-              <SuccessOverlay inNetworkingManager={networkingManager} />
-              <span color={textColor} className="resultText">
-                {drawResult}
-              </span>
-              <ScoreWidget inNetworkingManager={networkingManager} />
-              <RandomPlayerDataWidget inNetworkingManager={networkingManager} />
-            </VStack>
-          </GridItem>
+              /> */}
+          {/* </VStack> */}
+          {/* </GridItem> */}
 
-          <GridItem area="Main" maxH="600px" rowSpan={4} colSpan={5}>
+          <GridItem
+            area="Main"
+            rowStart={_index === 3 ? 2 : 3}
+            rowEnd={20}
+            colSpan={5}
+            alignItems={"center"}
+            // bg={"pink"}
+          >
             {inputTypes[_index]}
           </GridItem>
         </Grid>

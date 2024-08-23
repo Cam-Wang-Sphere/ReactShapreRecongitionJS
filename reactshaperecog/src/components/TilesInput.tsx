@@ -70,21 +70,19 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
   }, []);
 
   return (
-    <>
-      <SimpleGrid columns={2} spacing={10} mt="2%" pb="15%">
-        {Icons.map((Icon, index) => (
-          <Box
-            key={index}
-            bg={selectedIndex === index ? "teal" : "white"}
-            height="150px"
-            borderRadius="md"
-            onClick={() => handleButtonClick(index)}
-          >
-            {Icon}
-          </Box>
-        ))}
-      </SimpleGrid>
-    </>
+    <SimpleGrid columns={2} spacing={10} autoRows={"true"}>
+      {Icons.map((Icon, index) => (
+        <Box
+          key={index}
+          bg={selectedIndex === index ? "teal" : "white"}
+          height="150px"
+          borderRadius="md"
+          onClick={() => handleButtonClick(index)}
+        >
+          {Icon}
+        </Box>
+      ))}
+    </SimpleGrid>
   );
 };
 

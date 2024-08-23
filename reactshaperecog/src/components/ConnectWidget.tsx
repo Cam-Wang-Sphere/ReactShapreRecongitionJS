@@ -7,6 +7,7 @@ import {
   EditableTextarea,
   EditablePreview,
 } from "@chakra-ui/react";
+import { Padding } from "@mui/icons-material";
 
 interface ConnectWidgetProps {
   connectFunction: (address: string) => void;
@@ -43,9 +44,15 @@ const ConnectWidget = ({ connectFunction }: ConnectWidgetProps) => {
               value={address}
               onChange={handleSetAddress}
               placeholder="Enter ip address here"
+              style={{ height: "38px", padding: "10px" }}
             />
-            <Button colorScheme="teal" onClick={tryConnect}>
-              Connect To Server
+            <Button
+              colorScheme="teal"
+              onClick={tryConnect}
+              w={"200px"}
+              bg={"#24a0ed"}
+            >
+              Connect
             </Button>
           </HStack>
         </div>

@@ -13,11 +13,20 @@ import {
   Input,
   MenuButton,
   IconButton,
+  HStack,
+  ButtonGroup,
+  VStack,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { grey } from "@mui/material/colors";
 
-function NavMenu() {
+interface Props {
+  Names: string[];
+  onSelect: (index: number) => void;
+}
+
+function NavMenu({ Names, onSelect }: Props) {
+  const [selectIndex, setSelectedIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
@@ -34,16 +43,32 @@ function NavMenu() {
       ></Button>
       <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg={"teal"}>
+        <DrawerContent bg={"#333"} color={"#fff"}>
           <DrawerCloseButton />
           <DrawerHeader>Navigate to</DrawerHeader>
 
           <DrawerBody>
-            <ul>
-              <li>Connection</li>
-              <li>Enter Name</li>
-              <li>Game</li>
-            </ul>
+            <VStack spacing={1.5}>
+              {Names.map((Name, index) => (
+                <Button
+                  key={index}
+                  onClick={() => {
+                    onSelect(index);
+                    setSelectedIndex(index);
+                  }}
+                  _hover={{ bg: "teal" }}
+                  _active={{
+                    bg: "teal",
+                  }}
+                  bg={"#444"}
+                  w={"100%"}
+                  color="#fff"
+                  isActive={selectIndex === index}
+                >
+                  {Name}
+                </Button>
+              ))}
+            </VStack>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>

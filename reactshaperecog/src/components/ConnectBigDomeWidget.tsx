@@ -13,7 +13,6 @@ interface ConnectBigDomeWidgetProps {
 }
 
 const ConnectWidget = ({ connectFunction }: ConnectBigDomeWidgetProps) => {
-
   const tryConnectToBigDome = () => {
     const fullAddress = "wss://10.232.64.22:3004";
     connectFunction(fullAddress);
@@ -33,7 +32,12 @@ const ConnectWidget = ({ connectFunction }: ConnectBigDomeWidgetProps) => {
               <EditablePreview />
               <EditableInput />
             </Editable> */}
-            <Button style={{width: '365px'}} colorScheme="teal" onClick={tryConnectToBigDome}>
+            <Button
+              w={"100%"}
+              h={"50px"}
+              colorScheme="teal"
+              onClick={tryConnectToBigDome}
+            >
               Connect To Big Dome
             </Button>
           </HStack>
