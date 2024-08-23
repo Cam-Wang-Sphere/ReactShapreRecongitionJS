@@ -13,6 +13,16 @@ import { TIMInputEvent } from '../schema/wsschema/timinput-event';
 import { FTIMInputEvent } from '../TIM/TIMInputEvent';
 import { TIMPlayerInput } from '../schema/wsschema/timplayer-input';
 import { ETriggerState } from '../schema/wsschema/etrigger-state';
+import { TIMMappedAreaAdd } from '../schema/wsschema/timmapped-area-add';
+import { FTIMMappedArea } from '../TIM/TIMMappedArea';
+import { Vector2 } from '../TIM/Vector2';
+import { Vec2 } from '../schema/wsschema/vec2';
+import { FTIMMappedAreaHandle } from '../TIM/TIMMappedAreaHandle';
+import { TIMMappedAreaUpdate } from '../schema/wsschema/timmapped-area-update';
+import { TIMMappedAreaRemoved } from '../schema/wsschema/timmapped-area-removed';
+import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
+import { FTIMInteractableData } from '../TIM/TIMInteractableData';
+import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -177,6 +187,99 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         this.emit(Message.PlayerNameResponse.toString(), playerNameResponse.name());
     }
+
+    protected handleTIMMappedAreaAdded = (typeWrapper: TypeWrapper) =>
+    {
+        const mappedAreaAdded = new TIMMappedAreaAdd();
+        typeWrapper.message(mappedAreaAdded);
+
+        let mappedArea = new FTIMMappedArea();
+        mappedArea.color = mappedAreaAdded.color()!;
+        let dimensions = mappedAreaAdded.dimensions()!;
+        mappedArea.dimensions = new Vector2(dimensions.x(), dimensions.y());
+        mappedArea.distance = mappedAreaAdded.distance();
+        mappedArea.handle = new FTIMMappedAreaHandle(mappedAreaAdded.handle());
+        mappedArea.orientation = mappedAreaAdded.orientation();
+        let rotation = mappedAreaAdded.rotation()!;
+        mappedArea.pitch = rotation.x();
+        mappedArea.yaw = rotation.y();
+        mappedArea.shape = mappedAreaAdded.shape();
+
+        this.emit(Message.TIMMappedAreaAdd.toString(), mappedArea);
+    }
+
+    protected handleTIMMappedAreaUpdated = (typeWrapper: TypeWrapper) =>
+    {
+        const mappedAreaUpdated = new TIMMappedAreaUpdate();
+        typeWrapper.message(mappedAreaUpdated);
+
+        let mappedArea = new FTIMMappedArea();
+        mappedArea.color = mappedAreaUpdated.color()!;
+        let dimensions = mappedAreaUpdated.dimensions()!;
+        mappedArea.dimensions = new Vector2(dimensions.x(), dimensions.y());
+        mappedArea.distance = mappedAreaUpdated.distance();
+        mappedArea.handle = new FTIMMappedAreaHandle(mappedAreaUpdated.handle());
+        mappedArea.orientation = mappedAreaUpdated.orientation();
+        let rotation = mappedAreaUpdated.rotation()!;
+        mappedArea.pitch = rotation.x();
+        mappedArea.yaw = rotation.y();
+        mappedArea.shape = mappedAreaUpdated.shape();
+
+        this.emit(Message.TIMMappedAreaUpdate.toString(), mappedArea);
+
+    }
+
+    protected handleTIMMappedAreaRemoved = (typeWrapper: TypeWrapper) =>
+    {
+        const mappedAreaRemoved = new TIMMappedAreaRemoved();
+        typeWrapper.message(mappedAreaRemoved);
+
+        const handle = new FTIMMappedAreaHandle(mappedAreaRemoved.handle());
+
+        this.emit(Message.TIMMappedAreaRemoved.toString(), handle);
+    }
+
+    protected handleTIMInteractableData = (typeWrapper: TypeWrapper) =>
+    {
+        const interactableData = new TIMInteractableData();
+        typeWrapper.message(interactableData);
+
+        const tags : string[] = [];
+        for(let i = 0; i < interactableData.tagsLength(); i++)
+        {
+            tags.push(interactableData.tags(i));
+        }
+        const interactable = new FTIMInteractableData();
+        interactable.tags = tags;
+        interactable.scale = interactableData.scale();
+        interactable.handle = interactableData.netHandle();
+
+        this.emit(Message.TIMInteractableData.toString(), interactable);
+    }
+
+    protected handleTIMInteractableUpdate = (typeWrapper: TypeWrapper) =>
+    {
+        const interactableUpdate = new TIMInteractableUpdate();
+        typeWrapper.message(interactableUpdate);
+
+        const tags : string[] = [];
+        for(let i = 0; i < interactableUpdate.tagsLength(); i++)
+        {
+            tags.push(interactableUpdate.tags(i));
+        }
+        const vec = interactableUpdate.location()!;
+        const location = new Vector2(vec.x(), vec.y());
+
+        const interactable = new FTIMInteractableData();
+        interactable.tags = tags;
+        interactable.distance = interactableUpdate.distance();
+        interactable.location = location;
+        interactable.rotation = interactableUpdate.rotation();
+        interactable.handle = interactableUpdate.netHandle();
+
+        this.emit(Message.TIMInteractableUpdate.toString(), interactable);
+    }
+
     // END MESSAGE HANDLERS
 
 
