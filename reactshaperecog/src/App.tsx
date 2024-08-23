@@ -192,65 +192,65 @@ const App = () => {
 
   return (
     <Container className="App" maxW={"sm"}>
-      <section className="ipcon">
-        <Grid
-          templateRows="repeat(19, 0.6fr)"
-          templateColumns="repeat(5, 1fr)"
-          templateAreas={`"Heading" "Score" "Main"`}
-          gap={4}
-          p={"10px"}
-        >
-          <GridItem rowSpan={1} colSpan={1} area="Heading" mt="1%">
-            <NavMenu
-              Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
-              onSelect={selectHandle}
-            />
+      {/* <section className="ipcon"> */}
+      <Grid
+        templateRows="repeat(19, 0.6fr)"
+        templateColumns="repeat(5, 1fr)"
+        templateAreas={`"Heading" "Score" "Main"`}
+        gap={4}
+        pt={"20px"}
+      >
+        <GridItem rowSpan={1} colSpan={1} area="Heading" mt="1%">
+          <NavMenu
+            Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
+            onSelect={selectHandle}
+          />
+        </GridItem>
+        <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
+          <Center>
+            <Heading color={textColor}>PreFE</Heading>
+          </Center>
+        </GridItem>
+
+        {_index !== 3 && (
+          <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
+            <VStack>
+              <span color={textColor} className="resultText">
+                {drawResult}
+              </span>
+              <HStack justifyContent="space-evenly">
+                <SuccessOverlay inNetworkingManager={networkingManager} />
+
+                <ScoreWidget inNetworkingManager={networkingManager} />
+                <RandomPlayerDataWidget
+                  inNetworkingManager={networkingManager}
+                />
+              </HStack>
+            </VStack>
           </GridItem>
-          <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
-            <Center>
-              <Heading color={textColor}>PreFE</Heading>
-            </Center>
-          </GridItem>
+        )}
 
-          {_index !== 3 && (
-            <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
-              <VStack>
-                <span color={textColor} className="resultText">
-                  {drawResult}
-                </span>
-                <HStack justifyContent="space-evenly">
-                  <SuccessOverlay inNetworkingManager={networkingManager} />
-
-                  <ScoreWidget inNetworkingManager={networkingManager} />
-                  <RandomPlayerDataWidget
-                    inNetworkingManager={networkingManager}
-                  />
-                </HStack>
-              </VStack>
-            </GridItem>
-          )}
-
-          {/* <GridItem area="InputSelect" rowSpan={0} colSpan={0}> */}
-          {/* <VStack alignItems={"center"}> */}
-          {/* <InputSelect
+        {/* <GridItem area="InputSelect" rowSpan={0} colSpan={0}> */}
+        {/* <VStack alignItems={"center"}> */}
+        {/* <InputSelect
                 Names={["Draw", "Tiles", "Tap n Slash"]}
                 onSelect={selectHandle}
               /> */}
-          {/* </VStack> */}
-          {/* </GridItem> */}
+        {/* </VStack> */}
+        {/* </GridItem> */}
 
-          <GridItem
-            area="Main"
-            rowStart={_index === 3 ? 2 : 3}
-            rowEnd={20}
-            colSpan={5}
-            alignItems={"center"}
-            // bg={"pink"}
-          >
-            {inputTypes[_index]}
-          </GridItem>
-        </Grid>
-      </section>
+        <GridItem
+          area="Main"
+          rowStart={_index === 3 ? 2 : 3}
+          rowEnd={20}
+          colSpan={5}
+          alignItems={"center"}
+          // bg={"pink"}
+        >
+          {inputTypes[_index]}
+        </GridItem>
+      </Grid>
+      {/* </section> */}
     </Container>
   );
 
