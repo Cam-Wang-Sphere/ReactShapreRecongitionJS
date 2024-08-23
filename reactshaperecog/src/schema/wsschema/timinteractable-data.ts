@@ -20,7 +20,7 @@ static getSizePrefixedRootAsTIMInteractableData(bb:flatbuffers.ByteBuffer, obj?:
   return (obj || new TIMInteractableData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-toSession():number {
+sessionId():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
@@ -51,8 +51,8 @@ static startTIMInteractableData(builder:flatbuffers.Builder) {
   builder.startObject(4);
 }
 
-static addToSession(builder:flatbuffers.Builder, toSession:number) {
-  builder.addFieldInt32(0, toSession, 0);
+static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
+  builder.addFieldInt32(0, sessionId, 0);
 }
 
 static addNetHandle(builder:flatbuffers.Builder, netHandle:number) {
@@ -84,9 +84,9 @@ static endTIMInteractableData(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createTIMInteractableData(builder:flatbuffers.Builder, toSession:number, netHandle:number, tagsOffset:flatbuffers.Offset, scale:number):flatbuffers.Offset {
+static createTIMInteractableData(builder:flatbuffers.Builder, sessionId:number, netHandle:number, tagsOffset:flatbuffers.Offset, scale:number):flatbuffers.Offset {
   TIMInteractableData.startTIMInteractableData(builder);
-  TIMInteractableData.addToSession(builder, toSession);
+  TIMInteractableData.addSessionId(builder, sessionId);
   TIMInteractableData.addNetHandle(builder, netHandle);
   TIMInteractableData.addTags(builder, tagsOffset);
   TIMInteractableData.addScale(builder, scale);

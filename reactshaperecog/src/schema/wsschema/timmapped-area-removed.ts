@@ -20,7 +20,7 @@ static getSizePrefixedRootAsTIMMappedAreaRemoved(bb:flatbuffers.ByteBuffer, obj?
   return (obj || new TIMMappedAreaRemoved()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-toSession():number {
+sessionId():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
@@ -34,8 +34,8 @@ static startTIMMappedAreaRemoved(builder:flatbuffers.Builder) {
   builder.startObject(2);
 }
 
-static addToSession(builder:flatbuffers.Builder, toSession:number) {
-  builder.addFieldInt32(0, toSession, 0);
+static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
+  builder.addFieldInt32(0, sessionId, 0);
 }
 
 static addHandle(builder:flatbuffers.Builder, handle:number) {
@@ -47,9 +47,9 @@ static endTIMMappedAreaRemoved(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createTIMMappedAreaRemoved(builder:flatbuffers.Builder, toSession:number, handle:number):flatbuffers.Offset {
+static createTIMMappedAreaRemoved(builder:flatbuffers.Builder, sessionId:number, handle:number):flatbuffers.Offset {
   TIMMappedAreaRemoved.startTIMMappedAreaRemoved(builder);
-  TIMMappedAreaRemoved.addToSession(builder, toSession);
+  TIMMappedAreaRemoved.addSessionId(builder, sessionId);
   TIMMappedAreaRemoved.addHandle(builder, handle);
   return TIMMappedAreaRemoved.endTIMMappedAreaRemoved(builder);
 }

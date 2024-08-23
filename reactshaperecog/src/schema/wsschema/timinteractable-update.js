@@ -44,7 +44,7 @@ var TIMInteractableUpdate = /** @class */ (function () {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new TIMInteractableUpdate()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     };
-    TIMInteractableUpdate.prototype.toSession = function () {
+    TIMInteractableUpdate.prototype.sessionId = function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     };
@@ -75,8 +75,8 @@ var TIMInteractableUpdate = /** @class */ (function () {
     TIMInteractableUpdate.startTIMInteractableUpdate = function (builder) {
         builder.startObject(6);
     };
-    TIMInteractableUpdate.addToSession = function (builder, toSession) {
-        builder.addFieldInt32(0, toSession, 0);
+    TIMInteractableUpdate.addSessionId = function (builder, sessionId) {
+        builder.addFieldInt32(0, sessionId, 0);
     };
     TIMInteractableUpdate.addNetHandle = function (builder, netHandle) {
         builder.addFieldInt32(1, netHandle, 0);

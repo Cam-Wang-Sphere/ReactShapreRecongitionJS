@@ -43,7 +43,7 @@ var TIMInteractableData = /** @class */ (function () {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new TIMInteractableData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     };
-    TIMInteractableData.prototype.toSession = function () {
+    TIMInteractableData.prototype.sessionId = function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     };
@@ -66,8 +66,8 @@ var TIMInteractableData = /** @class */ (function () {
     TIMInteractableData.startTIMInteractableData = function (builder) {
         builder.startObject(4);
     };
-    TIMInteractableData.addToSession = function (builder, toSession) {
-        builder.addFieldInt32(0, toSession, 0);
+    TIMInteractableData.addSessionId = function (builder, sessionId) {
+        builder.addFieldInt32(0, sessionId, 0);
     };
     TIMInteractableData.addNetHandle = function (builder, netHandle) {
         builder.addFieldInt32(1, netHandle, 0);
@@ -92,9 +92,9 @@ var TIMInteractableData = /** @class */ (function () {
         var offset = builder.endObject();
         return offset;
     };
-    TIMInteractableData.createTIMInteractableData = function (builder, toSession, netHandle, tagsOffset, scale) {
+    TIMInteractableData.createTIMInteractableData = function (builder, sessionId, netHandle, tagsOffset, scale) {
         TIMInteractableData.startTIMInteractableData(builder);
-        TIMInteractableData.addToSession(builder, toSession);
+        TIMInteractableData.addSessionId(builder, sessionId);
         TIMInteractableData.addNetHandle(builder, netHandle);
         TIMInteractableData.addTags(builder, tagsOffset);
         TIMInteractableData.addScale(builder, scale);

@@ -43,7 +43,7 @@ var TIMMappedAreaRemoved = /** @class */ (function () {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new TIMMappedAreaRemoved()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     };
-    TIMMappedAreaRemoved.prototype.toSession = function () {
+    TIMMappedAreaRemoved.prototype.sessionId = function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     };
@@ -54,8 +54,8 @@ var TIMMappedAreaRemoved = /** @class */ (function () {
     TIMMappedAreaRemoved.startTIMMappedAreaRemoved = function (builder) {
         builder.startObject(2);
     };
-    TIMMappedAreaRemoved.addToSession = function (builder, toSession) {
-        builder.addFieldInt32(0, toSession, 0);
+    TIMMappedAreaRemoved.addSessionId = function (builder, sessionId) {
+        builder.addFieldInt32(0, sessionId, 0);
     };
     TIMMappedAreaRemoved.addHandle = function (builder, handle) {
         builder.addFieldInt32(1, handle, 0);
@@ -64,9 +64,9 @@ var TIMMappedAreaRemoved = /** @class */ (function () {
         var offset = builder.endObject();
         return offset;
     };
-    TIMMappedAreaRemoved.createTIMMappedAreaRemoved = function (builder, toSession, handle) {
+    TIMMappedAreaRemoved.createTIMMappedAreaRemoved = function (builder, sessionId, handle) {
         TIMMappedAreaRemoved.startTIMMappedAreaRemoved(builder);
-        TIMMappedAreaRemoved.addToSession(builder, toSession);
+        TIMMappedAreaRemoved.addSessionId(builder, sessionId);
         TIMMappedAreaRemoved.addHandle(builder, handle);
         return TIMMappedAreaRemoved.endTIMMappedAreaRemoved(builder);
     };

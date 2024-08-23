@@ -26,7 +26,7 @@ static getSizePrefixedRootAsTIMMappedAreaUpdate(bb:flatbuffers.ByteBuffer, obj?:
   return (obj || new TIMMappedAreaUpdate()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-toSession():number {
+sessionId():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
@@ -70,8 +70,8 @@ static startTIMMappedAreaUpdate(builder:flatbuffers.Builder) {
   builder.startObject(8);
 }
 
-static addToSession(builder:flatbuffers.Builder, toSession:number) {
-  builder.addFieldInt32(0, toSession, 0);
+static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
+  builder.addFieldInt32(0, sessionId, 0);
 }
 
 static addHandle(builder:flatbuffers.Builder, handle:number) {
