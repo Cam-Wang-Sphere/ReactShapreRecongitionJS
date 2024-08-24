@@ -194,7 +194,7 @@ const App = () => {
     <Container className="App" maxW={"sm"}>
       {/* <section className="ipcon"> */}
       <Grid
-        templateRows="repeat(19, 0.6fr)"
+        templateRows="repeat(12, 1fr)"
         templateColumns="repeat(5, 1fr)"
         templateAreas={`"Heading" "Score" "Main"`}
         gap={4}
@@ -242,7 +242,7 @@ const App = () => {
         <GridItem
           area="Main"
           rowStart={_index === 3 ? 2 : 3}
-          rowEnd={20}
+          rowEnd={12}
           colSpan={5}
           alignItems={"center"}
           // bg={"pink"}
