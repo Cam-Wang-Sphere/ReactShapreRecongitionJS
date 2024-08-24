@@ -32,6 +32,7 @@ import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
 import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
+import Orientation from "./components/Orientation";
 
 const UserInputKey = "UserInput";
 
@@ -192,6 +193,7 @@ const App = () => {
 
   return (
     <Container className="App" maxW={"sm"}>
+      <Orientation />
       {/* <section className="ipcon"> */}
       <Grid
         templateRows="repeat(12, 1fr)"
