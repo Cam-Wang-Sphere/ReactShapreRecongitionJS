@@ -3,7 +3,7 @@ import { NetworkingManager } from "./../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
-import { Box } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -142,32 +142,65 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   };
 
   return (
-    <Box
-      // mb="20px"
-      bg="gray.700"
-      borderColor="#FF0099"
-      borderWidth="5px"
+    <Grid
+      templateRows="repeat(1, 1fr)"
+      templateColumns="repeat(1, 1fr)"
+      templateAreas={`"TapRegion" "UIOverlay"`}
+      gap={4}
+      pt={"10px"}
+      h="100%"
       style={{
         position: "relative",
-        overflow: "hidden",
       }}
-      h="100%"
-      w="100%"
     >
-      <canvas
+      <GridItem
+        area="TapRegion"
+        bg="gray.700"
+        borderColor="#FF0099"
+        borderWidth="5px"
         style={{
           position: "relative",
-          overflow: "hidden",
         }}
-        onMouseDown={startDrawing}
-        onMouseUp={endDrawing}
-        onMouseMove={draw}
-        onTouchStart={startDrawing}
-        onTouchEnd={endDrawing}
-        onTouchMove={draw}
-        ref={canvasRef}
-      />
-    </Box>
+        h="100%"
+        w="100%"
+        rowStart={1}
+        colStart={1}
+      >
+        <canvas
+          style={{
+            position: "relative",
+          }}
+          onMouseDown={startDrawing}
+          onMouseUp={endDrawing}
+          onMouseMove={draw}
+          onTouchStart={startDrawing}
+          onTouchEnd={endDrawing}
+          onTouchMove={draw}
+          ref={canvasRef}
+        />
+      </GridItem>
+      <GridItem
+        area="UIOverlay"
+        style={{
+          position: "relative",
+        }}
+        h="100%"
+        w="100%"
+        rowStart={1}
+        colStart={1}
+      >
+        <HStack justifyContent="space-between">
+          <Text fontSize="xl" color="#FF0099" p="20px">
+            Name
+          </Text>
+          <Text fontSize="xl" color="#FF0099" p="20px">
+            Score
+          </Text>
+        </HStack>
+
+        {/* <Box h="100px" w="100px" bg="pink" mr="0"></Box> */}
+      </GridItem>
+    </Grid>
   );
 };
 
