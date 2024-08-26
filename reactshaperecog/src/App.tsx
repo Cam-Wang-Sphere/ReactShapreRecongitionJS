@@ -197,7 +197,6 @@ const App = () => {
       maxW={"sm"}
       style={{
         position: "relative",
-        overflow: "hidden",
         width: "100vw",
         height: "100vh",
       }}
@@ -260,7 +259,7 @@ const App = () => {
           // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
-          h={"84vh"}
+          h={"75vh"}
         >
           {inputTypes[_index]}
         </GridItem>

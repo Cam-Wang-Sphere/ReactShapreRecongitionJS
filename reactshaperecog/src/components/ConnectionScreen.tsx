@@ -48,10 +48,11 @@ const ConnectionScreen = () => {
 
   return (
     <Box mt={"2%"}>
-      <VStack alignItems={"left"} p={"20px"}>
+      <VStack alignItems={"left"} p={"10px"}>
         <ConnectWidget connectFunction={connectToServer} />
         <NameEntry inNetworkingManager={networkingManager} />
         {/* {<AddTemplateWidget AddTemplateFunction={AddTemplate} />} */}
+        <br></br>
         <ConnectBigDomeWidget connectFunction={connectToServer} />
       </VStack>
     </Box>

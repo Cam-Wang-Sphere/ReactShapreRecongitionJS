@@ -43,7 +43,7 @@ const ConnectWidget = ({ connectFunction }: ConnectWidgetProps) => {
               type="text"
               value={address}
               onChange={handleSetAddress}
-              placeholder="Enter ip address here"
+              placeholder="Enter IP Address"
               style={{ height: "38px", padding: "10px" }}
             />
             <Button
