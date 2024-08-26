@@ -195,12 +195,12 @@ const App = () => {
     <Container
       className="App"
       maxW={"sm"}
-      maxH={"100vh"}
+      maxH={"60vh"}
       style={{
         // position: "relative",
         overflow: "hidden",
         width: "100vw",
-        height: "100vh",
+        // height: "100vh",
       }}
     >
       {/* <Orientation /> */}
