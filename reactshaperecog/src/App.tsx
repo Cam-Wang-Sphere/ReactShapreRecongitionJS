@@ -268,7 +268,7 @@ const App = () => {
           alignItems={"center"}
           // h="75vh"
           h={isLandscape ? "90vh" : "75vh"}
-          w={isLandscape ? "200vh" : "100%"}
+          w={isLandscape ? "90vw" : "100%"}
           // mt={isLandscape ? "-4%" : "0"}
         >
           {inputTypes[_index]}
