@@ -195,7 +195,12 @@ const DrawingWidget = ({
     <Box mb="20px" h="100%" w="100%" bg="white">
       {/* <div className="draw-area"> */}
       <canvas
-        style={{ position: "relative", width: "100%", height: "100%" }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          width: "100%",
+          height: "100%",
+        }}
         onMouseDown={startDrawing}
         onMouseUp={endDrawing}
         onMouseMove={draw}

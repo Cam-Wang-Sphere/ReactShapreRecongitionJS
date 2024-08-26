@@ -151,7 +151,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       borderWidth="5px"
     >
       <canvas
-        style={{ position: "relative", width: "100%", height: "100%" }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          width: "100%",
+          height: "100%",
+        }}
         onMouseDown={startDrawing}
         onMouseUp={endDrawing}
         onMouseMove={draw}
