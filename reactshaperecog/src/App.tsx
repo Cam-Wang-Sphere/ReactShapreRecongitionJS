@@ -205,7 +205,7 @@ const App = () => {
       className="App"
       // maxW={"sm"}
       // h="100vh"
-      maxW={isLandscape ? "100vw" : "sm"}
+      maxW={isLandscape ? "110vw" : "sm"}
       h="100vh"
       style={{
         position: "relative",
@@ -267,7 +267,7 @@ const App = () => {
           colSpan={5}
           alignItems={"center"}
           // h="75vh"
-          h={isLandscape ? "90vh" : "75vh"}
+          h={isLandscape ? "80vh" : "75vh"}
           w={isLandscape ? "90vw" : "100%"}
           // mt={isLandscape ? "-4%" : "0"}
         >
