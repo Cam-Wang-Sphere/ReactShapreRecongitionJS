@@ -210,6 +210,10 @@ const App = () => {
         templateAreas={`"Heading" "Score" "Main"`}
         gap={4}
         pt={"20px"}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+        }}
       >
         <GridItem rowSpan={1} colSpan={1} area="Heading" mt="1%">
           <NavMenu
