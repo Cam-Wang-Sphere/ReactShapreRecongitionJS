@@ -7,3 +7,8 @@
 .mainCanvas{
   position: absolute;
 }
+
+body{
+  height: 100vh;
+  overflow: hidden;
+}
