@@ -1,7 +1,8 @@
 import React from "react";
-const orientation = window.addEventListener("resize", () => {
-  const potrait = window.screen.orientation.type;
-  console.log(potrait);
+const resizeEvent = window.addEventListener("resize", () => {
+  const orientationType = window.screen.orientation.type;
+  // console.log(orientationType);
+  orientationType === "landscape-primary" && console.log("landscape");
 });
 
 const Orientation = () => {

@@ -32,7 +32,6 @@ import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
 import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
-import Orientation from "./components/Orientation";
 
 const UserInputKey = "UserInput";
 
@@ -191,41 +190,55 @@ const App = () => {
     <TapnSlashInput inNetworkingManager={networkingManager} />,
   ];
 
+  const [isLandscape, setIsLandscape] = useState(false);
+
+  const resizeEvent = window.addEventListener("resize", () => {
+    const orientationType = window.screen.orientation.type;
+    // console.log(orientationType);
+    orientationType === "landscape-primary"
+      ? setIsLandscape(true)
+      : setIsLandscape(false);
+  });
+
   return (
     <Container
       className="App"
-      maxW={"sm"}
+      // maxW={"sm"}
+      maxW={isLandscape ? "220vh" : "sm"}
+      h={isLandscape ? "220vh" : "100vh"}
       style={{
         position: "relative",
-        width: "100vw",
-        height: "100vh",
       }}
     >
-      <Orientation />
-      {/* <section className="ipcon"> */}
       <Grid
         templateRows="repeat(10, 1fr)"
         templateColumns="repeat(5, 1fr)"
         templateAreas={`"Heading" "Score" "Main"`}
         gap={4}
-        pt={"20px"}
+        pt={"10px"}
         style={{
           position: "relative",
           overflow: "hidden",
         }}
       >
-        <GridItem rowSpan={1} colSpan={1} area="Heading">
-          <NavMenu
-            Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
-            onSelect={selectHandle}
-          />
-        </GridItem>
-        <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
-          <Center>
-            <Heading color={textColor}>PreFE</Heading>
-          </Center>
-        </GridItem>
+        {/* Heading------------------------------ */}
+        {!isLandscape && (
+          <GridItem rowSpan={1} colSpan={1} area="Heading">
+            <NavMenu
+              Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
+              onSelect={selectHandle}
+            />
+          </GridItem>
+        )}
+        {!isLandscape && (
+          <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
+            <Center>
+              <Heading color={textColor}>PreFE</Heading>
+            </Center>
+          </GridItem>
+        )}
 
+        {/* Score+ Feedback------------------------------ */}
         {_index === 1 && (
           <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
             <VStack>
@@ -244,22 +257,16 @@ const App = () => {
           </GridItem>
         )}
 
-        {/* <GridItem area="InputSelect" rowSpan={0} colSpan={0}> */}
-        {/* <VStack alignItems={"center"}> */}
-        {/* <InputSelect
-                Names={["Draw", "Tiles", "Tap n Slash"]}
-                onSelect={selectHandle}
-              /> */}
-        {/* </VStack> */}
-        {/* </GridItem> */}
-
+        {/* Main content------------------------------ */}
         <GridItem
           area="Main"
           rowStart={_index === 3 ? 2 : 3}
           // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
-          h={"75vh"}
+          h={isLandscape ? "330%" : "75vh"}
+          w={isLandscape ? "200vh" : "100%"}
+          mt={isLandscape ? "-6%" : "0"}
         >
           {inputTypes[_index]}
         </GridItem>
