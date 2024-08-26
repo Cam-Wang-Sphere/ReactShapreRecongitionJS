@@ -192,7 +192,16 @@ const App = () => {
   ];
 
   return (
-    <Container className="App" maxW={"sm"}>
+    <Container
+      className="App"
+      maxW={"sm"}
+      style={{
+        // position: "relative",
+        overflow: "hidden",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
       <Orientation />
       {/* <section className="ipcon"> */}
       <Grid
