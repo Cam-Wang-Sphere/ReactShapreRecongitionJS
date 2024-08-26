@@ -205,7 +205,7 @@ const App = () => {
       className="App"
       // maxW={"sm"}
       // h="100vh"
-      maxW={isLandscape ? "110vw" : "sm"}
+      maxW={isLandscape ? "150vw" : "sm"}
       h="100vh"
       style={{
         position: "relative",
