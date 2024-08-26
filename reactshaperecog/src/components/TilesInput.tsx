@@ -49,7 +49,7 @@ interface TilesInputProps {
 const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const delay = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
   async function DelayAction() {
     await delay(200);
     setSelectedIndex(-1);

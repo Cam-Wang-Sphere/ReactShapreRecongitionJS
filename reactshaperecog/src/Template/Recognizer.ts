@@ -3,6 +3,7 @@
  //// Shape recognition below ////
 
 import { float64 } from "flatbuffers";
+import { Vector2 } from "../TIM/Vector2";
 
   /**
  * The $1 Unistroke Recognizer (JavaScript version)
@@ -91,13 +92,22 @@ export class Point // constructor
 //
 // Rectangle class
 //
-export function Rectangle(x, y, width, height) // constructor
+//export function Rectangle({x, y, width, height} : {x:number, y:number, width:number, height:number}) // constructor
+export class Rectangle
 {
-	this.X = x;
-	this.Y = y;
 	
-	this.Width = width;
-	this.Height = height;
+	X : number;
+	Y : number;
+	Width : number;
+	Height : number;
+	
+	constructor(x:number, y:number, width:number, height:number) // constructor
+	{
+		this.X = x;
+		this.Y = y;
+		this.Width = width;
+		this.Height = height;
+	}
 }
 //
 // Unistroke class: a unistroke template
@@ -125,11 +135,17 @@ export class Unistroke // constructor
 //
 // Result class
 //
-export function Result(name, score, ms) // constructor
+export class Result // constructor
 {
-	this.Name = name;
-	this.Score = score;
-	this.Time = ms;
+	Name : string;
+	Score : number;
+	Time : number;
+	constructor(name:string, score:number, ms:number)
+	{
+		this.Name = name;
+		this.Score = score;
+		this.Time = ms;
+	}
 }
 //
 // DollarRecognizer constants
@@ -179,7 +195,7 @@ export class DollarRecognizer // constructor
   
 	// The $1 Gesture Recognizer API begins here -- 3 methods: Recognize(), AddGesture(), and DeleteUserGestures()
 	//
-	Recognize = function(points : Point[], useProtractor : boolean)
+	Recognize(points : Point[], useProtractor : boolean)
 	{
 		var t0 = Date.now();
 		var candidate = new Unistroke("", points);
@@ -203,9 +219,26 @@ export class DollarRecognizer // constructor
 			}
 		}
 		var t1 = Date.now();
-		return (u === -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
+		// writing it out for clarity temp
+		if (u === -1)
+		{
+			//return new Result("No match.", 0.0, t1-t0);
+			return new Result("No match.", 0.0, t1-t0);
+		}
+		else
+		{
+			if (useProtractor)
+			{
+				return new Result(this.Unistrokes[u].Name, (1.0 - b), t1-t0);
+			}
+			else
+			{
+				return new Result(this.Unistrokes[u].Name, 1.0 - (b / HalfDiagonal), t1-t0);
+			}
+		}
+		//return (u === -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
 	}
-	AddGesture = function(NewTemp : Unistroke)
+	AddGesture(NewTemp : Unistroke)
 	{
 		this.Unistrokes.push(NewTemp);
 	}
@@ -222,7 +255,7 @@ export class DollarRecognizer // constructor
 	// 	}
 	// 	return num;
 	// }
-	DeleteUserGestures = function()
+	DeleteUserGestures()
 	{
 		this.Unistrokes.length = NumUnistrokes; // clear any beyond the original set
 		return NumUnistrokes;
@@ -232,7 +265,7 @@ export class DollarRecognizer // constructor
 //
 // Private helper functions from here on down
 //
-export function Resample(points, n)
+export function Resample(points:Point[], n:number)
 {
 	var I = PathLength(points) / (n - 1); // interval length
 	var D = 0.0;
@@ -255,12 +288,12 @@ export function Resample(points, n)
 		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
 	return newpoints;
 }
-export function IndicativeAngle(points)
+export function IndicativeAngle(points:Point[])
 {
 	var c = Centroid(points);
 	return Math.atan2(c.Y - points[0].Y, c.X - points[0].X);
 }
-export function RotateBy(points : Point[], radians) // rotates points around centroid
+export function RotateBy(points : Point[], radians:number) // rotates points around centroid
 {
 	var c = Centroid(points);
 	var cos = Math.cos(radians);
@@ -273,7 +306,7 @@ export function RotateBy(points : Point[], radians) // rotates points around cen
 	}
 	return newpoints;
 }
-export function ScaleTo(points, size) // non-uniform scale; assumes 2D gestures (i.e., no lines)
+export function ScaleTo(points:Point[], size:number) // non-uniform scale; assumes 2D gestures (i.e., no lines)
 {
 	var B = BoundingBox(points);
 	var newpoints = new Array();
@@ -284,7 +317,7 @@ export function ScaleTo(points, size) // non-uniform scale; assumes 2D gestures 
 	}
 	return newpoints;
 }
-export function TranslateTo(points, pt) // translates points' centroid
+export function TranslateTo(points:Point[], pt:Point) // translates points' centroid
 {
 	var c = Centroid(points);
 	var newpoints = new Array();
@@ -295,7 +328,7 @@ export function TranslateTo(points, pt) // translates points' centroid
 	}
 	return newpoints;
 }
-export function Vectorize(points) // for Protractor
+export function Vectorize(points:Point[]) // for Protractor
 {
 	var sum = 0.0;
 	var vector = new Array();
@@ -309,7 +342,8 @@ export function Vectorize(points) // for Protractor
 		vector[j] /= magnitude;
 	return vector;
 }
-export function OptimalCosineDistance(v1, v2) // for Protractor
+// figure out what this is actually supposed to be later
+export function OptimalCosineDistance(v1:any, v2:any) // for Protractor
 {
 	var a = 0.0;
 	var b = 0.0;
@@ -320,7 +354,7 @@ export function OptimalCosineDistance(v1, v2) // for Protractor
 	var angle = Math.atan(b / a);
 	return Math.acos(a * Math.cos(angle) + b * Math.sin(angle));
 }
-export function DistanceAtBestAngle(points : Point[], T : Unistroke, a, b, threshold)
+export function DistanceAtBestAngle(points : Point[], T : Unistroke, a:number, b:number, threshold:number)
 {
 	var x1 = Phi * a + (1.0 - Phi) * b;
 	var f1 = DistanceAtAngle(points, T, x1);
@@ -349,7 +383,7 @@ export function DistanceAtAngle(points : Point[], T : Unistroke, radians : numbe
 	var newpoints = RotateBy(points, radians);
 	return PathDistance(newpoints, T.Points);
 }
-export function Centroid(points)
+export function Centroid(points:Point[])
 {
 	var x = 0.0, y = 0.0;
 	for (var i = 0; i < points.length; i++) {
@@ -360,9 +394,9 @@ export function Centroid(points)
 	y /= points.length;
 	return new Point(x, y);
 }
-export function BoundingBox(points)
+export function BoundingBox(points:Point[])
 {
-	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
+	var minX:number = +Infinity, maxX:number = -Infinity, minY:number = +Infinity, maxY:number = -Infinity;
 	for (var i = 0; i < points.length; i++) {
 		minX = Math.min(minX, points[i].X);
 		minY = Math.min(minY, points[i].Y);
@@ -378,22 +412,22 @@ export function PathDistance(pts1 : Point[], pts2 : Point[])
 		d += Distance(pts1[i], pts2[i]);
 	return d / pts1.length;
 }
-export function PathLength(points)
+export function PathLength(points:Point[])
 {
 	var d = 0.0;
 	for (var i = 1; i < points.length; i++)
 		d += Distance(points[i - 1], points[i]);
 	return d;
 }
-export function Distance(p1, p2)
+export function Distance(p1:Point, p2:Point)
 {
 	var dx = p2.X - p1.X;
 	var dy = p2.Y - p1.Y;
 	return Math.sqrt(dx * dx + dy * dy);
 }
-export function Deg2Rad(d) { return (d * Math.PI / 180.0); }
+export function Deg2Rad(d:number) { return (d * Math.PI / 180.0); }
 
 
 
-//// END RECONGIZER ////
+//// END RECOGNIZER ////
 //#endregion

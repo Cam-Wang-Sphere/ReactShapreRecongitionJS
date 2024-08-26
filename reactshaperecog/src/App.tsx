@@ -4,7 +4,7 @@ import React from "react";
 // import Menu from "./components/Menu";
 // import { flatbuffers } from 'flatbuffers';
 import "./App.css";
-import Gyroscope from "./components/Gyroscope";
+// import Gyroscope from "./components/Gyroscope";
 import InputSelect from "./components/InputSelect";
 import TilesInput from "./components/TilesInput";
 import ConnectionScreen from "./components/ConnectionScreen";

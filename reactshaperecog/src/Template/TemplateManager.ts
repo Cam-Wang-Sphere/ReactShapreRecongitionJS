@@ -2,7 +2,7 @@ import * as flatbuffers from 'flatbuffers';
 import { Template } from './../schema/_Templates/shape-template/template';
 import { Vec2 } from './../schema/_Templates/shape-template/vec2';
 import { Unistroke, Point, DollarRecognizer } from './Recognizer';
-import helloworld from './../assets/Templates/testtemplate.txt';
+//import helloworld from './../assets/Templates/testtemplate.txt';
 
 const download = async ({filename, blob}: {filename: string; blob: Blob}) => {
     const a: HTMLAnchorElement = document.createElement('a');
