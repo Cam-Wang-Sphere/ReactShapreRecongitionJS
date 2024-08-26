@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from "../schema/wsschema/message";
 
-import SucessSound from "../assets/sounds/SuccessSound.wav";
+import SuccessSound from "../assets/sounds/SuccessSound.wav";
 import FailSound from "../assets/sounds/IncorrectSound.wav";
 
 interface SuccessOverlayProps {
@@ -35,7 +35,7 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
 
       // play sounds if possible
       if (shouldPlaySounds) {
-        const successAudio = new Audio(SucessSound);
+        const successAudio = new Audio(SuccessSound);
         successAudio.play();
       }
 
@@ -52,10 +52,10 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
 
     // cleaning up
     return () => {
-    //   inNetworkingManager?.off(
-    //     Message.ScoreUpdateResponse.toString(),
-    //     handleEvent
-    //   );
+      // inNetworkingManager?.off(
+      //   Message.ScoreUpdateResponse.toString(),
+      //   handleEvent
+      // );
     };
   }, [inNetworkingManager]);
 
@@ -73,7 +73,7 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
     pointerEvents: "none",
   } as const;
 
-  return <div style={greenScreenStyle}></div>;
+  return <div data-testid="success-overlay" style={greenScreenStyle}></div>;
 };
 
 export default SuccessOverlay;

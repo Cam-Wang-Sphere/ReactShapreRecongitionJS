@@ -25,76 +25,78 @@ describe('ScoreWidget Component', () => {
         expect(scoreText).toBeInTheDocument();
     });
 
-    test('should register event listeners on mount', () => {
-        render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
+    // PSA: Test cases involving message types are deprecated as of the writing of this comment since they were commented out in corresponding component file
+
+    // test('should register event listeners on mount', () => {
+    //     render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
         
-        expect(mockOn).toHaveBeenCalledWith(Message.ScoreUpdateResponse.toString(), expect.any(Function));
-        expect(mockOn).toHaveBeenCalledWith(Message.MediaPlaneToMobileLoginResponse.toString(), expect.any(Function));
-    });
+    //     expect(mockOn).toHaveBeenCalledWith(Message.ScoreUpdateResponse.toString(), expect.any(Function));
+    //     expect(mockOn).toHaveBeenCalledWith(Message.MediaPlaneToMobileLoginResponse.toString(), expect.any(Function));
+    // });
 
-    test('should unregister event listeners on unmount', () => {
-        const {unmount} = render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
+    // test('should unregister event listeners on unmount', () => {
+    //     const {unmount} = render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
 
-        unmount();
+    //     unmount();
 
-        expect(mockOff).toHaveBeenCalledWith(Message.ScoreUpdateResponse.toString(), expect.any(Function));
-        expect(mockOff).toHaveBeenCalledWith(Message.MediaPlaneToMobileLoginResponse.toString(), expect.any(Function));
-    });
+    //     expect(mockOff).toHaveBeenCalledWith(Message.ScoreUpdateResponse.toString(), expect.any(Function));
+    //     expect(mockOff).toHaveBeenCalledWith(Message.MediaPlaneToMobileLoginResponse.toString(), expect.any(Function));
+    // });
 
-    test('should update score when ScoreUpdateResponse event is triggered', async () => {
-        const scoreIncrement = 5555;
+    // test('should update score when ScoreUpdateResponse event is triggered', async () => {
+    //     const scoreIncrement = 5555;
 
-        mockOn.mockImplementationOnce((event, callback) => {
-            if (event === Message.ScoreUpdateResponse.toString()) {
-                setTimeout(() => callback(scoreIncrement), 0);
-            }
-        });
+    //     mockOn.mockImplementationOnce((event, callback) => {
+    //         if (event === Message.ScoreUpdateResponse.toString()) {
+    //             setTimeout(() => callback(scoreIncrement), 0);
+    //         }
+    //     });
 
-        render(<ScoreWidget inNetworkingManager={ mockNetworkingManager } />);
+    //     render(<ScoreWidget inNetworkingManager={ mockNetworkingManager } />);
 
-        await waitFor(() => {
-            const scoreText = screen.getByText(new RegExp(`${scoreIncrement}`));
-            expect(scoreText).toBeInTheDocument();
-        });
-    });
+    //     await waitFor(() => {
+    //         const scoreText = screen.getByText(new RegExp(`${scoreIncrement}`));
+    //         expect(scoreText).toBeInTheDocument();
+    //     });
+    // });
 
-    test('should reset score when MediaPlaneToMobileLoginResponse event is triggered', async () => {
-        const scoreIncrement = 5555;
+    // test('should reset score when MediaPlaneToMobileLoginResponse event is triggered', async () => {
+    //     const scoreIncrement = 5555;
 
-        render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
+    //     render(<ScoreWidget inNetworkingManager={ mockNetworkingManager }/>);
 
-        mockOn.mockImplementationOnce((event, callback) => {
-            if (event === Message.ScoreUpdateResponse.toString()) {
-                setTimeout(() => callback(scoreIncrement), 0);
-            }
-        });
+    //     mockOn.mockImplementationOnce((event, callback) => {
+    //         if (event === Message.ScoreUpdateResponse.toString()) {
+    //             setTimeout(() => callback(scoreIncrement), 0);
+    //         }
+    //     });
 
-        mockOn.mock.calls.forEach(([event, callback]) => {
-            if (event === Message.ScoreUpdateResponse.toString()) {
-                setTimeout(() => callback(scoreIncrement), 0);
-            }
-        });
+    //     mockOn.mock.calls.forEach(([event, callback]) => {
+    //         if (event === Message.ScoreUpdateResponse.toString()) {
+    //             setTimeout(() => callback(scoreIncrement), 0);
+    //         }
+    //     });
 
-        await waitFor(() => {
-            const scoreText = screen.getByText(new RegExp(`${scoreIncrement}`));
-            expect(scoreText).toBeInTheDocument();
-        });
+    //     await waitFor(() => {
+    //         const scoreText = screen.getByText(new RegExp(`${scoreIncrement}`));
+    //         expect(scoreText).toBeInTheDocument();
+    //     });
 
-        mockOn.mockImplementationOnce((event, callback) => {
-            if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
-                setTimeout(() => callback(), 0);
-            }
-        });
+    //     mockOn.mockImplementationOnce((event, callback) => {
+    //         if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
+    //             setTimeout(() => callback(), 0);
+    //         }
+    //     });
 
-        mockOn.mock.calls.forEach(([event, callback]) => {
-            if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
-                setTimeout(() => callback(), 0);
-            }
-        });
+    //     mockOn.mock.calls.forEach(([event, callback]) => {
+    //         if (event == Message.MediaPlaneToMobileLoginResponse.toString()) {
+    //             setTimeout(() => callback(), 0);
+    //         }
+    //     });
 
-        await waitFor(() => {
-            const scoreText = screen.getByText(/0/);
-            expect(scoreText).toBeInTheDocument();
-        });
-    });
+    //     await waitFor(() => {
+    //         const scoreText = screen.getByText(/0/);
+    //         expect(scoreText).toBeInTheDocument();
+    //     });
+    // });
 });
