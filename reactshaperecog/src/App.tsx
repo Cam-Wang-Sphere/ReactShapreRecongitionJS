@@ -268,8 +268,8 @@ const App = () => {
           alignItems={"center"}
           // h="75vh"
           h={isLandscape ? "80vh" : "75vh"}
-          w={isLandscape ? "90vw" : "100%"}
-          // mt={isLandscape ? "-4%" : "0"}
+          w={isLandscape ? "95vw" : "100%"}
+          mt={isLandscape ? "-2%" : "0"}
         >
           {inputTypes[_index]}
         </GridItem>
