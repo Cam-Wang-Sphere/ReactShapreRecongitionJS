@@ -5,7 +5,7 @@ const orientation = window.addEventListener("resize", () => {
 });
 
 const Orientation = () => {
-  return <div></div>;
+  return <div>Orientation</div>;
 };
 
 export default Orientation;
