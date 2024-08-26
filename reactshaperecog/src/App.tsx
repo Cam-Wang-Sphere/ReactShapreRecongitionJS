@@ -205,7 +205,7 @@ const App = () => {
       <Orientation />
       {/* <section className="ipcon"> */}
       <Grid
-        templateRows="repeat(12, 1fr)"
+        templateRows="repeat(10, 1fr)"
         templateColumns="repeat(5, 1fr)"
         templateAreas={`"Heading" "Score" "Main"`}
         gap={4}
