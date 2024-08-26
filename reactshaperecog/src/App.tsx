@@ -198,11 +198,12 @@ const App = () => {
       style={{
         // position: "relative",
         overflow: "hidden",
+        // display: "none",
         width: "100vw",
-        height: "100vh",
+        height: "95vh",
       }}
     >
-      <Orientation />
+      {/* <Orientation /> */}
       {/* <section className="ipcon"> */}
       <Grid
         templateRows="repeat(10, 1fr)"
