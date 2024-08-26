@@ -204,13 +204,15 @@ const App = () => {
     <Container
       className="App"
       // maxW={"sm"}
-      maxW={isLandscape ? "220vh" : "sm"}
-      h={isLandscape ? "220vh" : "100vh"}
+      // h="100vh"
+      maxW={isLandscape ? "100vw" : "sm"}
+      h="100vh"
       style={{
         position: "relative",
       }}
     >
       <Grid
+        // className="landscape"
         templateRows="repeat(10, 1fr)"
         templateColumns="repeat(5, 1fr)"
         templateAreas={`"Heading" "Score" "Main"`}
@@ -264,9 +266,10 @@ const App = () => {
           // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
-          h={isLandscape ? "330%" : "75vh"}
+          // h="75vh"
+          h={isLandscape ? "90vh" : "75vh"}
           w={isLandscape ? "200vh" : "100%"}
-          mt={isLandscape ? "-6%" : "0"}
+          // mt={isLandscape ? "-4%" : "0"}
         >
           {inputTypes[_index]}
         </GridItem>
