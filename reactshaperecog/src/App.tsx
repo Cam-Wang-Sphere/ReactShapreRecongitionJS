@@ -195,8 +195,6 @@ const App = () => {
     <Container
       className="App"
       maxW={"sm"}
-      // maxH={"100vh"}
-      bg={"pink"}
       style={{
         position: "relative",
         overflow: "hidden",
@@ -204,10 +202,10 @@ const App = () => {
         height: "100vh",
       }}
     >
-      {/* <Orientation /> */}
+      <Orientation />
       {/* <section className="ipcon"> */}
       <Grid
-        // templateRows="repeat(10, 1fr)"
+        templateRows="repeat(10, 1fr)"
         templateColumns="repeat(5, 1fr)"
         templateAreas={`"Heading" "Score" "Main"`}
         gap={4}
@@ -217,11 +215,7 @@ const App = () => {
           overflow: "hidden",
         }}
       >
-        <GridItem
-          // rowSpan={1}
-          colSpan={1}
-          area="Heading"
-        >
+        <GridItem rowSpan={1} colSpan={1} area="Heading">
           <NavMenu
             Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
             onSelect={selectHandle}
@@ -233,13 +227,8 @@ const App = () => {
           </Center>
         </GridItem>
 
-        {_index !== 3 && (
-          <GridItem
-            // rowStart={2}
-            // rowEnd={3}
-            colSpan={5}
-            alignItems={"center"}
-          >
+        {_index === 1 && (
+          <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
             <VStack>
               <span color={textColor} className="resultText">
                 {drawResult}
@@ -268,15 +257,14 @@ const App = () => {
         <GridItem
           area="Main"
           rowStart={_index === 3 ? 2 : 3}
-          // rowEnd={12}
+          // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
-          // bg={"pink"}
+          h={"84vh"}
         >
           {inputTypes[_index]}
         </GridItem>
       </Grid>
-      {/* </section> */}
     </Container>
   );
 

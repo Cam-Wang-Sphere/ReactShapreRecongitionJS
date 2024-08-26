@@ -143,9 +143,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
   return (
     <Box
-      mb="20px"
-      h="100%"
-      w="100%"
+      // mb="20px"
       bg="gray.700"
       borderColor="#FF0099"
       borderWidth="5px"
@@ -153,6 +151,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         position: "relative",
         overflow: "hidden",
       }}
+      h="100%"
+      w="100%"
     >
       <canvas
         style={{

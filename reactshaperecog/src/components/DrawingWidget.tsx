@@ -192,7 +192,16 @@ const DrawingWidget = ({
   };
 
   return (
-    <Box mb="20px" h="100%" w="100%" bg="white">
+    <Box
+      mb="20px"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+      }}
+      h="88%"
+      w="100%"
+      bg="white"
+    >
       {/* <div className="draw-area"> */}
       <canvas
         style={{
