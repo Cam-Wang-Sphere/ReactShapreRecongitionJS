@@ -154,10 +154,29 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       }}
     >
       <GridItem
-        area="TapRegion"
+        area="UIOverlay"
         bg="gray.700"
         borderColor="#FF0099"
         borderWidth="5px"
+        style={{
+          position: "relative",
+        }}
+        h="100%"
+        w="100%"
+        rowStart={1}
+        colStart={1}
+      >
+        <HStack justifyContent="space-between">
+          <Text fontSize="xl" color="#FF0099" p="20px">
+            Name
+          </Text>
+          <Text fontSize="xl" color="#FF0099" p="20px">
+            Score
+          </Text>
+        </HStack>
+      </GridItem>
+      <GridItem
+        area="TapRegion"
         style={{
           position: "relative",
         }}
@@ -178,27 +197,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchMove={draw}
           ref={canvasRef}
         />
-      </GridItem>
-      <GridItem
-        area="UIOverlay"
-        style={{
-          position: "relative",
-        }}
-        h="100%"
-        w="100%"
-        rowStart={1}
-        colStart={1}
-      >
-        <HStack justifyContent="space-between">
-          <Text fontSize="xl" color="#FF0099" p="20px">
-            Name
-          </Text>
-          <Text fontSize="xl" color="#FF0099" p="20px">
-            Score
-          </Text>
-        </HStack>
-
-        {/* <Box h="100px" w="100px" bg="pink" mr="0"></Box> */}
       </GridItem>
     </Grid>
   );
