@@ -40,12 +40,13 @@ function NavMenu({ Names, onSelect }: Props) {
         color={"teal"}
         bg={"black"}
         borderColor={"teal"}
+        data-testid="hamburger-button"
       ></Button>
       <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg={"#333"} color={"#fff"}>
-          <DrawerCloseButton />
-          <DrawerHeader>Navigate to</DrawerHeader>
+          <DrawerCloseButton data-testid="drawer-close-button"/>
+          <DrawerHeader data-testid="drawer-header">Navigate to</DrawerHeader>
 
           <DrawerBody>
             <VStack spacing={1.5}>

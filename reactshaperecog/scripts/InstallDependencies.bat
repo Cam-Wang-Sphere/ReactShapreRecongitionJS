@@ -2,6 +2,6 @@
 
 cd ../
 
-npm install && pause
+npm install || pause
 
 exit
