@@ -27,6 +27,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       : setIsLandscape(false);
   });
 
+  let pos = [0, 10];
+  let speed = [1, 1.2];
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -40,8 +43,20 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
 
-        ctxRef.current.fillStyle = "blue";
-        ctxRef.current.fillRect(70, 70, 20, 20);
+        const render = () => {
+          //archit test
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "blue";
+          ctx.fillRect(pos[0], pos[1], 20, 20);
+          pos[0] += speed[0];
+          pos[1] += speed[1];
+
+          (pos[0] >= canvas.width || pos[0] < 0) && (speed[0] *= -1);
+          (pos[1] >= canvas.height || pos[1] < 0) && (speed[1] *= -1);
+          requestAnimationFrame(render);
+        };
+
+        render();
       }
     }
   }, [inNetworkingManager]);
@@ -157,6 +172,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     let Inputs: FTIMInputEvent[] = [];
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputEvents(Inputs);
+
+    console.log(x, " ", y);
   };
 
   return (
