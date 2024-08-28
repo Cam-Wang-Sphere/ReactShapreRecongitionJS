@@ -103,6 +103,7 @@ const App = () => {
       .connect()
       .then(() => {
         setNetworkingManager(newNetworkingManager);
+        console.log('set networking manager');
       })
       .catch(() => {
         console.log("failed to connect");
@@ -158,6 +159,11 @@ const App = () => {
     if (DrawResult.Score >= 0.5) {
       let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
       // sendShapeRequest(enumResult);
+      console.log('ended shape request');
+      if (networkingManager)
+      {
+        console.log('inNetworkingManager is valid');
+      }
       networkingManager?.sendShapeRequest(enumResult);
       setDrawResult(DrawResult.Name);
     } else {
@@ -181,7 +187,7 @@ const App = () => {
   };
   const [_index, setIndex] = useState(0);
   const inputTypes = [
-    <ConnectionScreen />,
+    <ConnectionScreen connectFunction={connectToServer} inConnectNetworkingManager={networkingManager}/>,
     <DrawingWidget
       drawEndFunction={endDrawing}
       inNetworkingManager={networkingManager}
