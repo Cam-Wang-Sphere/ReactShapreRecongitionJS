@@ -17,6 +17,15 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(false);
+
+  const resizeEvent = window.addEventListener("resize", () => {
+    const orientationType = window.screen.orientation.type;
+    // console.log(orientationType);
+    orientationType === "landscape-primary"
+      ? setIsLandscape(true)
+      : setIsLandscape(false);
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,6 +39,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         ctx.lineWidth = 5;
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
+
+        ctxRef.current.fillStyle = "blue";
+        ctxRef.current.fillRect(70, 70, 20, 20);
       }
     }
   }, [inNetworkingManager]);
@@ -57,7 +69,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
-    console.log("X: " + x + "Y: " + y);
+    // console.log("X: " + x + "Y: " + y);
 
     let Event: ETriggerEvent = ETriggerEvent.Started;
     let Pos: Vector2 = new Vector2(x, y);
@@ -117,10 +129,16 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
 
+    // // canvas drawing------------------------------------------------
+    // const img = new Image();
+    // img.src = "https://k3no.com/Meetup/hang-in-there.jpg";
+    // // img.src = "../assets/Icons/asteroid.png";
+    // // ctxRef.current.fillRect(x, y, 100, 100);
+    // ctxRef.current.drawImage(img, 50, 50, 50, 50);
+    // console.log(img);
+
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
-
-    console.log("X: " + x + "Y: " + y);
 
     let Event: ETriggerEvent = ETriggerEvent.Ongoing;
     let Pos: Vector2 = new Vector2(x, y);
@@ -155,9 +173,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     >
       <GridItem
         area="UIOverlay"
-        bg="gray.700"
-        borderColor="#FF0099"
-        borderWidth="5px"
+        // // bg="gray.700"
+        // borderColor="#FF0099"
+        // borderWidth="5px"
         style={{
           position: "relative",
         }}
@@ -179,6 +197,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         area="TapRegion"
         style={{
           position: "relative",
+          // background: "blue",
         }}
         h="100%"
         w="100%"
@@ -188,6 +207,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         <canvas
           style={{
             position: "relative",
+            background: "#1f1c1e",
+            borderStyle: "solid",
+            borderColor: "#FF0099",
+            borderWidth: "5px",
+            // height: "100%",
+            // width: "100%",
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
@@ -196,6 +221,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchEnd={endDrawing}
           onTouchMove={draw}
           ref={canvasRef}
+          height={window.innerHeight * 0.85}
+          width={
+            isLandscape ? window.innerWidth * 0.92 : window.innerWidth * 0.8
+          }
+          // height={isLandscape ? 370 : 570} // dynamic resize
+          // width={isLandscape ? 870 : 330}
         />
       </GridItem>
     </Grid>
