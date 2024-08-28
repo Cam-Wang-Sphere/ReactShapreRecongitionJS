@@ -29,6 +29,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
   let pos = [0, 10];
   let speed = [1, 1.2];
+  const heartImage = new Image();
+  const img = new Image();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,12 +44,19 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         ctx.lineWidth = 5;
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
+        heartImage.src = "../assets/Icons/asteroid.png";
+        img.src = "https://k3no.com/Meetup/hang-in-there.jpg";
+        // heartImage.onload = () => {
+        //   ctx.drawImage(heartImage, pos[0], pos[1], 50, 50);
+        // };
 
         const render = () => {
           //archit test
+
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.fillStyle = "blue";
-          ctx.fillRect(pos[0], pos[1], 20, 20);
+          // ctx.fillRect(pos[0], pos[1], 20, 20);
+          ctx.drawImage(img, pos[0], pos[1], 50, 50);
           pos[0] += speed[0];
           pos[1] += speed[1];
 
@@ -173,7 +182,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputEvents(Inputs);
 
-    console.log(x, " ", y);
+    // console.log(x, " ", y);
   };
 
   return (
