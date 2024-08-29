@@ -14,8 +14,6 @@ const GameState = ({ inPlayerData, inNetworkingManager }: GameStateProps) =>
 {
   useEffect(() =>
     {
-        console.log('useEffect called on gamestate');
-
         // handlers
         const handleLoginResponse = (inSessionId: number) =>  // note this one will probably fail, but thats expected.
         {
@@ -36,7 +34,6 @@ const GameState = ({ inPlayerData, inNetworkingManager }: GameStateProps) =>
         // cleaning up
         return () =>
         {
-            console.log('returning out of gamestate');
             inNetworkingManager?.off(Message.ClientLoginResponse.toString(), handleLoginResponse);
             inNetworkingManager?.off(Message.PhaseResponse.toString(), handlePhaseResponse);
             // inNetworkingManager?.off(...) continue here...
