@@ -28,8 +28,6 @@ import SvgCircle from "../assets/Icons/circle.tsx";
 import Svgtriangle from "../assets/Icons/triangle.tsx";
 import SvgLightning from "../assets/Icons/lightning.tsx";
 import SvgBow from "../assets/Icons/bow.tsx";
-
-import { Opacity } from "@mui/icons-material";
 import { Fade } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 

@@ -7,7 +7,6 @@ import {
   EditableTextarea,
   EditablePreview,
 } from "@chakra-ui/react";
-import { Padding } from "@mui/icons-material";
 
 interface ConnectWidgetProps {
   connectFunction: (address: string) => void;

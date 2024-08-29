@@ -32,6 +32,8 @@ import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
 import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
+import { WSPlayerData } from "./player/WSPlayerData";
+import GameState from "./components/GameState";
 
 const UserInputKey = "UserInput";
 
@@ -66,39 +68,21 @@ const App = () => {
   const [networkingManager, setNetworkingManager] =
     useState<NetworkingManager | null>(null);
 
-  const HandleLineColor = (teamId: number) => {
-    console.log("received teamid = ", teamId, " from event emit");
-    switch (teamId) {
-      case 0: {
-        setTextColor("red.500");
-        break;
-      }
-      case 1: {
-        setTextColor("blue.500");
-        break;
-      }
-      default: {
-        setTextColor("yellow.500");
-        break;
-      }
-    }
-  };
+  // player data
+  const [playerData, setPlayerData] = useState<WSPlayerData | null>(null);
 
-  const setupNetworkingBindings = (inNetworkingManager: NetworkingManager) => {
-    if (networkingManager) {
-      // networkingManager.addListener(
-      //   Message.MediaPlaneToMobileLoginResponse.toString(),
-      //   HandleLineColor
-      // );
-      console.log("setup bindings");
-    }
-  };
+  // function to set the player data
+  const initPlayerData = () =>
+  {
+    const newPlayerData = new WSPlayerData();
+    setPlayerData(newPlayerData);
+    console.log('player data initialized');
+  }
 
   // networking function
   // to be passed in as a prop to a component
   const connectToServer = (address: string) => {
     const newNetworkingManager = new NetworkingManager(address);
-    setupNetworkingBindings(newNetworkingManager);
     newNetworkingManager
       .connect()
       .then(() => {
@@ -113,12 +97,13 @@ const App = () => {
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
+    initPlayerData();
     templateManager.LoadTemplates().then((result) => {
       for (let i = 0; i < result.length; i++) {
         Recognizer.AddGesture(result[i]);
       }
     });
-  });
+  }, []);
 
   // TODO maybe look into a more robust way to handle this...
   enum ShapeToEnum {
@@ -236,6 +221,7 @@ const App = () => {
               Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
               onSelect={selectHandle}
             />
+            <GameState inNetworkingManager={networkingManager} inPlayerData={playerData} />
           </GridItem>
         )}
         {!isLandscape && (
