@@ -28,6 +28,7 @@ var repeater_broadcast_binary_response_js_1 = require("../wsschema/repeater-broa
 var repeater_login_request_js_1 = require("../wsschema/repeater-login-request.js");
 var shape_request_js_1 = require("../wsschema/shape-request.js");
 var shape_response_js_1 = require("../wsschema/shape-response.js");
+var timhit_event_js_1 = require("../wsschema/timhit-event.js");
 var timinteractable_data_js_1 = require("../wsschema/timinteractable-data.js");
 var timinteractable_update_js_1 = require("../wsschema/timinteractable-update.js");
 var timmapped_area_add_js_1 = require("../wsschema/timmapped-area-add.js");
@@ -73,6 +74,7 @@ var Message;
     Message[Message["TIMMappedAreaRemoved"] = 31] = "TIMMappedAreaRemoved";
     Message[Message["TIMInteractableData"] = 32] = "TIMInteractableData";
     Message[Message["TIMInteractableUpdate"] = 33] = "TIMInteractableUpdate";
+    Message[Message["TIMHitEvent"] = 34] = "TIMHitEvent";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -110,6 +112,7 @@ function unionToMessage(type, accessor) {
         case 'TIMMappedAreaRemoved': return accessor(new timmapped_area_removed_js_1.TIMMappedAreaRemoved());
         case 'TIMInteractableData': return accessor(new timinteractable_data_js_1.TIMInteractableData());
         case 'TIMInteractableUpdate': return accessor(new timinteractable_update_js_1.TIMInteractableUpdate());
+        case 'TIMHitEvent': return accessor(new timhit_event_js_1.TIMHitEvent());
         default: return null;
     }
 }
@@ -149,6 +152,7 @@ function unionListToMessage(type, accessor, index) {
         case 'TIMMappedAreaRemoved': return accessor(index, new timmapped_area_removed_js_1.TIMMappedAreaRemoved());
         case 'TIMInteractableData': return accessor(index, new timinteractable_data_js_1.TIMInteractableData());
         case 'TIMInteractableUpdate': return accessor(index, new timinteractable_update_js_1.TIMInteractableUpdate());
+        case 'TIMHitEvent': return accessor(index, new timhit_event_js_1.TIMHitEvent());
         default: return null;
     }
 }

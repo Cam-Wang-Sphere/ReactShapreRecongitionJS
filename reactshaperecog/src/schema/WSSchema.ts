@@ -31,6 +31,7 @@ export { RepeaterBroadcastBinaryResponse } from './wsschema/repeater-broadcast-b
 export { RepeaterLoginRequest } from './wsschema/repeater-login-request.js';
 export { ShapeRequest } from './wsschema/shape-request.js';
 export { ShapeResponse } from './wsschema/shape-response.js';
+export { TIMHitEvent } from './wsschema/timhit-event.js';
 export { TIMInputEvent } from './wsschema/timinput-event.js';
 export { TIMInteractableData } from './wsschema/timinteractable-data.js';
 export { TIMInteractableUpdate } from './wsschema/timinteractable-update.js';
