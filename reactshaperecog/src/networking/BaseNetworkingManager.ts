@@ -4,6 +4,8 @@ import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
 import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
+import { GenericBatchResponse } from '../schema/WSSchema';
+import { GenericBinaryWrapper } from '../schema/WSSchema';
 
 export class BaseNetworkingManager extends EventEmitter {
 
@@ -90,6 +92,29 @@ export class BaseNetworkingManager extends EventEmitter {
         this.emit(Message.ClientLoginResponse.toString(), this.sessionId);
     }
 
+    protected handleGenericBatchResponse = (typeWrapper: TypeWrapper): void =>
+    {
+        const genericBatchResponseMessage = new GenericBatchResponse();
+        typeWrapper.message(genericBatchResponseMessage);
+
+        for (let i: number = 0; i < genericBatchResponseMessage.messagesLength(); i++)
+        {
+            const flatBufferMessage: GenericBinaryWrapper | null = genericBatchResponseMessage.messages(i);
+
+            if (flatBufferMessage)
+            {
+                const rawData: Uint8Array | null = flatBufferMessage.dataArray();
+                if (!rawData) continue;
+
+                const rawArrayBuffer: ArrayBuffer = rawData.slice().buffer;
+                if (rawArrayBuffer)
+                {
+                    this.handleBinaryMessage(rawArrayBuffer);
+                }
+            }
+        }
+    }
+
     protected handleBinaryMessage(data: ArrayBuffer): void
     {
         console.log('Received binary message: ', data);
@@ -105,6 +130,11 @@ export class BaseNetworkingManager extends EventEmitter {
             case Message.ClientLoginResponse:
             {
                 this.handleClientLoginResponse(root);
+                break;
+            }
+            case Message.GenericBatchResponse:
+            {
+                this.handleGenericBatchResponse(root);
                 break;
             }
             default:

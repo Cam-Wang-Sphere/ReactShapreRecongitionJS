@@ -143,12 +143,7 @@ const App = () => {
 
     if (DrawResult.Score >= 0.5) {
       let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
-      // sendShapeRequest(enumResult);
-      console.log('ended shape request');
-      if (networkingManager)
-      {
-        console.log('inNetworkingManager is valid');
-      }
+
       networkingManager?.sendShapeRequest(enumResult);
       setDrawResult(DrawResult.Name);
     } else {
