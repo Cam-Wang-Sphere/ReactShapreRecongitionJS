@@ -23,6 +23,8 @@ import { TIMMappedAreaRemoved } from '../schema/wsschema/timmapped-area-removed'
 import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
 import { FTIMInteractableData } from '../TIM/TIMInteractableData';
 import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
+import { GlobalInputResponse } from '../schema/WSSchema';
+import { GlobalInputEnums } from '../schema/WSSchema';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -280,6 +282,17 @@ export class NetworkingManager extends BaseNetworkingManager {
         this.emit(Message.TIMInteractableUpdate.toString(), interactable);
     }
 
+    protected handleGlobalInputResponse = (typeWrapper: TypeWrapper) =>
+    {
+        const globalInputResponse = new GlobalInputResponse();
+        typeWrapper.message(globalInputResponse);
+
+        const inputScreenEnum: GlobalInputEnums = globalInputResponse.currentInput();
+
+        console.log('received global input response. Input = ', inputScreenEnum.toString());
+
+        this.emit(Message.GlobalInputResponse.toString(), inputScreenEnum);
+    }
     // END MESSAGE HANDLERS
 
 
@@ -325,6 +338,11 @@ export class NetworkingManager extends BaseNetworkingManager {
             case Message.TIMInteractableUpdate:
             {
                 this.handleTIMInteractableUpdate(root);
+                break;
+            }
+            case Message.GlobalInputResponse:
+            {
+                this.handleGlobalInputResponse(root);
                 break;
             }
             default:
