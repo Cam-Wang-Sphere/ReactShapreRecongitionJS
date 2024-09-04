@@ -39,6 +39,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     { x: 0, y: 0 },
   ];
   let enemyOpacity = [];
+  let enemyColor = [];
+  let mouse = {
+    x: 0,
+    y: 0,
+  };
+  let size = [20, 20];
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,12 +59,19 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
 
+        //mouse position
+        window.addEventListener("touchstart", (e) => {
+          mouse.x = e.touches[0].clientX;
+          mouse.y = e.touches[0].clientY;
+        });
+
         // random location
         for (var i = 0; i < 5; i++) {
           pos[i].x = Math.floor(Math.random() * canvas.width);
           pos[i].y = Math.floor(Math.random() * canvas.height);
           astSpeed[i] = Math.random() * 2;
           enemyOpacity[i] = 0.1;
+          enemyColor[i] = "orange";
         }
 
         const render = () => {
@@ -85,7 +98,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             ctx.beginPath();
             ctx.globalAlpha = enemyOpacity[i];
             ctx.arc(pos[i].x, pos[i].y, 20, 0, Math.PI * 2);
-            ctx.fillStyle = "orange";
+            ctx.fillStyle = enemyColor[i];
+            // i === 0 ? (ctx.fillStyle = "red") : (ctx.fillStyle = "orange");
             ctx.fill();
             ctx.closePath();
 
@@ -103,6 +117,17 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               enemyOpacity[i] = 0.1;
               pos[i].x = Math.floor(Math.random() * canvas.width);
             }
+
+            //mouse press
+            if (
+              mouse.x >= pos[i].x &&
+              mouse.x < pos[i].x + 50 &&
+              mouse.y >= pos[i].y &&
+              mouse.y < pos[i].y + 50
+            ) {
+              //   enemyOpacity[i] = 0;
+              enemyColor[i] = "red";
+            }
           }
 
           // change radius and opacity;
@@ -113,11 +138,13 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           if (radius >= 900) {
             for (var i = 0; i < 5; i++) {
               enemyOpacity[i] = 0.1;
+              enemyColor[i] = "orange";
             }
             radius = 40;
           }
           //   radius >= 900 && (radius = 40) &&( for (var i = 0; i < 5; i++) { enemyOpacity[i] = 0;} );
           radius === 40 && (opacity = 0.5);
+
           requestAnimationFrame(render);
         };
 
@@ -252,6 +279,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       style={{
         position: "relative",
       }}
+      mt="-8%"
     >
       <GridItem
         area="UIOverlay"
@@ -267,14 +295,14 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         rowStart={1}
         colStart={1}
       >
-        <HStack justifyContent="space-between">
+        {/* <HStack justifyContent="space-between">
           <Text fontSize="xl" color="#39D7B9" p="20px">
             Name
           </Text>
           <Text fontSize="xl" color="#39D7B9" p="20px">
             Score
           </Text>
-        </HStack>
+        </HStack> */}
       </GridItem>
       <GridItem
         area="TapRegion"
