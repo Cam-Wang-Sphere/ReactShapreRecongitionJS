@@ -9,6 +9,7 @@ import InputSelect from "./components/InputSelect";
 import TilesInput from "./components/TilesInput";
 import ConnectionScreen from "./components/ConnectionScreen";
 import TapnSlashInput from "./components/TapnSlashInput";
+import RadarView from "./components/RadarViewInput";
 import SuccessOverlay from "./components/SuccessOverlay";
 import ScoreWidget from "./components/ScoreWidget";
 import { NetworkingManager } from "./networking/NetworkingManager";
@@ -72,12 +73,11 @@ const App = () => {
   const [playerData, setPlayerData] = useState<WSPlayerData | null>(null);
 
   // function to set the player data
-  const initPlayerData = () =>
-  {
+  const initPlayerData = () => {
     const newPlayerData = new WSPlayerData();
     setPlayerData(newPlayerData);
-    console.log('player data initialized');
-  }
+    console.log("player data initialized");
+  };
 
   // networking function
   // to be passed in as a prop to a component
@@ -87,7 +87,7 @@ const App = () => {
       .connect()
       .then(() => {
         setNetworkingManager(newNetworkingManager);
-        console.log('set networking manager');
+        console.log("set networking manager");
       })
       .catch(() => {
         console.log("failed to connect");
@@ -167,13 +167,17 @@ const App = () => {
   };
   const [_index, setIndex] = useState(0);
   const inputTypes = [
-    <ConnectionScreen connectFunction={connectToServer} inConnectNetworkingManager={networkingManager}/>,
+    <ConnectionScreen
+      connectFunction={connectToServer}
+      inConnectNetworkingManager={networkingManager}
+    />,
     <DrawingWidget
       drawEndFunction={endDrawing}
       inNetworkingManager={networkingManager}
     />,
     <TilesInput inNetworkingManager={networkingManager} />,
     <TapnSlashInput inNetworkingManager={networkingManager} />,
+    <RadarView inNetworkingManager={networkingManager} />,
   ];
 
   const [isLandscape, setIsLandscape] = useState(false);
@@ -213,10 +217,19 @@ const App = () => {
         {!isLandscape && (
           <GridItem rowSpan={1} colSpan={1} area="Heading">
             <NavMenu
-              Names={["Connection/Name", "Draw", "Tiles", "Tap n Slash"]}
+              Names={[
+                "Connection/Name",
+                "Draw",
+                "Tiles",
+                "Tap n Slash",
+                "Radar View",
+              ]}
               onSelect={selectHandle}
             />
-            <GameState inNetworkingManager={networkingManager} inPlayerData={playerData} />
+            <GameState
+              inNetworkingManager={networkingManager}
+              inPlayerData={playerData}
+            />
           </GridItem>
         )}
         {!isLandscape && (
