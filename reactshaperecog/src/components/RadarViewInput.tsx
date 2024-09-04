@@ -121,9 +121,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             //mouse press
             if (
               mouse.x >= pos[i].x &&
-              mouse.x < pos[i].x + 50 &&
+              mouse.x < pos[i].x + 60 &&
               mouse.y >= pos[i].y &&
-              mouse.y < pos[i].y + 50
+              mouse.y < pos[i].y + 60
             ) {
               //   enemyOpacity[i] = 0;
               enemyColor[i] = "red";
