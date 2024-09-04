@@ -3,10 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from "../schema/wsschema/message";
 import { Box } from "@chakra-ui/react";
+import { Result, Point, DollarRecognizer } from "./../Template/Recognizer";
 
 interface DrawingProps {
-  drawEndFunction: () => void;
   inNetworkingManager: NetworkingManager | null;
+  inRecognizer: DollarRecognizer;
+  inSetDrawResult: (inResult: string) => void;
 }
 
 const UserInputKey = "UserInput";
@@ -55,10 +57,8 @@ function AppendNexInput(X: number, Y: number) {
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
-const DrawingWidget = ({
-  drawEndFunction,
-  inNetworkingManager,
-}: DrawingProps) => {
+const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: DrawingProps) => 
+{
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
@@ -83,6 +83,16 @@ const DrawingWidget = ({
       }
     }
   };
+
+  // TODO maybe look into a more robust way to handle this...
+  enum ShapeToEnum {
+    Arrow = 0,
+    Parenthesis = 1,
+    Check = 2,
+    Triangle = 3,
+    Pigtail = 4,
+    Circle = 5,
+  }
 
   useEffect(() => {
     // inNetworkingManager?.on(
@@ -156,6 +166,42 @@ const DrawingWidget = ({
     setIsDrawing(false);
 
     drawEndFunction();
+  };
+
+  // Function for ending the drawing
+  const drawEndFunction = () => {
+    let pointArray = new Array();
+
+    if (storageAvailable("localStorage")) {
+      if (!localStorage.getItem(UserInputKey)) {
+        return;
+      }
+      let existingInputString = localStorage.getItem(UserInputKey);
+
+      if (!existingInputString) {
+        return;
+      }
+      let existingInputObj = JSON.parse(existingInputString);
+
+      for (let i = 0; i < existingInputObj["Input"].length; i++) {
+        let X = existingInputObj["Input"][i]["x"];
+        let Y = existingInputObj["Input"][i]["y"];
+
+        let newPoint = new Point(X, Y);
+        pointArray.push(newPoint);
+      }
+    }
+
+    let DrawResult = inRecognizer.Recognize(pointArray, false);
+
+    if (DrawResult.Score >= 0.5) {
+      let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
+
+      inNetworkingManager?.sendShapeRequest(enumResult);
+      inSetDrawResult(DrawResult.Name);
+    } else {
+      inSetDrawResult("No Match.");
+    }
   };
 
   const draw = (

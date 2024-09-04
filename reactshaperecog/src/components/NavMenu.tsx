@@ -23,9 +23,10 @@ import { grey } from "@mui/material/colors";
 interface Props {
   Names: string[];
   onSelect: (index: number) => void;
+  inSelectedIndex: number;
 }
 
-function NavMenu({ Names, onSelect }: Props) {
+function NavMenu({ Names, onSelect, inSelectedIndex }: Props) {
   const [selectIndex, setSelectedIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -64,7 +65,7 @@ function NavMenu({ Names, onSelect }: Props) {
                   bg={"#444"}
                   w={"100%"}
                   color="#fff"
-                  isActive={selectIndex === index}
+                  isActive={inSelectedIndex === index}
                 >
                   {Name}
                 </Button>

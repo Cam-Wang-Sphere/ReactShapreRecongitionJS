@@ -35,6 +35,7 @@ import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
 import { WSPlayerData } from "./player/WSPlayerData";
 import GameState from "./components/GameState";
+import ScreenSwitcher from "./components/ScreenSwitcher";
 
 const UserInputKey = "UserInput";
 
@@ -94,6 +95,21 @@ const App = () => {
       });
   };
 
+  // TEMP
+  const funcSetDrawResult = (inResult: string) =>
+  {
+    setDrawResult(inResult);
+  }
+  const namesArray = [
+    "Testing",
+    "Connection/Name",
+    "Tap n Slash",
+    "Draw",
+    "Tiles",
+    "Radar View",
+  ]
+  // END TEMP
+
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
@@ -104,52 +120,6 @@ const App = () => {
       }
     });
   }, []);
-
-  // TODO maybe look into a more robust way to handle this...
-  enum ShapeToEnum {
-    Arrow = 0,
-    Parenthesis = 1,
-    Check = 2,
-    Triangle = 3,
-    Pigtail = 4,
-    Circle = 5,
-  }
-
-  // Function for ending the drawing
-  const endDrawing = () => {
-    let pointArray = new Array();
-
-    if (storageAvailable("localStorage")) {
-      if (!localStorage.getItem(UserInputKey)) {
-        return;
-      }
-      let existingInputString = localStorage.getItem(UserInputKey);
-
-      if (!existingInputString) {
-        return;
-      }
-      let existingInputObj = JSON.parse(existingInputString);
-
-      for (let i = 0; i < existingInputObj["Input"].length; i++) {
-        let X = existingInputObj["Input"][i]["x"];
-        let Y = existingInputObj["Input"][i]["y"];
-
-        let newPoint = new Point(X, Y);
-        pointArray.push(newPoint);
-      }
-    }
-
-    let DrawResult = Recognizer.Recognize(pointArray, false);
-
-    if (DrawResult.Score >= 0.5) {
-      let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
-
-      networkingManager?.sendShapeRequest(enumResult);
-      setDrawResult(DrawResult.Name);
-    } else {
-      setDrawResult("No Match.");
-    }
-  };
 
   const AddTemplate = (TemplateName: string) => {
     templateManager.SaveTemplate(TemplateName);
@@ -165,20 +135,7 @@ const App = () => {
   const selectHandle = (index: number) => {
     setIndex(index);
   };
-  const [_index, setIndex] = useState(0);
-  const inputTypes = [
-    <ConnectionScreen
-      connectFunction={connectToServer}
-      inConnectNetworkingManager={networkingManager}
-    />,
-    <DrawingWidget
-      drawEndFunction={endDrawing}
-      inNetworkingManager={networkingManager}
-    />,
-    <TilesInput inNetworkingManager={networkingManager} />,
-    <TapnSlashInput inNetworkingManager={networkingManager} />,
-    <RadarView inNetworkingManager={networkingManager} />,
-  ];
+  const [_index, setIndex] = useState(1);
 
   const [isLandscape, setIsLandscape] = useState(false);
 
@@ -217,14 +174,9 @@ const App = () => {
         {!isLandscape && (
           <GridItem rowSpan={1} colSpan={1} area="Heading">
             <NavMenu
-              Names={[
-                "Connection/Name",
-                "Draw",
-                "Tiles",
-                "Tap n Slash",
-                "Radar View",
-              ]}
+              Names={namesArray}
               onSelect={selectHandle}
+              inSelectedIndex={_index}
             />
             <GameState
               inNetworkingManager={networkingManager}
@@ -271,7 +223,14 @@ const App = () => {
           w={isLandscape ? "95vw" : "100%"}
           mt={isLandscape ? "-2%" : "0"}
         >
-          {inputTypes[_index]}
+          <ScreenSwitcher 
+            inConnectFunction={connectToServer} 
+            inNetworkingManager={networkingManager} 
+            inSSDollarRecognizer={Recognizer} 
+            inSSSetDrawResult={funcSetDrawResult} 
+            inSelectHandle={selectHandle} 
+            inSelectedIndex={_index}
+          />
         </GridItem>
       </Grid>
     </Container>
