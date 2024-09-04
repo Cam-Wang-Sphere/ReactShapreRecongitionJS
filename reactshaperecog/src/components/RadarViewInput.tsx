@@ -116,6 +116,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               pos[i].y -= canvas.height;
               enemyOpacity[i] = 0.1;
               pos[i].x = Math.floor(Math.random() * canvas.width);
+              enemyColor[i] = "orange";
             }
 
             //mouse press
@@ -138,7 +139,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           if (radius >= 900) {
             for (var i = 0; i < 5; i++) {
               enemyOpacity[i] = 0.1;
-              enemyColor[i] = "orange";
             }
             radius = 40;
           }
