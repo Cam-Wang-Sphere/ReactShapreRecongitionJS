@@ -35,6 +35,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     return RandomNumber;
   }
 
+  const randomNum = (min: number, max: number) => {
+    var RandomNumber = Math.random() * (max - min) + min;
+
+    return RandomNumber;
+  };
+
   let astSpeed = [0, 0, 0, 0, 0];
   let speed = 6;
   let radius = 40;
@@ -287,12 +293,12 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               !asteroids[i].isDestroyed &&
               asteroids[i].y >= canvas.height - radius
             ) {
-              //   //detect and light up enemy
-              asteroids[i].opacity = 0.6;
+              //   //detect and light up enemy -----------
+              // asteroids[i].opacity = 0.6;
             }
 
             //fadeway asteroids
-            asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.01);
+            // asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.01);
 
             //tapping on asteeoids
             if (
@@ -361,12 +367,36 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           radius === 40 && (opacity = 0.5);
 
           requestAnimationFrame(render);
+          requestAnimationFrame(animate);
         };
 
         render();
       }
     }
   }, [inNetworkingManager]);
+
+  var startTime = 0;
+
+  let index = false;
+  var colors = [0, 0.6];
+
+  function animate(time: number) {
+    requestAnimationFrame(animate);
+    var interval = randomNum(400, 600);
+    if (startTime === 0) {
+      startTime = time;
+    }
+    var elapsed = time - startTime;
+    if (elapsed > interval) {
+      startTime = time;
+      index = !index;
+      for (var i = 0; i < asteroids.length; i++) {
+        if (index) {
+          !asteroids[i].isDestroyed && (asteroids[i].opacity = colors[0]);
+        } else !asteroids[i].isDestroyed && (asteroids[i].opacity = colors[1]);
+      }
+    }
+  }
 
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
