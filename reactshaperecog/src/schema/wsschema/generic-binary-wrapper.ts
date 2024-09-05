@@ -20,17 +20,17 @@ static getSizePrefixedRootAsGenericBinaryWrapper(bb:flatbuffers.ByteBuffer, obj?
   return (obj || new GenericBinaryWrapper()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-data(index: number):number|null {
+rawData(index: number):number|null {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readUint8(this.bb!.__vector(this.bb_pos + offset) + index) : 0;
 }
 
-dataLength():number {
+rawDataLength():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-dataArray():Uint8Array|null {
+rawDataArray():Uint8Array|null {
   const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? new Uint8Array(this.bb!.bytes().buffer, this.bb!.bytes().byteOffset + this.bb!.__vector(this.bb_pos + offset), this.bb!.__vector_len(this.bb_pos + offset)) : null;
 }
@@ -39,11 +39,11 @@ static startGenericBinaryWrapper(builder:flatbuffers.Builder) {
   builder.startObject(1);
 }
 
-static addData(builder:flatbuffers.Builder, dataOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(0, dataOffset, 0);
+static addRawData(builder:flatbuffers.Builder, rawDataOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, rawDataOffset, 0);
 }
 
-static createDataVector(builder:flatbuffers.Builder, data:number[]|Uint8Array):flatbuffers.Offset {
+static createRawDataVector(builder:flatbuffers.Builder, data:number[]|Uint8Array):flatbuffers.Offset {
   builder.startVector(1, data.length, 1);
   for (let i = data.length - 1; i >= 0; i--) {
     builder.addInt8(data[i]!);
@@ -51,7 +51,7 @@ static createDataVector(builder:flatbuffers.Builder, data:number[]|Uint8Array):f
   return builder.endVector();
 }
 
-static startDataVector(builder:flatbuffers.Builder, numElems:number) {
+static startRawDataVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(1, numElems, 1);
 }
 
@@ -60,9 +60,9 @@ static endGenericBinaryWrapper(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createGenericBinaryWrapper(builder:flatbuffers.Builder, dataOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createGenericBinaryWrapper(builder:flatbuffers.Builder, rawDataOffset:flatbuffers.Offset):flatbuffers.Offset {
   GenericBinaryWrapper.startGenericBinaryWrapper(builder);
-  GenericBinaryWrapper.addData(builder, dataOffset);
+  GenericBinaryWrapper.addRawData(builder, rawDataOffset);
   return GenericBinaryWrapper.endGenericBinaryWrapper(builder);
 }
 }

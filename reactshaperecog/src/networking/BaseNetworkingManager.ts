@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
 import { GenericBatchResponse } from '../schema/WSSchema';
 import { GenericBinaryWrapper } from '../schema/WSSchema';
+import { LateConnectPayloadResponse } from '../schema/WSSchema';
 
 export class BaseNetworkingManager extends EventEmitter {
 
@@ -103,7 +104,7 @@ export class BaseNetworkingManager extends EventEmitter {
 
             if (flatBufferMessage)
             {
-                const rawData: Uint8Array | null = flatBufferMessage.dataArray();
+                const rawData: Uint8Array | null = flatBufferMessage.rawDataArray();
                 if (!rawData) continue;
 
                 const rawArrayBuffer: ArrayBuffer = rawData.slice().buffer;
@@ -111,6 +112,24 @@ export class BaseNetworkingManager extends EventEmitter {
                 {
                     this.handleBinaryMessage(rawArrayBuffer);
                 }
+            }
+        }
+    }
+
+    protected handleLateConnectPayloadResponse = (typeWrapper: TypeWrapper): void =>
+    {
+        const lateConnectPayloadResponse = new LateConnectPayloadResponse();
+        typeWrapper.message(lateConnectPayloadResponse);
+
+        console.log('received late connect payload response');
+
+        const rawData: Uint8Array | null = lateConnectPayloadResponse.messagesArray();
+        if (rawData)
+        {
+            const rawArrayBuffer: ArrayBuffer = rawData.slice().buffer;
+            if (rawArrayBuffer)
+            {
+                this.handleBinaryMessage(rawArrayBuffer);
             }
         }
     }
@@ -135,6 +154,11 @@ export class BaseNetworkingManager extends EventEmitter {
             case Message.GenericBatchResponse:
             {
                 this.handleGenericBatchResponse(root);
+                break;
+            }
+            case Message.LateConnectPayloadResponse:
+            {
+                this.handleLateConnectPayloadResponse(root);
                 break;
             }
             default:

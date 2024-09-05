@@ -20,41 +20,41 @@ var GenericBinaryWrapper = /** @class */ (function () {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new GenericBinaryWrapper()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     };
-    GenericBinaryWrapper.prototype.data = function (index) {
+    GenericBinaryWrapper.prototype.rawData = function (index) {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
     };
-    GenericBinaryWrapper.prototype.dataLength = function () {
+    GenericBinaryWrapper.prototype.rawDataLength = function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
     };
-    GenericBinaryWrapper.prototype.dataArray = function () {
+    GenericBinaryWrapper.prototype.rawDataArray = function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
     };
     GenericBinaryWrapper.startGenericBinaryWrapper = function (builder) {
         builder.startObject(1);
     };
-    GenericBinaryWrapper.addData = function (builder, dataOffset) {
-        builder.addFieldOffset(0, dataOffset, 0);
+    GenericBinaryWrapper.addRawData = function (builder, rawDataOffset) {
+        builder.addFieldOffset(0, rawDataOffset, 0);
     };
-    GenericBinaryWrapper.createDataVector = function (builder, data) {
+    GenericBinaryWrapper.createRawDataVector = function (builder, data) {
         builder.startVector(1, data.length, 1);
         for (var i = data.length - 1; i >= 0; i--) {
             builder.addInt8(data[i]);
         }
         return builder.endVector();
     };
-    GenericBinaryWrapper.startDataVector = function (builder, numElems) {
+    GenericBinaryWrapper.startRawDataVector = function (builder, numElems) {
         builder.startVector(1, numElems, 1);
     };
     GenericBinaryWrapper.endGenericBinaryWrapper = function (builder) {
         var offset = builder.endObject();
         return offset;
     };
-    GenericBinaryWrapper.createGenericBinaryWrapper = function (builder, dataOffset) {
+    GenericBinaryWrapper.createGenericBinaryWrapper = function (builder, rawDataOffset) {
         GenericBinaryWrapper.startGenericBinaryWrapper(builder);
-        GenericBinaryWrapper.addData(builder, dataOffset);
+        GenericBinaryWrapper.addRawData(builder, rawDataOffset);
         return GenericBinaryWrapper.endGenericBinaryWrapper(builder);
     };
     return GenericBinaryWrapper;

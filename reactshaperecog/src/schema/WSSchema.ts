@@ -11,6 +11,8 @@ export { GlobalInputEnums } from './wsschema/global-input-enums.js';
 export { GlobalInputResponse } from './wsschema/global-input-response.js';
 export { JsonToBinaryRequest } from './wsschema/json-to-binary-request.js';
 export { JsonToBinaryResponse } from './wsschema/json-to-binary-response.js';
+export { LateConnectPayloadRequest } from './wsschema/late-connect-payload-request.js';
+export { LateConnectPayloadResponse } from './wsschema/late-connect-payload-response.js';
 export { LinearColor } from './wsschema/linear-color.js';
 export { MediaPlaneLoginRequest } from './wsschema/media-plane-login-request.js';
 export { Message } from './wsschema/message.js';

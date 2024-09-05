@@ -6,6 +6,8 @@ import { GenericBatchResponse } from '../wsschema/generic-batch-response.js';
 import { GlobalInputResponse } from '../wsschema/global-input-response.js';
 import { JsonToBinaryRequest } from '../wsschema/json-to-binary-request.js';
 import { JsonToBinaryResponse } from '../wsschema/json-to-binary-response.js';
+import { LateConnectPayloadRequest } from '../wsschema/late-connect-payload-request.js';
+import { LateConnectPayloadResponse } from '../wsschema/late-connect-payload-response.js';
 import { MediaPlaneLoginRequest } from '../wsschema/media-plane-login-request.js';
 import { MobileToMediaPlaneLoginRequest } from '../wsschema/mobile-to-media-plane-login-request.js';
 import { MobileToMediaPlaneLogoutRequest } from '../wsschema/mobile-to-media-plane-logout-request.js';
@@ -61,25 +63,27 @@ export enum Message {
   RepeaterBroadcastBinaryResponse = 20,
   GenericBatchRequest = 21,
   GenericBatchResponse = 22,
-  ShapeRequest = 23,
-  ShapeResponse = 24,
-  PlayerNameRequest = 25,
-  PlayerNameResponse = 26,
-  PhaseResponse = 27,
-  GlobalInputResponse = 28,
-  TIMPlayerInput = 29,
-  TIMMappedAreaAdd = 30,
-  TIMMappedAreaUpdate = 31,
-  TIMMappedAreaRemoved = 32,
-  TIMInteractableData = 33,
-  TIMInteractableUpdate = 34,
-  TIMHitEvent = 35
+  LateConnectPayloadRequest = 23,
+  LateConnectPayloadResponse = 24,
+  ShapeRequest = 25,
+  ShapeResponse = 26,
+  PlayerNameRequest = 27,
+  PlayerNameResponse = 28,
+  PhaseResponse = 29,
+  GlobalInputResponse = 30,
+  TIMPlayerInput = 31,
+  TIMMappedAreaAdd = 32,
+  TIMMappedAreaUpdate = 33,
+  TIMMappedAreaRemoved = 34,
+  TIMInteractableData = 35,
+  TIMInteractableUpdate = 36,
+  TIMHitEvent = 37
 }
 
 export function unionToMessage(
   type: Message,
-  accessor: (obj:ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
-): ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+  accessor: (obj:ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
+): ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(new PingServerRequest())! as PingServerRequest;
@@ -104,6 +108,8 @@ export function unionToMessage(
     case 'RepeaterBroadcastBinaryResponse': return accessor(new RepeaterBroadcastBinaryResponse())! as RepeaterBroadcastBinaryResponse;
     case 'GenericBatchRequest': return accessor(new GenericBatchRequest())! as GenericBatchRequest;
     case 'GenericBatchResponse': return accessor(new GenericBatchResponse())! as GenericBatchResponse;
+    case 'LateConnectPayloadRequest': return accessor(new LateConnectPayloadRequest())! as LateConnectPayloadRequest;
+    case 'LateConnectPayloadResponse': return accessor(new LateConnectPayloadResponse())! as LateConnectPayloadResponse;
     case 'ShapeRequest': return accessor(new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(new ShapeResponse())! as ShapeResponse;
     case 'PlayerNameRequest': return accessor(new PlayerNameRequest())! as PlayerNameRequest;
@@ -123,9 +129,9 @@ export function unionToMessage(
 
 export function unionListToMessage(
   type: Message, 
-  accessor: (index: number, obj:ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
+  accessor: (index: number, obj:ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
   index: number
-): ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+): ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInteractableData|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(index, new PingServerRequest())! as PingServerRequest;
@@ -150,6 +156,8 @@ export function unionListToMessage(
     case 'RepeaterBroadcastBinaryResponse': return accessor(index, new RepeaterBroadcastBinaryResponse())! as RepeaterBroadcastBinaryResponse;
     case 'GenericBatchRequest': return accessor(index, new GenericBatchRequest())! as GenericBatchRequest;
     case 'GenericBatchResponse': return accessor(index, new GenericBatchResponse())! as GenericBatchResponse;
+    case 'LateConnectPayloadRequest': return accessor(index, new LateConnectPayloadRequest())! as LateConnectPayloadRequest;
+    case 'LateConnectPayloadResponse': return accessor(index, new LateConnectPayloadResponse())! as LateConnectPayloadResponse;
     case 'ShapeRequest': return accessor(index, new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(index, new ShapeResponse())! as ShapeResponse;
     case 'PlayerNameRequest': return accessor(index, new PlayerNameRequest())! as PlayerNameRequest;
