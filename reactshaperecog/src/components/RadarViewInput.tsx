@@ -27,6 +27,14 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       : setIsLandscape(false);
   });
 
+  function generateRandFloat() {
+    var min = 0.3,
+      max = 0.5,
+      RandomNumber = Math.random() * (max - min) + min;
+
+    return RandomNumber;
+  }
+
   let astSpeed = [0, 0, 0, 0, 0];
   let speed = 6;
   let radius = 40;
@@ -141,7 +149,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         for (var i = 0; i < asteroids.length; i++) {
           // asteroids[i].x = Math.floor(Math.random() * canvas.width);
           // asteroids[i].y = ;
-          asteroids[i].speed = 0.7;
+          asteroids[i].speed = generateRandFloat();
         }
 
         asteroids[3].x = asteroids[0].x;
