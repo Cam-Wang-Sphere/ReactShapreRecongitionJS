@@ -26,6 +26,7 @@ var ping_server_unreliable_request_js_1 = require("../wsschema/ping-server-unrel
 var ping_server_unreliable_response_js_1 = require("../wsschema/ping-server-unreliable-response.js");
 var player_name_request_js_1 = require("../wsschema/player-name-request.js");
 var player_name_response_js_1 = require("../wsschema/player-name-response.js");
+var player_score_response_js_1 = require("../wsschema/player-score-response.js");
 var repeater_binary_response_js_1 = require("../wsschema/repeater-binary-response.js");
 var repeater_broadcast_binary_response_js_1 = require("../wsschema/repeater-broadcast-binary-response.js");
 var repeater_login_request_js_1 = require("../wsschema/repeater-login-request.js");
@@ -74,13 +75,14 @@ var Message;
     Message[Message["PlayerNameResponse"] = 28] = "PlayerNameResponse";
     Message[Message["PhaseResponse"] = 29] = "PhaseResponse";
     Message[Message["GlobalInputResponse"] = 30] = "GlobalInputResponse";
-    Message[Message["TIMPlayerInput"] = 31] = "TIMPlayerInput";
-    Message[Message["TIMMappedAreaAdd"] = 32] = "TIMMappedAreaAdd";
-    Message[Message["TIMMappedAreaUpdate"] = 33] = "TIMMappedAreaUpdate";
-    Message[Message["TIMMappedAreaRemoved"] = 34] = "TIMMappedAreaRemoved";
-    Message[Message["TIMInteractableData"] = 35] = "TIMInteractableData";
-    Message[Message["TIMInteractableUpdate"] = 36] = "TIMInteractableUpdate";
-    Message[Message["TIMHitEvent"] = 37] = "TIMHitEvent";
+    Message[Message["PlayerScoreResponse"] = 31] = "PlayerScoreResponse";
+    Message[Message["TIMPlayerInput"] = 32] = "TIMPlayerInput";
+    Message[Message["TIMMappedAreaAdd"] = 33] = "TIMMappedAreaAdd";
+    Message[Message["TIMMappedAreaUpdate"] = 34] = "TIMMappedAreaUpdate";
+    Message[Message["TIMMappedAreaRemoved"] = 35] = "TIMMappedAreaRemoved";
+    Message[Message["TIMInteractableData"] = 36] = "TIMInteractableData";
+    Message[Message["TIMInteractableUpdate"] = 37] = "TIMInteractableUpdate";
+    Message[Message["TIMHitEvent"] = 38] = "TIMHitEvent";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -115,6 +117,7 @@ function unionToMessage(type, accessor) {
         case 'PlayerNameResponse': return accessor(new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(new phase_response_js_1.PhaseResponse());
         case 'GlobalInputResponse': return accessor(new global_input_response_js_1.GlobalInputResponse());
+        case 'PlayerScoreResponse': return accessor(new player_score_response_js_1.PlayerScoreResponse());
         case 'TIMPlayerInput': return accessor(new timplayer_input_js_1.TIMPlayerInput());
         case 'TIMMappedAreaAdd': return accessor(new timmapped_area_add_js_1.TIMMappedAreaAdd());
         case 'TIMMappedAreaUpdate': return accessor(new timmapped_area_update_js_1.TIMMappedAreaUpdate());
@@ -158,6 +161,7 @@ function unionListToMessage(type, accessor, index) {
         case 'PlayerNameResponse': return accessor(index, new player_name_response_js_1.PlayerNameResponse());
         case 'PhaseResponse': return accessor(index, new phase_response_js_1.PhaseResponse());
         case 'GlobalInputResponse': return accessor(index, new global_input_response_js_1.GlobalInputResponse());
+        case 'PlayerScoreResponse': return accessor(index, new player_score_response_js_1.PlayerScoreResponse());
         case 'TIMPlayerInput': return accessor(index, new timplayer_input_js_1.TIMPlayerInput());
         case 'TIMMappedAreaAdd': return accessor(index, new timmapped_area_add_js_1.TIMMappedAreaAdd());
         case 'TIMMappedAreaUpdate': return accessor(index, new timmapped_area_update_js_1.TIMMappedAreaUpdate());

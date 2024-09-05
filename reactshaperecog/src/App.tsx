@@ -9,9 +9,6 @@ import InputSelect from "./components/InputSelect";
 import TilesInput from "./components/TilesInput";
 import ConnectionScreen from "./components/ConnectionScreen";
 import TapnSlashInput from "./components/TapnSlashInput";
-import RadarView from "./components/RadarViewInput";
-import SuccessOverlay from "./components/SuccessOverlay";
-import ScoreWidget from "./components/ScoreWidget";
 import { NetworkingManager } from "./networking/NetworkingManager";
 import { Message } from "./schema/wsschema/message";
 import { TemplateManager } from "./Template/TemplateManager";
@@ -31,7 +28,6 @@ import {
 } from "@chakra-ui/react";
 import AddTemplateWidget from "./components/AddTemplate";
 import DrawingWidget from "./components/DrawingWidget";
-import RandomPlayerDataWidget from "./components/RandomPlayerDataWidget";
 import NavMenu from "./components/NavMenu";
 import { WSPlayerData } from "./player/WSPlayerData";
 import GameState from "./components/GameState";
@@ -199,14 +195,6 @@ const App = () => {
               <span color={textColor} className="resultText">
                 {drawResult}
               </span>
-              <HStack justifyContent="space-evenly">
-                <SuccessOverlay inNetworkingManager={networkingManager} />
-
-                <ScoreWidget inNetworkingManager={networkingManager} />
-                <RandomPlayerDataWidget
-                  inNetworkingManager={networkingManager}
-                />
-              </HStack>
             </VStack>
           </GridItem>
         )}

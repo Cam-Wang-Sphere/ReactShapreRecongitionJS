@@ -23,9 +23,10 @@ import { TIMMappedAreaRemoved } from '../schema/wsschema/timmapped-area-removed'
 import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
 import { FTIMInteractableData } from '../TIM/TIMInteractableData';
 import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
-import { GlobalInputResponse, TIMHitEvent } from '../schema/WSSchema';
+import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent } from '../schema/WSSchema';
 import { GlobalInputEnums } from '../schema/WSSchema';
 import { FTIMHitEvent } from '../TIM/TIMHitEvent';
+import { ScoreUpdateResponse } from '../schema/wsschema/score-update-response';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -302,6 +303,18 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         this.emit(Message.GlobalInputResponse.toString(), inputScreenEnum);
     }
+
+    protected handlePlayerScoreResponse = (typeWrapper: TypeWrapper) =>
+    {
+        const playerScoreResponse = new PlayerScoreResponse();
+        typeWrapper.message(playerScoreResponse);
+
+        const newScore: number = playerScoreResponse.newScore();
+
+        console.log('received playerScoreResponse = ', newScore);
+
+        this.emit(Message.PlayerScoreResponse.toString(), newScore);
+    }
     // END MESSAGE HANDLERS
 
 
@@ -352,6 +365,11 @@ export class NetworkingManager extends BaseNetworkingManager {
             case Message.GlobalInputResponse:
             {
                 this.handleGlobalInputResponse(root);
+                break;
+            }
+            case Message.PlayerScoreResponse:
+            {
+                this.handlePlayerScoreResponse(root);
                 break;
             }
             default:

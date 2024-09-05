@@ -15,22 +15,15 @@ const ScoreWidget = ({ inNetworkingManager }: ScoreWidgetProps) =>
     {
         const handleScoreEvent = (inScore: number) =>
         {
-            setScore((prevScore) => prevScore + inScore);
+            setScore(inScore);
         };
 
-        const resetScore = () =>
-        {
-            setScore(0);
-        }
-
-        // inNetworkingManager?.on(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
-        // inNetworkingManager?.on(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
+        inNetworkingManager?.on(Message.PlayerScoreResponse.toString(), handleScoreEvent);
 
         // cleaning up
         return () =>
         {
-            // inNetworkingManager?.off(Message.ScoreUpdateResponse.toString(), handleScoreEvent);
-            // inNetworkingManager?.off(Message.MediaPlaneToMobileLoginResponse.toString(), resetScore);
+            inNetworkingManager?.off(Message.PlayerScoreResponse.toString(), handleScoreEvent);
         };
     }, [inNetworkingManager]);
 

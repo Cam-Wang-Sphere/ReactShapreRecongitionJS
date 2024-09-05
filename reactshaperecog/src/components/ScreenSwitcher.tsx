@@ -8,6 +8,11 @@ import TilesInput from './TilesInput';
 import TapnSlashInput from './TapnSlashInput';
 import RadarView from "./RadarViewInput";
 import { DollarRecognizer } from '../Template/Recognizer';
+import SuccessOverlay from "./../components/SuccessOverlay";
+import ScoreWidget from "./../components/ScoreWidget";
+import RandomPlayerDataWidget from "./../components/RandomPlayerDataWidget";
+import { HStack } from '@chakra-ui/react';
+
 
 interface ScreenSwitcherProps
 {
@@ -57,7 +62,16 @@ const ScreenSwitcher = ({ inNetworkingManager, inSSSetDrawResult, inSelectHandle
 
     }, [inNetworkingManager]);
 
-    return <div>{inputTypes[inSelectedIndex]}</div>;
+    return (
+        <div>
+            <SuccessOverlay inNetworkingManager={inNetworkingManager} />
+            <HStack justifyContent="space-evenly">
+                <ScoreWidget inNetworkingManager={inNetworkingManager} />
+            </HStack>
+            {inputTypes[inSelectedIndex]}
+        </div>
+    );
+    
 }
 
 export default ScreenSwitcher;
