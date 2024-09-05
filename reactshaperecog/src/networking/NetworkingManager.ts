@@ -362,6 +362,11 @@ export class NetworkingManager extends BaseNetworkingManager {
                 this.handleTIMInteractableUpdate(root);
                 break;
             }
+            case Message.TIMHitEvent:
+            {
+                this.handleTIMHitEvent(root);
+                break;
+            }  
             case Message.GlobalInputResponse:
             {
                 this.handleGlobalInputResponse(root);
