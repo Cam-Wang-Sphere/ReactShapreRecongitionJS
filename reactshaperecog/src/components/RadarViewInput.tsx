@@ -44,8 +44,72 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     x: 0,
     y: 0,
   };
-  let size = [20, 20];
 
+  //different shapes
+  let asteroids = [
+    {
+      type: "circle",
+      x: 50,
+      y: 10,
+      speed: 0.4,
+      color: "orange",
+      opacity: 0.1,
+      size: 27,
+      isDestroyed: false,
+    },
+    {
+      type: "square",
+      x: 130,
+      y: -10,
+      speed: 0.5,
+      color: "orange",
+      opacity: 0.1,
+      size: 50,
+      isDestroyed: false,
+    },
+    {
+      type: "triangle",
+      x: 260,
+      y: 0,
+      speed: 0.6,
+      color: "orange",
+      opacity: 0.1,
+      size: 38,
+      isDestroyed: false,
+    },
+    {
+      type: "circle",
+      x: 50,
+      y: 10,
+      speed: 0.4,
+      color: "orange",
+      opacity: 0.1,
+      size: 27,
+      isDestroyed: false,
+    },
+    {
+      type: "square",
+      x: 130,
+      y: -10,
+      speed: 0.5,
+      color: "orange",
+      opacity: 0.1,
+      size: 50,
+      isDestroyed: false,
+    },
+    {
+      type: "triangle",
+      x: 260,
+      y: 0,
+      speed: 0.6,
+      color: "orange",
+      opacity: 0.1,
+      size: 38,
+      isDestroyed: false,
+    },
+  ];
+
+  let yDist = 300;
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -74,7 +138,22 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           enemyColor[i] = "orange";
         }
 
+        for (var i = 0; i < asteroids.length; i++) {
+          // asteroids[i].x = Math.floor(Math.random() * canvas.width);
+          // asteroids[i].y = ;
+          asteroids[i].speed = 0.7;
+        }
+
+        asteroids[3].x = asteroids[0].x;
+        asteroids[4].x = asteroids[1].x;
+        asteroids[5].x = asteroids[2].x;
+
+        asteroids[3].y = asteroids[0].y - yDist;
+        asteroids[4].y = asteroids[1].y - yDist;
+        asteroids[5].y = asteroids[2].y - yDist;
+
         const render = () => {
+          //clear canavs
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           //Ship bottom hemisphere
@@ -93,43 +172,171 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           ctx.fill();
           ctx.closePath();
 
-          for (var i = 0; i < 5; i++) {
-            //draw enemy
-            ctx.beginPath();
-            ctx.globalAlpha = enemyOpacity[i];
-            ctx.arc(pos[i].x, pos[i].y, 20, 0, Math.PI * 2);
-            ctx.fillStyle = enemyColor[i];
-            // i === 0 ? (ctx.fillStyle = "red") : (ctx.fillStyle = "orange");
-            ctx.fill();
-            ctx.closePath();
+          //shape asteroids
 
-            //detect and light up enemy
-            if (pos[i].y >= canvas.height - radius) {
-              enemyOpacity[i] = 0.6;
+          //circle 1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[0].opacity;
+          ctx.arc(
+            asteroids[0].x,
+            asteroids[0].y,
+            asteroids[0].size,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = asteroids[0].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //circle 2
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[3].opacity;
+          ctx.arc(
+            asteroids[3].x,
+            asteroids[3].y,
+            asteroids[3].size,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = asteroids[3].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //square1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[1].opacity;
+          ctx.fillRect(
+            asteroids[1].x,
+            asteroids[1].y,
+            asteroids[1].size,
+            asteroids[1].size
+          );
+          ctx.fillStyle = asteroids[1].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //square2
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[4].opacity;
+          ctx.fillRect(
+            asteroids[4].x,
+            asteroids[4].y,
+            asteroids[4].size,
+            asteroids[4].size
+          );
+          ctx.fillStyle = asteroids[4].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //triangle1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[2].opacity;
+          ctx.moveTo(asteroids[2].x, asteroids[2].y);
+          ctx.lineTo(
+            asteroids[2].x - asteroids[2].size,
+            asteroids[2].y + asteroids[2].size + 4
+          );
+          ctx.lineTo(
+            asteroids[2].x + asteroids[2].size,
+            asteroids[2].y + asteroids[2].size + 4
+          );
+          ctx.fillStyle = asteroids[2].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //triangle2
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[5].opacity;
+          ctx.moveTo(asteroids[5].x, asteroids[5].y);
+          ctx.lineTo(
+            asteroids[5].x - asteroids[5].size,
+            asteroids[5].y + asteroids[5].size + 4
+          );
+          ctx.lineTo(
+            asteroids[5].x + asteroids[5].size,
+            asteroids[5].y + asteroids[5].size + 4
+          );
+          ctx.fillStyle = asteroids[5].color;
+          ctx.fill();
+          ctx.closePath();
+
+          for (var i = 0; i < asteroids.length; i++) {
+            //update speed
+            asteroids[i].y += asteroids[i].speed;
+
+            //reset asteroids
+            if (asteroids[i].y > canvas.height) {
+              asteroids[i].y = -10;
+              asteroids[i].color = "orange";
+              asteroids[i].opacity = 0.1;
+              asteroids[i].isDestroyed = false;
+              //reset mouse
+              mouse.x = 0;
+              mouse.y = 0;
             }
 
-            //update enemy speed
-            pos[i].y += astSpeed[i];
-
-            //reset enemy pos
-            if (pos[i].y >= canvas.height) {
-              pos[i].y -= canvas.height;
-              enemyOpacity[i] = 0.1;
-              pos[i].x = Math.floor(Math.random() * canvas.width);
-              enemyColor[i] = "orange";
-            }
-
-            //mouse press
             if (
-              mouse.x >= pos[i].x &&
-              mouse.x < pos[i].x + 60 &&
-              mouse.y >= pos[i].y &&
-              mouse.y < pos[i].y + 60
+              !asteroids[i].isDestroyed &&
+              asteroids[i].y >= canvas.height - radius
             ) {
-              //   enemyOpacity[i] = 0;
-              enemyColor[i] = "red";
+              //   //detect and light up enemy
+              asteroids[i].opacity = 0.6;
+            }
+
+            //fadeway asteroids
+            asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.01);
+
+            //tapping on asteeoids
+            if (
+              mouse.x >= asteroids[i].x &&
+              mouse.x < asteroids[i].x + 100 &&
+              mouse.y >= asteroids[i].y &&
+              mouse.y < asteroids[i].y + 100
+            ) {
+              // let newSize = asteroids[i].size;
+              // asteroids[i].size *= 0.5;
+              asteroids[i].opacity = 0;
+              asteroids[i].isDestroyed = true;
             }
           }
+
+          // for (var i = 0; i < 5; i++) {
+          //   //draw enemy
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = enemyOpacity[i];
+          //   ctx.arc(pos[i].x, pos[i].y, 20, 0, Math.PI * 2);
+          //   ctx.fillStyle = enemyColor[i];
+          //   // i === 0 ? (ctx.fillStyle = "red") : (ctx.fillStyle = "orange");
+          //   ctx.fill();
+          //   ctx.closePath();
+
+          //   //detect and light up enemy
+          //   if (pos[i].y >= canvas.height - radius) {
+          //     enemyOpacity[i] = 0.6;
+          //   }
+
+          //   //update enemy speed
+          //   pos[i].y += astSpeed[i];
+
+          //   //reset enemy pos
+          //   if (pos[i].y >= canvas.height) {
+          //     pos[i].y -= canvas.height;
+          //     enemyOpacity[i] = 0.1;
+          //     pos[i].x = Math.floor(Math.random() * canvas.width);
+          //     enemyColor[i] = "orange";
+          //   }
+
+          //   //mouse press
+          //   if (
+          //     mouse.x >= pos[i].x &&
+          //     mouse.x < pos[i].x + 60 &&
+          //     mouse.y >= pos[i].y &&
+          //     mouse.y < pos[i].y + 60
+          //   ) {
+          //     //   enemyOpacity[i] = 0;
+          //     enemyColor[i] = "red";
+          //   }
+          // }
 
           // change radius and opacity;
           radius += speed;
