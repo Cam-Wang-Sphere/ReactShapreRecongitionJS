@@ -4,13 +4,15 @@ import { Message } from "../schema/wsschema/message";
 
 import SuccessSound from "../assets/sounds/SuccessSound.wav";
 import FailSound from "../assets/sounds/IncorrectSound.wav";
+import { WSPlayerData } from "../player/WSPlayerData";
 
 interface SuccessOverlayProps {
-  inNetworkingManager: NetworkingManager | null;
+  inPlayerData: WSPlayerData | null;
 }
 
-const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
+const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [oldScore, setOldScore] = useState(0);
 
   // @TODO NATHAN: cvar?
   const flashBangTime = 200; // in milliseconds
@@ -18,18 +20,25 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
   const shouldPlaySounds = true;
 
   useEffect(() => {
-    const handleEvent = (inScore: number) => {
-      if (inScore < 0) {
-        if (shouldPlaySounds) {
+    const handleEvent = (newScore: number) => 
+    {
+      // note the react state set schedules a variable update so newScore would be stale until next render..
+      setOldScore(newScore);
+
+      // playing fail sound if you didn't get a score
+      if (newScore < oldScore) 
+      {
+        if (shouldPlaySounds) 
+        {
           const failAudio = new Audio(FailSound);
           failAudio.play();
         }
-
         return;
       }
 
       // playing haptics if possible
-      if ("vibrate" in navigator) {
+      if (navigator.vibrate) 
+      {
         navigator.vibrate(hapticTime);
       }
 
@@ -45,19 +54,15 @@ const SuccessOverlay = ({ inNetworkingManager }: SuccessOverlayProps) => {
       }, flashBangTime);
     };
 
-    // inNetworkingManager?.on(
-    //   Message.ScoreUpdateResponse.toString(),
-    //   handleEvent
-    // );
+    console.log('in success use effect');
 
-    // cleaning up
-    return () => {
-      // inNetworkingManager?.off(
-      //   Message.ScoreUpdateResponse.toString(),
-      //   handleEvent
-      // );
-    };
-  }, [inNetworkingManager]);
+    if (inPlayerData)
+    {
+      handleEvent(inPlayerData.getScore());
+    }
+
+
+  }, [inPlayerData ? inPlayerData.getScore() : 0.0]);
 
   const greenScreenStyle = {
     position: "fixed",

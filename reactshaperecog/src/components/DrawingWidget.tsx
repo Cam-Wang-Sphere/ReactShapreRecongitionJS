@@ -4,11 +4,12 @@ import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from "../schema/wsschema/message";
 import { Box } from "@chakra-ui/react";
 import { Result, Point, DollarRecognizer } from "./../Template/Recognizer";
+import { GridItem } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 
 interface DrawingProps {
   inNetworkingManager: NetworkingManager | null;
   inRecognizer: DollarRecognizer;
-  inSetDrawResult: (inResult: string) => void;
 }
 
 const UserInputKey = "UserInput";
@@ -57,7 +58,7 @@ function AppendNexInput(X: number, Y: number) {
 const canvasWidth = window.innerHeight;
 const canvasHeight = window.innerHeight;
 
-const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: DrawingProps) => 
+const DrawingWidget = ({inNetworkingManager, inRecognizer}: DrawingProps) => 
 {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -66,6 +67,8 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: Dra
   const [lineWidth /*setLineWidth*/] = useState(5);
   const [lineColor, setLineColor] = useState("black");
   const [lineOpacity /*setLineOpacity*/] = useState(1.0);
+  const [drawResult, setDrawResult] = useState("No Match.");
+  const [textColor, setTextColor] = useState("red.500");
 
   const setLineColorFromTeamId = (teamId: number) => {
     switch (teamId) {
@@ -198,9 +201,9 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: Dra
       let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
 
       inNetworkingManager?.sendShapeRequest(enumResult);
-      inSetDrawResult(DrawResult.Name);
+      setDrawResult(DrawResult.Name);
     } else {
-      inSetDrawResult("No Match.");
+      setDrawResult("No Match.");
     }
   };
 
@@ -238,7 +241,15 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: Dra
   };
 
   return (
-    <Box
+    <div>
+      <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
+        <VStack>
+          <span color={textColor} className="resultText">
+            {drawResult}
+          </span>
+        </VStack>
+      </GridItem>
+      <Box
       mb="20px"
       style={{
         position: "relative",
@@ -266,6 +277,8 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer, inSetDrawResult}: Dra
       />
       {/* </div> */}
     </Box>
+    </div>
+    
   );
 };
 

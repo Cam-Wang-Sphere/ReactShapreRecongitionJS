@@ -14,6 +14,11 @@ export class WSPlayerData extends BasePlayerData
         return this.curreentPhase;
     }
 
+    public getScore(): number
+    {
+        return this.score;
+    }
+
     public setTeamId(inTeamId: number): void
     {
         this.teamId = inTeamId;
@@ -24,9 +29,16 @@ export class WSPlayerData extends BasePlayerData
         this.curreentPhase = inCurrentPhase;
     }
 
+    public setScore(inScore: number): void
+    {
+        this.score = inScore;
+    }
+
     protected teamId: number = WSPlayerData.noTeamId;
     protected curreentPhase: PhaseEnums = WSPlayerData.defaultPhase;
+    protected score: number = WSPlayerData.defaultScore;
 
     public static readonly noTeamId: number = -1;
     public static readonly defaultPhase: PhaseEnums.None;
+    public static readonly defaultScore: number = 0;
 }

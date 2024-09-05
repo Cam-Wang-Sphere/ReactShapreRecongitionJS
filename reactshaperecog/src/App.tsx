@@ -55,10 +55,8 @@ function storageAvailable(type: "localStorage" | "sessionStorage") {
 }
 
 const App = () => {
-  const [drawResult, setDrawResult] = useState("No Match.");
   const [score, setScore] = useState(0);
   const [scoreText, setScoreText] = useState("Score: ");
-  const [textColor, setTextColor] = useState("red.500");
   const [Recognizer] = useState<DollarRecognizer>(new DollarRecognizer());
   const templateManager = new TemplateManager();
 
@@ -91,11 +89,7 @@ const App = () => {
       });
   };
 
-  // TEMP
-  const funcSetDrawResult = (inResult: string) =>
-  {
-    setDrawResult(inResult);
-  }
+  // @TODO NATHAN: componentmentalize
   const namesArray = [
     "Testing",
     "Connection/Name",
@@ -104,7 +98,6 @@ const App = () => {
     "Tiles",
     "Radar View",
   ]
-  // END TEMP
 
   // Initialization when the component
   // mounts for the first time
@@ -183,19 +176,8 @@ const App = () => {
         {!isLandscape && (
           <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
             <Center>
-              <Heading color={textColor}>PreFE</Heading>
+              <Heading color={"red.500"}>PreFE</Heading>
             </Center>
-          </GridItem>
-        )}
-
-        {/* Score+ Feedback------------------------------ */}
-        {_index === 1 && (
-          <GridItem rowStart={2} rowEnd={3} colSpan={5} alignItems={"center"}>
-            <VStack>
-              <span color={textColor} className="resultText">
-                {drawResult}
-              </span>
-            </VStack>
           </GridItem>
         )}
 
@@ -212,10 +194,10 @@ const App = () => {
           mt={isLandscape ? "-2%" : "0"}
         >
           <ScreenSwitcher 
+            inPlayerData={playerData}
             inConnectFunction={connectToServer} 
             inNetworkingManager={networkingManager} 
             inSSDollarRecognizer={Recognizer} 
-            inSSSetDrawResult={funcSetDrawResult} 
             inSelectHandle={selectHandle} 
             inSelectedIndex={_index}
           />

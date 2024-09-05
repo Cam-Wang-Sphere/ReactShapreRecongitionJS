@@ -12,6 +12,7 @@ import SuccessOverlay from "./../components/SuccessOverlay";
 import ScoreWidget from "./../components/ScoreWidget";
 import RandomPlayerDataWidget from "./../components/RandomPlayerDataWidget";
 import { HStack } from '@chakra-ui/react';
+import { WSPlayerData } from '../player/WSPlayerData';
 
 
 interface ScreenSwitcherProps
@@ -19,12 +20,12 @@ interface ScreenSwitcherProps
     inNetworkingManager: NetworkingManager | null;
     inSelectHandle: (index: number) => void;
     inConnectFunction: (address: string) => void;  // @TODO NATHAN: Rework...
-    inSSSetDrawResult: (inResult: string) => void;  // @TODO NATHAN: Rework
     inSSDollarRecognizer: DollarRecognizer;
     inSelectedIndex: number;
+    inPlayerData: WSPlayerData | null;
 }
 
-const ScreenSwitcher = ({ inNetworkingManager, inSSSetDrawResult, inSelectHandle, inSelectedIndex, inConnectFunction, inSSDollarRecognizer }: ScreenSwitcherProps) =>
+const ScreenSwitcher = ({ inNetworkingManager, inSelectHandle, inSelectedIndex, inConnectFunction, inSSDollarRecognizer, inPlayerData }: ScreenSwitcherProps) =>
 {
     // @TODO NATHAN: MAP PLEASE !
     const inputTypes = [
@@ -37,7 +38,6 @@ const ScreenSwitcher = ({ inNetworkingManager, inSSSetDrawResult, inSelectHandle
         <DrawingWidget
           inNetworkingManager={inNetworkingManager}
           inRecognizer={inSSDollarRecognizer}
-          inSetDrawResult={inSSSetDrawResult}
         />,
         <TilesInput inNetworkingManager={inNetworkingManager} />,  
         <RadarView inNetworkingManager={inNetworkingManager} />,
@@ -64,9 +64,8 @@ const ScreenSwitcher = ({ inNetworkingManager, inSSSetDrawResult, inSelectHandle
 
     return (
         <div>
-            <SuccessOverlay inNetworkingManager={inNetworkingManager} />
             <HStack justifyContent="space-evenly">
-                <ScoreWidget inNetworkingManager={inNetworkingManager} />
+                <ScoreWidget inNetworkingManager={inNetworkingManager} inPlayerData={inPlayerData}/>
             </HStack>
             {inputTypes[inSelectedIndex]}
         </div>
