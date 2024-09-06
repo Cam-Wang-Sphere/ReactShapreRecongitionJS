@@ -41,19 +41,10 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     return RandomNumber;
   };
 
-  let astSpeed = [0, 0, 0, 0, 0];
   let speed = 6;
   let radius = 40;
   let opacity = 0.5;
-  let pos = [
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-  ];
-  let enemyOpacity = [];
-  let enemyColor = [];
+
   let mouse = {
     x: 0,
     y: 0,
@@ -65,8 +56,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       type: "circle",
       x: 50,
       y: 10,
-      speed: 0.4,
-      color: "orange",
+      speed: 0.5,
+      color: "white",
       opacity: 0.1,
       size: 27,
       isDestroyed: false,
@@ -76,7 +67,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       x: 130,
       y: -10,
       speed: 0.5,
-      color: "orange",
+      color: "white",
       opacity: 0.1,
       size: 50,
       isDestroyed: false,
@@ -85,8 +76,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       type: "triangle",
       x: 260,
       y: 0,
-      speed: 0.6,
-      color: "orange",
+      speed: 0.5,
+      color: "white",
       opacity: 0.1,
       size: 38,
       isDestroyed: false,
@@ -95,8 +86,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       type: "circle",
       x: 50,
       y: 10,
-      speed: 0.4,
-      color: "orange",
+      speed: 0.5,
+      color: "white",
       opacity: 0.1,
       size: 27,
       isDestroyed: false,
@@ -106,7 +97,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       x: 130,
       y: -10,
       speed: 0.5,
-      color: "orange",
+      color: "white",
       opacity: 0.1,
       size: 50,
       isDestroyed: false,
@@ -115,8 +106,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       type: "triangle",
       x: 260,
       y: 0,
-      speed: 0.6,
-      color: "orange",
+      speed: 0.5,
+      color: "white",
       opacity: 0.1,
       size: 38,
       isDestroyed: false,
@@ -143,19 +134,10 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           mouse.y = e.touches[0].clientY;
         });
 
-        // random location
-        for (var i = 0; i < 5; i++) {
-          pos[i].x = Math.floor(Math.random() * canvas.width);
-          pos[i].y = Math.floor(Math.random() * canvas.height);
-          astSpeed[i] = Math.random() * 2;
-          enemyOpacity[i] = 0.1;
-          enemyColor[i] = "orange";
-        }
-
         for (var i = 0; i < asteroids.length; i++) {
           // asteroids[i].x = Math.floor(Math.random() * canvas.width);
           // asteroids[i].y = ;
-          asteroids[i].speed = generateRandFloat();
+          //   asteroids[i].speed = generateRandFloat();
         }
 
         asteroids[3].x = asteroids[0].x;
@@ -203,23 +185,23 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           ctx.closePath();
 
           //circle 2
-          ctx.beginPath();
-          ctx.globalAlpha = asteroids[3].opacity;
-          ctx.arc(
-            asteroids[3].x,
-            asteroids[3].y,
-            asteroids[3].size,
-            0,
-            Math.PI * 2
-          );
-          ctx.fillStyle = asteroids[3].color;
-          ctx.fill();
-          ctx.closePath();
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[3].opacity;
+          //   ctx.arc(
+          //     asteroids[3].x,
+          //     asteroids[3].y,
+          //     asteroids[3].size,
+          //     0,
+          //     Math.PI * 2
+          //   );
+          //   ctx.fillStyle = asteroids[3].color;
+          //   ctx.fill();
+          //   ctx.closePath();
 
           //square1
           ctx.beginPath();
           ctx.globalAlpha = asteroids[1].opacity;
-          ctx.fillRect(
+          ctx.rect(
             asteroids[1].x,
             asteroids[1].y,
             asteroids[1].size,
@@ -230,17 +212,17 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           ctx.closePath();
 
           //square2
-          ctx.beginPath();
-          ctx.globalAlpha = asteroids[4].opacity;
-          ctx.fillRect(
-            asteroids[4].x,
-            asteroids[4].y,
-            asteroids[4].size,
-            asteroids[4].size
-          );
-          ctx.fillStyle = asteroids[4].color;
-          ctx.fill();
-          ctx.closePath();
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[4].opacity;
+          //   ctx.rect(
+          //     asteroids[4].x,
+          //     asteroids[4].y,
+          //     asteroids[4].size,
+          //     asteroids[4].size
+          //   );
+          //   ctx.fillStyle = asteroids[4].color;
+          //   ctx.fill();
+          //   ctx.closePath();
 
           //triangle1
           ctx.beginPath();
@@ -259,48 +241,54 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           ctx.closePath();
 
           //triangle2
-          ctx.beginPath();
-          ctx.globalAlpha = asteroids[5].opacity;
-          ctx.moveTo(asteroids[5].x, asteroids[5].y);
-          ctx.lineTo(
-            asteroids[5].x - asteroids[5].size,
-            asteroids[5].y + asteroids[5].size + 4
-          );
-          ctx.lineTo(
-            asteroids[5].x + asteroids[5].size,
-            asteroids[5].y + asteroids[5].size + 4
-          );
-          ctx.fillStyle = asteroids[5].color;
-          ctx.fill();
-          ctx.closePath();
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[5].opacity;
+          //   ctx.moveTo(asteroids[5].x, asteroids[5].y);
+          //   ctx.lineTo(
+          //     asteroids[5].x - asteroids[5].size,
+          //     asteroids[5].y + asteroids[5].size + 4
+          //   );
+          //   ctx.lineTo(
+          //     asteroids[5].x + asteroids[5].size,
+          //     asteroids[5].y + asteroids[5].size + 4
+          //   );
+          //   ctx.fillStyle = asteroids[5].color;
+          //   ctx.fill();
+          //   ctx.closePath();
+          //   let allTrue = booleanArray.every((val) => val === true); --------------------------------------------
 
           for (var i = 0; i < asteroids.length; i++) {
             //update speed
             asteroids[i].y += asteroids[i].speed;
 
+            //reset if all asteroids are destroyed
+            if (asteroids[i].isDestroyed) {
+              console.log("reset");
+            }
+
             //reset asteroids
             if (asteroids[i].y > canvas.height) {
               asteroids[i].y = -10;
-              asteroids[i].color = "orange";
+              asteroids[i].color = "white";
               asteroids[i].opacity = 0.1;
               asteroids[i].isDestroyed = false;
               //reset mouse
               mouse.x = 0;
               mouse.y = 0;
+              index = 0;
             }
-
+            //detect and light up enemy -----------
             if (
               !asteroids[i].isDestroyed &&
               asteroids[i].y >= canvas.height - radius
             ) {
-              //   //detect and light up enemy -----------
               asteroids[i].opacity = 0.6;
             }
 
             //fadeway asteroids
             asteroids[i].opacity > 0.05 && (asteroids[i].opacity -= 0.02);
 
-            //tapping on asteeoids
+            //tapping on asteroids
             if (
               mouse.x >= asteroids[i].x &&
               mouse.x < asteroids[i].x + 100 &&
@@ -320,16 +308,13 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
           //reset radius and opacity
           if (radius >= 900) {
-            for (var i = 0; i < 5; i++) {
-              enemyOpacity[i] = 0.1;
-            }
             radius = 40;
           }
           //   radius >= 900 && (radius = 40) &&( for (var i = 0; i < 5; i++) { enemyOpacity[i] = 0;} );
           radius === 40 && (opacity = 0.5);
 
           requestAnimationFrame(render);
-          //   requestAnimationFrame(animate);
+          requestAnimationFrame(animateColor);
         };
 
         render();
@@ -338,26 +323,50 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   }, [inNetworkingManager]);
 
   var startTime = 0;
-  let index = false;
-  var colors = [0, 0.6];
+  let flipColor = false;
+  var index = 0;
+  var colors = ["orange", "white"];
+  var intervalSwitch = 1000;
 
-  function animate(time: number) {
-    requestAnimationFrame(animate);
-    var interval = randomNum(400, 600);
-    if (startTime === 0) {
+  const animateColor = (time: number) => {
+    requestAnimationFrame(animateColor);
+
+    if (!startTime) {
       startTime = time;
     }
     var elapsed = time - startTime;
-    if (elapsed > interval) {
+    if (elapsed > intervalSwitch) {
       startTime = time;
-      index = !index;
-      for (var i = 0; i < asteroids.length; i++) {
-        if (index) {
-          !asteroids[i].isDestroyed && (asteroids[i].opacity = colors[0]);
-        } else !asteroids[i].isDestroyed && (asteroids[i].opacity = colors[1]);
+      flipColor = !flipColor;
+      var RandomIndex = Math.floor(randomNum(0, 3));
+      for (let i = 0; i < 3; i++) {
+        !flipColor && (asteroids[i].color = "white");
+
+        if (flipColor && index < 5) {
+          i === RandomIndex && (asteroids[i].color = "orange");
+        }
       }
+      index++;
+
+      //   if (flipColor && index < 3) {
+      //     var RandomIndex = Math.floor(randomNum(0, 3));
+      //     // console.log(RandomIndex);
+
+      //     for (let i = 0; i < 3; i++) {
+      //       i === RandomIndex
+      //         ? (asteroids[i].color = "orange")
+      //         : (asteroids[i].color = "white");
+      //     }
+      //   }
+
+      //   !flipColor && (index = 4);
+      //   index++;
+
+      // if (++index > 2) {
+      //     index = 0;
+      // }
     }
-  }
+  };
 
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
