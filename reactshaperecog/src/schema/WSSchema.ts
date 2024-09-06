@@ -39,6 +39,7 @@ export { ShapeResponse } from './wsschema/shape-response.js';
 export { TIMHitEvent } from './wsschema/timhit-event.js';
 export { TIMInputEvent } from './wsschema/timinput-event.js';
 export { TIMInteractableData } from './wsschema/timinteractable-data.js';
+export { TIMInteractableDestroyed } from './wsschema/timinteractable-destroyed.js';
 export { TIMInteractableUpdate } from './wsschema/timinteractable-update.js';
 export { TIMMappedAreaAdd } from './wsschema/timmapped-area-add.js';
 export { TIMMappedAreaRemoved } from './wsschema/timmapped-area-removed.js';
