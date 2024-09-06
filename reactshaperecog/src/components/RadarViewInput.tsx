@@ -271,6 +271,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               mouse.x = 0;
               mouse.y = 0;
               index = 0;
+              //   console.log("reset");
             }
             //detect and light up enemy -----------
             if (
@@ -290,13 +291,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               mouse.y >= asteroids[i].y &&
               mouse.y < asteroids[i].y + 100
             ) {
-              // let newSize = asteroids[i].size;
-              // asteroids[i].size *= 0.5;
               asteroids[i].opacity = 0;
               asteroids[i].isDestroyed = true;
-            }
-            if (asteroids[i].isDestroyed) {
-              asteroids[i].opacity <= 0.8 && (asteroids[i].opacity += 0.05);
             }
           }
 
@@ -325,6 +321,20 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   var index = 0;
   var intervalSwitch = 1000;
 
+  let randomNoRepeats = (array: number[]) => {
+    var copy = array.slice(0);
+    return function () {
+      if (copy.length < 1) {
+        copy = array.slice(0);
+      }
+      var index = Math.floor(Math.random() * copy.length);
+      var item = copy[index];
+      copy.splice(index, 1);
+      return item;
+    };
+  };
+  var RandomIndex = randomNoRepeats([0, 1, 2]);
+
   const animateColor = (time: number) => {
     requestAnimationFrame(animateColor);
 
@@ -335,19 +345,23 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     if (elapsed > intervalSwitch) {
       startTime = time;
       flipColor = !flipColor;
-      var RandomIndex = Math.floor(randomNum(0, 3));
+      //   var Randomnumber = Math.floor(randomNum(0, 3));
+      var Randomnumber;
+      if (flipColor) {
+        Randomnumber = RandomIndex();
+      }
+
+      console.log(Randomnumber);
+
       for (let i = 0; i < 3; i++) {
         !flipColor && (asteroids[i].color = "white");
 
         if (flipColor && index < 5) {
-          i === RandomIndex && (asteroids[i].color = "orange");
+          i === Randomnumber && (asteroids[i].color = "orange");
         }
       }
+      //   console.log(index);
       index++;
-
-      // if (++index > 2) {
-      //     index = 0;
-      // }
     }
   };
 
