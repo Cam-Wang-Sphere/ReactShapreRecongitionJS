@@ -261,6 +261,17 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             //update speed
             asteroids[i].y += asteroids[i].speed;
 
+            //tapping on asteroids
+            if (
+              mouse.x >= asteroids[i].x &&
+              mouse.x < asteroids[i].x + 100 &&
+              mouse.y >= asteroids[i].y &&
+              mouse.y < asteroids[i].y + 100
+            ) {
+              asteroids[i].opacity = 0;
+              asteroids[i].isDestroyed = true;
+            }
+
             //reset asteroids
             if (asteroids[i].y > canvas.height) {
               asteroids[i].y = -10;
@@ -283,17 +294,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
             //fadeway asteroids
             asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.001);
-
-            //tapping on asteroids
-            if (
-              mouse.x >= asteroids[i].x &&
-              mouse.x < asteroids[i].x + 100 &&
-              mouse.y >= asteroids[i].y &&
-              mouse.y < asteroids[i].y + 100
-            ) {
-              asteroids[i].opacity = 0;
-              asteroids[i].isDestroyed = true;
-            }
           }
 
           // change radius and opacity;
