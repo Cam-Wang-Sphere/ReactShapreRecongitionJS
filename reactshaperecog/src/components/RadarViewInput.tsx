@@ -114,6 +114,13 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
     },
   ];
 
+  const resetAsteroid = (i: number) => {
+    asteroids[i].y = -10;
+    asteroids[i].color = "white";
+    asteroids[i].opacity = 0.1;
+    asteroids[i].isDestroyed = false;
+  };
+
   let yDist = 300;
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -264,24 +271,36 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             //tapping on asteroids
             if (
               mouse.x >= asteroids[i].x &&
-              mouse.x < asteroids[i].x + 100 &&
+              mouse.x < asteroids[i].x + 150 &&
               mouse.y >= asteroids[i].y &&
-              mouse.y < asteroids[i].y + 100
+              mouse.y < asteroids[i].y + 150
             ) {
               asteroids[i].opacity = 0;
               asteroids[i].isDestroyed = true;
+              destroyedIndex++;
+              mouse.x = 0;
+              mouse.y = 0;
             }
 
-            //reset asteroids
+            // if (destroyedIndex === 3) {
+            //   console.log("destroyed");
+            //   for (let j = 0; j < 3; j++) {
+            //     resetAsteroid(j);
+            //   }
+            //   destroyedIndex = 0;
+            //   mouse.x = 0;
+            //   mouse.y = 0;
+            //   index = 0;
+            // }
+
             if (asteroids[i].y > canvas.height) {
-              asteroids[i].y = -10;
-              asteroids[i].color = "white";
-              asteroids[i].opacity = 0.1;
-              asteroids[i].isDestroyed = false;
+              //reset asteroids
+              resetAsteroid(i);
               //reset mouse
               mouse.x = 0;
               mouse.y = 0;
               index = 0;
+
               //   console.log("reset");
             }
             //detect and light up enemy -----------
@@ -320,6 +339,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   let flipColor = false;
   var index = 0;
   var intervalSwitch = 1000;
+  let destroyedIndex = 0;
+  //   let destroyedIndex: boolean[] = [];
 
   let randomNoRepeats = (array: number[]) => {
     var copy = array.slice(0);
@@ -351,7 +372,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         Randomnumber = RandomIndex();
       }
 
-      console.log(Randomnumber);
+      //   console.log(Randomnumber);
 
       for (let i = 0; i < 3; i++) {
         !flipColor && (asteroids[i].color = "white");
