@@ -261,11 +261,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             //update speed
             asteroids[i].y += asteroids[i].speed;
 
-            //reset if all asteroids are destroyed
-            if (asteroids[i].isDestroyed) {
-              console.log("reset");
-            }
-
             //reset asteroids
             if (asteroids[i].y > canvas.height) {
               asteroids[i].y = -10;
@@ -282,11 +277,11 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               !asteroids[i].isDestroyed &&
               asteroids[i].y >= canvas.height - radius
             ) {
-              asteroids[i].opacity = 0.6;
+              asteroids[i].opacity = 0.8;
             }
 
             //fadeway asteroids
-            asteroids[i].opacity > 0.05 && (asteroids[i].opacity -= 0.02);
+            asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.001);
 
             //tapping on asteroids
             if (
@@ -299,6 +294,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               // asteroids[i].size *= 0.5;
               asteroids[i].opacity = 0;
               asteroids[i].isDestroyed = true;
+            }
+            if (asteroids[i].isDestroyed) {
+              asteroids[i].opacity <= 0.8 && (asteroids[i].opacity += 0.05);
             }
           }
 
@@ -325,7 +323,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   var startTime = 0;
   let flipColor = false;
   var index = 0;
-  var colors = ["orange", "white"];
   var intervalSwitch = 1000;
 
   const animateColor = (time: number) => {
@@ -347,20 +344,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         }
       }
       index++;
-
-      //   if (flipColor && index < 3) {
-      //     var RandomIndex = Math.floor(randomNum(0, 3));
-      //     // console.log(RandomIndex);
-
-      //     for (let i = 0; i < 3; i++) {
-      //       i === RandomIndex
-      //         ? (asteroids[i].color = "orange")
-      //         : (asteroids[i].color = "white");
-      //     }
-      //   }
-
-      //   !flipColor && (index = 4);
-      //   index++;
 
       // if (++index > 2) {
       //     index = 0;
