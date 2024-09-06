@@ -23,10 +23,9 @@ import { TIMMappedAreaRemoved } from '../schema/wsschema/timmapped-area-removed'
 import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
 import { FTIMInteractableData } from '../TIM/TIMInteractableData';
 import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
-import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent } from '../schema/WSSchema';
+import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent, TIMInteractableDestroyed } from '../schema/WSSchema';
 import { GlobalInputEnums } from '../schema/WSSchema';
 import { FTIMHitEvent } from '../TIM/TIMHitEvent';
-import { ScoreUpdateResponse } from '../schema/wsschema/score-update-response';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -284,6 +283,14 @@ export class NetworkingManager extends BaseNetworkingManager {
         this.emit(Message.TIMInteractableUpdate.toString(), interactable);
     }
 
+    protected handleTIMInteractableDestroyed = (typeWrapper: TypeWrapper) =>
+    {
+        const interactableDestroyed = new TIMInteractableDestroyed();
+        typeWrapper.message(interactableDestroyed);
+
+        this.emit(Message.TIMInteractableDestroyed.toString(), interactableDestroyed.netHandle());
+    }
+
     protected handleTIMHitEvent = (typeWrapper: TypeWrapper) =>
     {
         const hitEvent = new TIMHitEvent();
@@ -315,6 +322,7 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         this.emit(Message.PlayerScoreResponse.toString(), newScore);
     }
+
     // END MESSAGE HANDLERS
 
 
@@ -322,13 +330,13 @@ export class NetworkingManager extends BaseNetworkingManager {
     // START BASE CLASS OVERRIDE
     protected handleBinaryMessage(data: ArrayBuffer): void
     {
-        console.log('Received binary message: ', data);
+        // console.log('Received binary message: ', data);
         const myBuf = new Uint8Array(data);
         const buf = new flatbuffers.ByteBuffer(myBuf);
 
         const root = TypeWrapper.getRootAsTypeWrapper(buf);
         const messageType = root.messageType();
-        console.log('message type = ', messageType);
+        // console.log('message type = ', messageType);
 
         switch (messageType)
         {
@@ -362,11 +370,16 @@ export class NetworkingManager extends BaseNetworkingManager {
                 this.handleTIMInteractableUpdate(root);
                 break;
             }
+            case Message.TIMInteractableDestroyed:
+            {
+                this.handleTIMInteractableDestroyed(root);
+                break;
+            }
             case Message.TIMHitEvent:
             {
                 this.handleTIMHitEvent(root);
                 break;
-            }  
+            }
             case Message.GlobalInputResponse:
             {
                 this.handleGlobalInputResponse(root);
