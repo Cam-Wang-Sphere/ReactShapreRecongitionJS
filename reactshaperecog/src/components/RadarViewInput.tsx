@@ -294,11 +294,11 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               asteroids[i].y >= canvas.height - radius
             ) {
               //   //detect and light up enemy -----------
-              // asteroids[i].opacity = 0.6;
+              asteroids[i].opacity = 0.6;
             }
 
             //fadeway asteroids
-            // asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.01);
+            asteroids[i].opacity > 0.05 && (asteroids[i].opacity -= 0.02);
 
             //tapping on asteeoids
             if (
@@ -313,44 +313,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
               asteroids[i].isDestroyed = true;
             }
           }
-
-          // for (var i = 0; i < 5; i++) {
-          //   //draw enemy
-          //   ctx.beginPath();
-          //   ctx.globalAlpha = enemyOpacity[i];
-          //   ctx.arc(pos[i].x, pos[i].y, 20, 0, Math.PI * 2);
-          //   ctx.fillStyle = enemyColor[i];
-          //   // i === 0 ? (ctx.fillStyle = "red") : (ctx.fillStyle = "orange");
-          //   ctx.fill();
-          //   ctx.closePath();
-
-          //   //detect and light up enemy
-          //   if (pos[i].y >= canvas.height - radius) {
-          //     enemyOpacity[i] = 0.6;
-          //   }
-
-          //   //update enemy speed
-          //   pos[i].y += astSpeed[i];
-
-          //   //reset enemy pos
-          //   if (pos[i].y >= canvas.height) {
-          //     pos[i].y -= canvas.height;
-          //     enemyOpacity[i] = 0.1;
-          //     pos[i].x = Math.floor(Math.random() * canvas.width);
-          //     enemyColor[i] = "orange";
-          //   }
-
-          //   //mouse press
-          //   if (
-          //     mouse.x >= pos[i].x &&
-          //     mouse.x < pos[i].x + 60 &&
-          //     mouse.y >= pos[i].y &&
-          //     mouse.y < pos[i].y + 60
-          //   ) {
-          //     //   enemyOpacity[i] = 0;
-          //     enemyColor[i] = "red";
-          //   }
-          // }
 
           // change radius and opacity;
           radius += speed;
@@ -367,7 +329,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           radius === 40 && (opacity = 0.5);
 
           requestAnimationFrame(render);
-          requestAnimationFrame(animate);
+          //   requestAnimationFrame(animate);
         };
 
         render();
@@ -376,7 +338,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   }, [inNetworkingManager]);
 
   var startTime = 0;
-
   let index = false;
   var colors = [0, 0.6];
 
