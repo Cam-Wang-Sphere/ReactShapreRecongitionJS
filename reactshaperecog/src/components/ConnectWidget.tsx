@@ -21,13 +21,19 @@ const ConnectWidget = ({ connectFunction }: ConnectWidgetProps) => {
   };
 
   // temporary workaround for no login service right now.
+  // @TODO NATHAN: hook up to login service
   const getRandomPort = () => {
     return Math.floor(Math.random() * (NetworkingConstants.MAXIMUM_REPEATER_PORT - NetworkingConstants.MINIMUM_REPEATER_PORT + 1) + NetworkingConstants.MINIMUM_REPEATER_PORT);
   }
 
   const tryConnect = () => {
 
-    const randomPort: number = getRandomPort();
+    let randomPort: number = NetworkingConstants.MINIMUM_REPEATER_PORT;
+    
+    if (!NetworkingConstants.ONLY_USE_DEFAULT_PORT)
+    {
+      randomPort = getRandomPort();
+    }
     console.log('port chosen = ', randomPort);
 
     const fullAddress: string = "wss://" + address + ":" + randomPort;
