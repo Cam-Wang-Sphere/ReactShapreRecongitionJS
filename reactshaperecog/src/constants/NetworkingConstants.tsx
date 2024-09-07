@@ -1,2 +1,5 @@
-export const MINIMUM_REPEATER_PORT = 3004;
-export const MAXIMUM_REPEATER_PORT = 3005;
+export const NetworkingConstants = 
+{
+    MINIMUM_REPEATER_PORT : 3004,
+    MAXIMUM_REPEATER_PORT : 3005
+} as const;

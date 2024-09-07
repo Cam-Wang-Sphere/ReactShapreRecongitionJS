@@ -7,6 +7,7 @@ import {
   EditableTextarea,
   EditablePreview,
 } from "@chakra-ui/react";
+import { NetworkingConstants } from "../constants/NetworkingConstants";
 
 interface ConnectWidgetProps {
   connectFunction: (address: string) => void;
@@ -19,8 +20,18 @@ const ConnectWidget = ({ connectFunction }: ConnectWidgetProps) => {
     setAddress(event.target.value);
   };
 
+  // temporary workaround for no login service right now.
+  const getRandomPort = () => {
+    return Math.floor(Math.random() * (NetworkingConstants.MAXIMUM_REPEATER_PORT - NetworkingConstants.MINIMUM_REPEATER_PORT + 1) + NetworkingConstants.MINIMUM_REPEATER_PORT);
+  }
+
   const tryConnect = () => {
-    const fullAddress = "wss://" + address + ":3004";
+
+    const randomPort: number = getRandomPort();
+    console.log('port chosen = ', randomPort);
+
+    const fullAddress: string = "wss://" + address + ":" + randomPort;
+    console.log('full address = ', fullAddress);
     connectFunction(fullAddress);
   };
 
