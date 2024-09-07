@@ -4,6 +4,9 @@ import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
 import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
+import { FTIMMappedArea } from "../TIM/TIMMappedArea";
+import { Message } from "../schema/WSSchema";
+import { FTIMInteractableData } from "../TIM/TIMInteractableData";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -33,6 +36,17 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   const img = new Image();
 
   useEffect(() => {
+
+    const handleMessage = (inTIMMappedArea: FTIMMappedArea): void =>
+    {
+      console.log('in TnS component. received distance = ', inTIMMappedArea.distance);
+    }
+
+    const handleTIMInteractableData = (inTIMInteractableData: FTIMInteractableData): void =>
+    {
+      console.log('in TnS component. Received first time interactable data');
+    }
+
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext("2d");
@@ -50,6 +64,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         //   ctx.drawImage(heartImage, pos[0], pos[1], 50, 50);
         // };
 
+        
         const render = () => {
           //archit test
 
@@ -65,7 +80,15 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           requestAnimationFrame(render);
         };
 
+        inNetworkingManager?.on(Message.TIMMappedAreaAdd.toString(), handleMessage);
+        inNetworkingManager?.on(Message.TIMInteractableUpdate.toString(), handleTIMInteractableData);
+
         render();
+      }
+
+      return () =>
+      {
+        inNetworkingManager?.off(Message.TIMMappedAreaAdd.toString(), handleMessage);
       }
     }
   }, [inNetworkingManager]);

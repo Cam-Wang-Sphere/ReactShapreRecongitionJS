@@ -1,0 +1,2 @@
+export const MINIMUM_REPEATER_PORT = 3004;
+export const MAXIMUM_REPEATER_PORT = 3005;
