@@ -97,7 +97,7 @@ const App = () => {
     "Draw",
     "Tiles",
     "Radar View",
-  ]
+  ];
 
   // Initialization when the component
   // mounts for the first time
@@ -184,7 +184,7 @@ const App = () => {
         {/* Main content------------------------------ */}
         <GridItem
           area="Main"
-          rowStart={_index === 3 ? 2 : 3}
+          rowStart={_index === 2 ? 2 : 3}
           // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
@@ -193,12 +193,12 @@ const App = () => {
           w={isLandscape ? "95vw" : "100%"}
           mt={isLandscape ? "-2%" : "0"}
         >
-          <ScreenSwitcher 
+          <ScreenSwitcher
             inPlayerData={playerData}
-            inConnectFunction={connectToServer} 
-            inNetworkingManager={networkingManager} 
-            inSSDollarRecognizer={Recognizer} 
-            inSelectHandle={selectHandle} 
+            inConnectFunction={connectToServer}
+            inNetworkingManager={networkingManager}
+            inSSDollarRecognizer={Recognizer}
+            inSelectHandle={selectHandle}
             inSelectedIndex={_index}
           />
         </GridItem>

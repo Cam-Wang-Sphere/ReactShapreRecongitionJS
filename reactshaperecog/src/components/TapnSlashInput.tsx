@@ -34,15 +34,13 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   let speed = [1, 1.2];
   const heartImage = new Image();
   const img = new Image();
-  let color = { r: 255, g: 0, b: 0 };
+  let color = { r: 173, g: 179, b: 175 };
 
   useEffect(() => {
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
-      // console.log(inTIMMappedArea.color.r());
       color.r = inTIMMappedArea.color.r() * 255;
       color.g = inTIMMappedArea.color.g() * 255;
       color.b = inTIMMappedArea.color.b() * 255;
-      // console.log(color);
     };
 
     const handleTIMInteractableData = (
@@ -235,7 +233,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         position: "relative",
       }}
     >
-      <GridItem
+      {/* UI Elements overlayed */}
+      {/* <GridItem
         area="UIOverlay"
         // // bg="gray.700"
         // borderColor="#FF0099"
@@ -256,7 +255,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
             Score
           </Text>
         </HStack>
-      </GridItem>
+      </GridItem> */}
+
       <GridItem
         area="TapRegion"
         style={{
