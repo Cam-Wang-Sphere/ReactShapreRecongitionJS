@@ -34,18 +34,22 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   let speed = [1, 1.2];
   const heartImage = new Image();
   const img = new Image();
+  let color = { r: 255, g: 0, b: 0 };
 
   useEffect(() => {
+    const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
+      // console.log(inTIMMappedArea.color.r());
+      color.r = inTIMMappedArea.color.r() * 255;
+      color.g = inTIMMappedArea.color.g() * 255;
+      color.b = inTIMMappedArea.color.b() * 255;
+      // console.log(color);
+    };
 
-    const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void =>
-    {
-      console.log('in TnS component. received MappedAreAdd. Distance = ', inTIMMappedArea.distance);
-    }
-
-    const handleTIMInteractableData = (inTIMInteractableData: FTIMInteractableData): void =>
-    {
-      console.log('in TnS component. Received first time interactable data');
-    }
+    const handleTIMInteractableData = (
+      inTIMInteractableData: FTIMInteractableData
+    ): void => {
+      console.log(inTIMInteractableData.tags);
+    };
 
     const canvas = canvasRef.current;
     if (canvas) {
@@ -64,14 +68,20 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         //   ctx.drawImage(heartImage, pos[0], pos[1], 50, 50);
         // };
 
-        
         const render = () => {
           //archit test
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = "blue";
-          // ctx.fillRect(pos[0], pos[1], 20, 20);
-          ctx.drawImage(img, pos[0], pos[1], 50, 50);
+          ctx.beginPath();
+          ctx.lineWidth = 10;
+          ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+          ctx.rect(0, 0, canvas.width, canvas.height);
+          ctx.stroke();
+          ctx.closePath();
+
+          ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+          ctx.fillRect(pos[0], pos[1], 50, 50);
+          // ctx.drawImage(img, pos[0], pos[1], 50, 50);
           pos[0] += speed[0];
           pos[1] += speed[1];
 
@@ -80,16 +90,21 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           requestAnimationFrame(render);
         };
 
-        inNetworkingManager?.on(Message.TIMMappedAreaAdd.toString(), handleTIMMappedAreaAdd);
-        inNetworkingManager?.on(Message.TIMInteractableUpdate.toString(), handleTIMInteractableData);
+        inNetworkingManager?.on(
+          Message.TIMMappedAreaAdd.toString(),
+          handleTIMMappedAreaAdd
+        );
+        inNetworkingManager?.on(
+          Message.TIMInteractableData.toString(),
+          handleTIMInteractableData
+        );
 
         render();
       }
 
-      return () =>
-      {
+      return () => {
         // inNetworkingManager?.off(Message.TIMMappedAreaAdd.toString(), handleMessage);
-      }
+      };
     }
   }, [inNetworkingManager]);
 
@@ -257,9 +272,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           style={{
             position: "relative",
             background: "#1f1c1e",
-            borderStyle: "solid",
-            borderColor: "#FF0099",
-            borderWidth: "5px",
+            // borderStyle: "solid",
+            // borderColor: `rgb(${color.r} ${color.g} ${color.b})`,
+            // borderWidth: "5px",
             // height: "100%",
             // width: "100%",
           }}
