@@ -37,9 +37,9 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
   useEffect(() => {
 
-    const handleMessage = (inTIMMappedArea: FTIMMappedArea): void =>
+    const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void =>
     {
-      console.log('in TnS component. received distance = ', inTIMMappedArea.distance);
+      console.log('in TnS component. received MappedAreAdd. Distance = ', inTIMMappedArea.distance);
     }
 
     const handleTIMInteractableData = (inTIMInteractableData: FTIMInteractableData): void =>
@@ -80,7 +80,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           requestAnimationFrame(render);
         };
 
-        inNetworkingManager?.on(Message.TIMMappedAreaAdd.toString(), handleMessage);
+        inNetworkingManager?.on(Message.TIMMappedAreaAdd.toString(), handleTIMMappedAreaAdd);
         inNetworkingManager?.on(Message.TIMInteractableUpdate.toString(), handleTIMInteractableData);
 
         render();
@@ -88,7 +88,7 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
 
       return () =>
       {
-        inNetworkingManager?.off(Message.TIMMappedAreaAdd.toString(), handleMessage);
+        // inNetworkingManager?.off(Message.TIMMappedAreaAdd.toString(), handleMessage);
       }
     }
   }, [inNetworkingManager]);
