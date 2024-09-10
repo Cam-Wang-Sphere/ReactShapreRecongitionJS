@@ -111,6 +111,7 @@ const App = () => {
     "Draw",
     "Tiles",
     "Radar View",
+    "Point Tap"
   ];
 
   // Initialization when the component

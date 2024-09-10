@@ -14,6 +14,7 @@ import ScoreWidget from "./../components/ScoreWidget";
 import RandomPlayerDataWidget from "./../components/RandomPlayerDataWidget";
 import { HStack } from "@chakra-ui/react";
 import { WSPlayerData } from "../player/WSPlayerData";
+import PointTapInput from "./PointTapInput";
 
 interface ScreenSwitcherProps {
   inNetworkingManager: NetworkingManager | null;
@@ -39,13 +40,14 @@ const ScreenSwitcher = ({
       connectFunction={inConnectFunction}
       inConnectNetworkingManager={inNetworkingManager}
     />,
-    <TNS inNetworkingManager={inNetworkingManager} />,
+    <TapnSlashInput inNetworkingManager={inNetworkingManager} />,
     <DrawingWidget
       inNetworkingManager={inNetworkingManager}
       inRecognizer={inSSDollarRecognizer}
     />,
     <TilesInput inNetworkingManager={inNetworkingManager} />,
     <RadarView inNetworkingManager={inNetworkingManager} />,
+    <PointTapInput inNetworkingManager={inNetworkingManager} />,
   ];
 
   useEffect(() => {
