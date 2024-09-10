@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NetworkingManager } from "./../networking/NetworkingManager";
+import { NetworkingManager } from "../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
@@ -12,16 +12,23 @@ interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
 }
 
-const canvasWidth = window.innerHeight;
-const canvasHeight = window.innerHeight;
+//global variables
+let color = { r: 173, g: 179, b: 175 };
+let canvasWidth = window.innerHeight;
+let canvasHeight = window.innerHeight;
+const borderWidth = 20;
 
-const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
+const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
+  //html canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
+
+  // states
   const [isDrawing, setIsDrawing] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
+  //screen orientation
   const resizeEvent = window.addEventListener("resize", () => {
     const orientationType = window.screen.orientation.type;
     // console.log(orientationType);
@@ -30,37 +37,10 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       : setIsLandscape(false);
   });
 
-  let pos = [0, 10];
-  let speed = [1, 1.2];
-  // const heartImage = new Image();
-  // const img = new Image();
-  let color = { r: 173, g: 179, b: 175 };
-
-  // class Ball {
-  //   constructor(x: number, y: number, size: number) {
-  //     this.x = x;
-  //     this.y = y;
-  //     this.size = size;
-  //   }
-
-  //   draw(_ctx: CanvasRenderingContext2D) {
-  //     _ctx.beginPath();
-  //     _ctx.fillStyle = `rgb(255,0,0)`;
-  //     _ctx.rect(this.x, this,y, this.size, this.size);
-  //     _ctx.closePath();
-  //   }
-  // }
-
-  // let newBall = new Ball(100, 100, 50);
-  let newBall = (_ctx: CanvasRenderingContext2D) => {
-    _ctx.beginPath();
-    _ctx.lineWidth = 10;
-    _ctx.strokeStyle = "red";
-    _ctx.fillRect(0, 0, 50, 50);
-    _ctx.closePath();
-  };
-
   useEffect(() => {
+    //networking message handlers
+
+    //update color of the frame
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
       color.r = inTIMMappedArea.color.r() * 255;
       color.g = inTIMMappedArea.color.g() * 255;
@@ -73,59 +53,114 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
       console.log(inTIMInteractableData.tags);
     };
 
+    //Asteroid class---------------------------------------------
+    class Asteroid {
+      x: number;
+      y: number;
+      size: number;
+      speedx: number;
+      speedy: number;
+      color: { r: number; g: number; b: number };
+
+      constructor(_x: number, _y: number, _size: number) {
+        this.x = _x;
+        this.y = _y;
+        this.size = _size;
+        this.speedx = Math.random() * (3 - 1.2) + 1.2;
+        this.speedy = Math.random() * (3 - 1.2) + 1.2;
+        this.color = {
+          r: Math.floor(Math.random() * 255),
+          g: Math.floor(Math.random() * 255),
+          b: Math.floor(Math.random() * 255),
+        };
+      }
+      update() {
+        this.x += this.speedx;
+        this.y += this.speedy;
+
+        (this.x >= canvasWidth - borderWidth || this.x < borderWidth) &&
+          (this.x = borderWidth); //border width
+        (this.y >= canvasHeight - borderWidth || this.y < borderWidth) &&
+          (this.y = Math.floor(Math.random() * canvasHeight));
+      }
+      draw(_ctx: CanvasRenderingContext2D) {
+        _ctx.beginPath();
+        _ctx.fillStyle = `rgb(${this.color.r} ${this.color.g} ${this.color.b})`;
+        _ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        _ctx.fill();
+        _ctx.closePath();
+      }
+    }
+    //End of asteroid class-----------------------------------------------------------
+
+    // canvas variables
     const canvas = canvasRef.current;
+    let Asteroids: Asteroid[] = [];
+
+    for (let i = 0; i < 10; i++) {
+      Asteroids.push(new Asteroid(20, 20, 25));
+    }
+
+    //canvas functions
+    const update = () => {
+      for (let asteroid of Asteroids) {
+        asteroid.update();
+      }
+    };
+
+    const draw = (_ctx: CanvasRenderingContext2D) => {
+      //clear canvas every frame
+      _ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      //frame - canvas outline
+      _ctx.beginPath();
+      _ctx.lineWidth = 10;
+      _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+      _ctx.rect(0, 0, canvasWidth, canvasHeight);
+      _ctx.stroke();
+      _ctx.closePath();
+
+      for (let asteroid of Asteroids) {
+        asteroid.draw(_ctx);
+      }
+    };
+
+    //looping function
+    const loop = (_ctx: CanvasRenderingContext2D) => {
+      update();
+      draw(_ctx);
+      requestAnimationFrame(() => {
+        loop(_ctx);
+      });
+    };
+
     if (canvas) {
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.globalAlpha = 1.0;
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 5;
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
-        // heartImage.src = "../assets/Icons/asteroid.png";
-        // img.src = "https://k3no.com/Meetup/hang-in-there.jpg";
-        // heartImage.onload = () => {
-        //   ctx.drawImage(heartImage, pos[0], pos[1], 50, 50);
-        // };
+        loop(ctx);
+        canvasWidth = canvas.width;
+        canvasHeight = canvas.height;
+      }
 
-        const render = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.beginPath();
-          ctx.lineWidth = 10;
-          ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
-          ctx.rect(0, 0, canvas.width, canvas.height);
-          ctx.stroke();
-          ctx.closePath();
+      inNetworkingManager?.on(
+        Message.TIMMappedAreaAdd.toString(),
+        handleTIMMappedAreaAdd
+      );
+      inNetworkingManager?.on(
+        Message.TIMInteractableData.toString(),
+        handleTIMInteractableData
+      );
 
-          newBall(ctx);
+      return () => {
+        // cancelAnimationFrame(loop);
 
-          ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
-          ctx.fillRect(pos[0], pos[1], 50, 50);
-          // ctx.drawImage(img, pos[0], pos[1], 50, 50);
-          pos[0] += speed[0];
-          pos[1] += speed[1];
-
-          (pos[0] >= canvas.width || pos[0] < 0) && (speed[0] *= -1);
-          (pos[1] >= canvas.height || pos[1] < 0) && (speed[1] *= -1);
-          requestAnimationFrame(render);
-        };
-
-        inNetworkingManager?.on(
+        //deregister message
+        inNetworkingManager?.off(
           Message.TIMMappedAreaAdd.toString(),
           handleTIMMappedAreaAdd
         );
-        inNetworkingManager?.on(
-          Message.TIMInteractableData.toString(),
-          handleTIMInteractableData
-        );
-
-        render();
-      }
-
-      return () => {
-        // inNetworkingManager?.off(Message.TIMMappedAreaAdd.toString(), handleMessage);
       };
     }
   }, [inNetworkingManager]);
@@ -249,35 +284,10 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         position: "relative",
       }}
     >
-      {/* UI Elements overlayed */}
-      {/* <GridItem
-        area="UIOverlay"
-        // // bg="gray.700"
-        // borderColor="#FF0099"
-        // borderWidth="5px"
-        style={{
-          position: "relative",
-        }}
-        h="100%"
-        w="100%"
-        rowStart={1}
-        colStart={1}
-      >
-        <HStack justifyContent="space-between">
-          <Text fontSize="xl" color="#FF0099" p="20px">
-            Name
-          </Text>
-          <Text fontSize="xl" color="#FF0099" p="20px">
-            Score
-          </Text>
-        </HStack>
-      </GridItem> */}
-
       <GridItem
         area="TapRegion"
         style={{
           position: "relative",
-          // background: "blue",
         }}
         h="100%"
         w="100%"
@@ -288,11 +298,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           style={{
             position: "relative",
             background: "#1f1c1e",
-            // borderStyle: "solid",
-            // borderColor: `rgb(${color.r} ${color.g} ${color.b})`,
-            // borderWidth: "5px",
-            // height: "100%",
-            // width: "100%",
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
@@ -305,12 +310,10 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           width={
             isLandscape ? window.innerWidth * 0.92 : window.innerWidth * 0.8
           }
-          // height={isLandscape ? 370 : 570} // dynamic resize
-          // width={isLandscape ? 870 : 330}
         />
       </GridItem>
     </Grid>
   );
 };
 
-export default TapnSlashInput;
+export default TNS;
