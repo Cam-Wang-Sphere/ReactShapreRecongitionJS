@@ -17,6 +17,7 @@ let color = { r: 173, g: 179, b: 175 };
 let canvasWidth = window.innerHeight;
 let canvasHeight = window.innerHeight;
 const borderWidth = 20;
+let req: number = 0;
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
@@ -131,7 +132,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const loop = (_ctx: CanvasRenderingContext2D) => {
       update();
       draw(_ctx);
-      requestAnimationFrame(() => {
+      req = requestAnimationFrame(() => {
         loop(_ctx);
       });
     };
@@ -156,13 +157,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       );
 
       return () => {
-        //cancel animation
-        if (canvas) {
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            // cancelAnimationFrame(loop);
-          }
-        }
+        //cancel requested animation
+        cancelAnimationFrame(req);
 
         //deregister networking messages
         inNetworkingManager?.off(
