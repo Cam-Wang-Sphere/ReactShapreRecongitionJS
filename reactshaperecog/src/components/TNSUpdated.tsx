@@ -66,7 +66,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         this.x = _x;
         this.y = _y;
         this.size = _size;
-        this.speedx = Math.random() * (3 - 1.2) + 1.2;
+        this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
         this.speedy = Math.random() * (3 - 1.2) + 1.2;
         this.color = {
           r: Math.floor(Math.random() * 255),
@@ -103,6 +103,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
     //canvas functions
     const update = () => {
+      //updating all asteroid positions
       for (let asteroid of Asteroids) {
         asteroid.update();
       }
@@ -120,12 +121,13 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       _ctx.stroke();
       _ctx.closePath();
 
+      //drawing all asteroids
       for (let asteroid of Asteroids) {
         asteroid.draw(_ctx);
       }
     };
 
-    //looping function
+    //loop through canvas functions every frame
     const loop = (_ctx: CanvasRenderingContext2D) => {
       update();
       draw(_ctx);
