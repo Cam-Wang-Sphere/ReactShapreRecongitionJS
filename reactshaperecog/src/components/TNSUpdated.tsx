@@ -53,7 +53,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       console.log(inTIMInteractableData.tags);
     };
 
-    //Asteroid class---------------------------------------------
+    //Asteroid class----------------------------------------------------------------
     class Asteroid {
       x: number;
       y: number;
@@ -156,9 +156,15 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       );
 
       return () => {
-        // cancelAnimationFrame(loop);
+        //cancel animation
+        if (canvas) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            // cancelAnimationFrame(loop);
+          }
+        }
 
-        //deregister message
+        //deregister networking messages
         inNetworkingManager?.off(
           Message.TIMMappedAreaAdd.toString(),
           handleTIMMappedAreaAdd
