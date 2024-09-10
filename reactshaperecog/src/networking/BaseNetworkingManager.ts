@@ -4,6 +4,7 @@ import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
 import { EventEmitter } from 'events';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
+import { ClientLoginRequest } from '../schema/WSSchema';
 import { GenericBatchResponse } from '../schema/WSSchema';
 import { GenericBinaryWrapper } from '../schema/WSSchema';
 import { LateConnectPayloadResponse } from '../schema/WSSchema';
@@ -12,6 +13,8 @@ export class BaseNetworkingManager extends EventEmitter {
 
     protected socket: WebSocket | null = null;
     protected sessionId: number = -1;
+    protected playerGuid: string = crypto.randomUUID();
+    protected playerSecret: string = "NathanLovesFood";
 
     constructor(private url: string)
     {
@@ -38,10 +41,41 @@ export class BaseNetworkingManager extends EventEmitter {
         this.socket?.send(buf);
     }
 
+    protected sendClientLoginRequest = (): void =>
+    {
+        const builder = new flatbuffers.Builder(256);
+
+        const builtGuid = builder.createString(this.playerGuid);
+        const builtSecret = builder.createString(this.playerSecret);
+
+        ClientLoginRequest.startClientLoginRequest(builder);
+        ClientLoginRequest.addPlayerId(builder, builtGuid);
+        ClientLoginRequest.addSecret(builder, builtSecret);
+        const clientLoginRequest = ClientLoginRequest.endClientLoginRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.ClientLoginRequest);
+        TypeWrapper.addMessage(builder, clientLoginRequest);
+        const typeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(typeWrapper);
+
+        const buf = builder.asUint8Array();
+
+        this.socket?.send(buf);
+    }
+
     public connect = (): Promise<void> =>
     {
         return new Promise((resolve, reject) =>
         {
+            if (this.socket && (this.socket.OPEN || this.socket.CONNECTING))
+            {
+                alert('already connected to websocket with ip = ' + this.url);
+                reject('already connected');
+                return;
+            }
+
             this.socket = new WebSocket(this.url);
 
             // setting the binary type to an array buffer
@@ -50,6 +84,7 @@ export class BaseNetworkingManager extends EventEmitter {
             // socket bindings
             this.socket.onopen = () => 
             {
+                this.sendClientLoginRequest();
                 alert("Connected to websocket with ip = " + this.url);
                 resolve();
             };

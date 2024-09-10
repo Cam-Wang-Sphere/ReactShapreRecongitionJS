@@ -76,9 +76,12 @@ const App = () => {
 
   // networking function
   // to be passed in as a prop to a component
-  const connectToServer = (address: string) => {
-    const newNetworkingManager = new NetworkingManager(address);
-    newNetworkingManager
+  const connectToServer = (address: string) => 
+  {
+    if (!networkingManager)
+    {
+      const newNetworkingManager = new NetworkingManager(address);
+      newNetworkingManager
       .connect()
       .then(() => {
         setNetworkingManager(newNetworkingManager);
@@ -87,6 +90,17 @@ const App = () => {
       .catch(() => {
         console.log("failed to connect");
       });
+    }
+    else
+    {
+      networkingManager.connect()
+      .then(() => {
+        console.log("reconnected");
+      })
+      .catch(() => {
+        console.log("failed to connect since already connected");
+      });
+    }
   };
 
   // @TODO NATHAN: componentmentalize
