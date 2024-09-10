@@ -25,7 +25,7 @@ const PointTapInput = ({ inNetworkingManager }: PointTapInputProps) => {
             pitch: event.beta ? event.beta.toFixed(2) : 0,
             roll: event.gamma ? event.gamma.toFixed(2) : 0,
         });
-        inNetworkingManager?.sendOrientationRequestString(event.beta, event.alpha);
+        inNetworkingManager?.sendPointTapRequest(event.beta, event.gamma);
     };
 
     const startRecording = () => 
@@ -62,7 +62,7 @@ const PointTapInput = ({ inNetworkingManager }: PointTapInputProps) => {
         <div>
             <div>
                 <Box textAlign="center">
-                    <Button colorScheme="teal" w={"200px"} bg={"#24a0ed"} onClick={inNetworkingManager?.sendResetOrientationRequestString}>Reset Pointer</Button>
+                    <Button colorScheme="teal" w={"200px"} bg={"#24a0ed"} onClick={inNetworkingManager?.sendPointTapResetRequest}>Reset Pointer</Button>
                 </Box>
                 <Box>
                     <Text textAlign="center" color="white">

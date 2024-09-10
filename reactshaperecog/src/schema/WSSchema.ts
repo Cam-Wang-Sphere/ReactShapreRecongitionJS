@@ -32,6 +32,8 @@ export { PingServerUnreliableResponse } from './wsschema/ping-server-unreliable-
 export { PlayerNameRequest } from './wsschema/player-name-request.js';
 export { PlayerNameResponse } from './wsschema/player-name-response.js';
 export { PlayerScoreResponse } from './wsschema/player-score-response.js';
+export { PointTapRequest } from './wsschema/point-tap-request.js';
+export { PointTapResetRequest } from './wsschema/point-tap-reset-request.js';
 export { RepeaterBinaryResponse } from './wsschema/repeater-binary-response.js';
 export { RepeaterBroadcastBinaryResponse } from './wsschema/repeater-broadcast-binary-response.js';
 export { RepeaterLoginRequest } from './wsschema/repeater-login-request.js';

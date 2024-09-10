@@ -26,6 +26,9 @@ import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update
 import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent, TIMInteractableDestroyed } from '../schema/WSSchema';
 import { GlobalInputEnums } from '../schema/WSSchema';
 import { FTIMHitEvent } from '../TIM/TIMHitEvent';
+import { Point } from '../Template/Recognizer';
+import { PointTapRequest } from '../schema/WSSchema';
+import { PointTapResetRequest } from '../schema/WSSchema';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -125,6 +128,48 @@ export class NetworkingManager extends BaseNetworkingManager {
         TypeWrapper.startTypeWrapper(builder);
         TypeWrapper.addMessageType(builder, Message.PingServerRequest);
         TypeWrapper.addMessage(builder, pingServerRequest);
+        const typeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(typeWrapper);
+
+        const buf = builder.asUint8Array();
+
+        this.socket?.send(buf);
+    }
+
+    public sendPointTapRequest = (inPitch: number, inRoll: number) =>
+    {
+        const builder = new flatbuffers.Builder(256);
+
+        PointTapRequest.startPointTapRequest(builder);
+        PointTapRequest.addSessionId(builder, this.sessionId);
+        PointTapRequest.addPitch(builder, inPitch);
+        PointTapRequest.addRoll(builder, inRoll);
+        const pointTapRequest = PointTapRequest.endPointTapRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.PointTapRequest);
+        TypeWrapper.addMessage(builder, pointTapRequest);
+        const typeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(typeWrapper);
+
+        const buf = builder.asUint8Array();
+
+        this.socket?.send(buf);
+    }
+
+    public sendPointTapResetRequest = () =>
+    {
+        const builder = new flatbuffers.Builder(256);
+
+        PointTapResetRequest.startPointTapResetRequest(builder);
+        PointTapResetRequest.addSessionId(builder, this.sessionId);
+        const pointTapResetRequest = PointTapResetRequest.endPointTapResetRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.PointTapResetRequest);
+        TypeWrapper.addMessage(builder, pointTapResetRequest);
         const typeWrapper = TypeWrapper.endTypeWrapper(builder);
 
         builder.finish(typeWrapper);

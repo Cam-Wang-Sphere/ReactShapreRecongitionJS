@@ -28,6 +28,8 @@ var ping_server_unreliable_response_js_1 = require("../wsschema/ping-server-unre
 var player_name_request_js_1 = require("../wsschema/player-name-request.js");
 var player_name_response_js_1 = require("../wsschema/player-name-response.js");
 var player_score_response_js_1 = require("../wsschema/player-score-response.js");
+var point_tap_request_js_1 = require("../wsschema/point-tap-request.js");
+var point_tap_reset_request_js_1 = require("../wsschema/point-tap-reset-request.js");
 var repeater_binary_response_js_1 = require("../wsschema/repeater-binary-response.js");
 var repeater_broadcast_binary_response_js_1 = require("../wsschema/repeater-broadcast-binary-response.js");
 var repeater_login_request_js_1 = require("../wsschema/repeater-login-request.js");
@@ -79,14 +81,16 @@ var Message;
     Message[Message["PhaseResponse"] = 30] = "PhaseResponse";
     Message[Message["GlobalInputResponse"] = 31] = "GlobalInputResponse";
     Message[Message["PlayerScoreResponse"] = 32] = "PlayerScoreResponse";
-    Message[Message["TIMPlayerInput"] = 33] = "TIMPlayerInput";
-    Message[Message["TIMMappedAreaAdd"] = 34] = "TIMMappedAreaAdd";
-    Message[Message["TIMMappedAreaUpdate"] = 35] = "TIMMappedAreaUpdate";
-    Message[Message["TIMMappedAreaRemoved"] = 36] = "TIMMappedAreaRemoved";
-    Message[Message["TIMInteractableData"] = 37] = "TIMInteractableData";
-    Message[Message["TIMInteractableUpdate"] = 38] = "TIMInteractableUpdate";
-    Message[Message["TIMInteractableDestroyed"] = 39] = "TIMInteractableDestroyed";
-    Message[Message["TIMHitEvent"] = 40] = "TIMHitEvent";
+    Message[Message["PointTapRequest"] = 33] = "PointTapRequest";
+    Message[Message["PointTapResetRequest"] = 34] = "PointTapResetRequest";
+    Message[Message["TIMPlayerInput"] = 35] = "TIMPlayerInput";
+    Message[Message["TIMMappedAreaAdd"] = 36] = "TIMMappedAreaAdd";
+    Message[Message["TIMMappedAreaUpdate"] = 37] = "TIMMappedAreaUpdate";
+    Message[Message["TIMMappedAreaRemoved"] = 38] = "TIMMappedAreaRemoved";
+    Message[Message["TIMInteractableData"] = 39] = "TIMInteractableData";
+    Message[Message["TIMInteractableUpdate"] = 40] = "TIMInteractableUpdate";
+    Message[Message["TIMInteractableDestroyed"] = 41] = "TIMInteractableDestroyed";
+    Message[Message["TIMHitEvent"] = 42] = "TIMHitEvent";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -123,6 +127,8 @@ function unionToMessage(type, accessor) {
         case 'PhaseResponse': return accessor(new phase_response_js_1.PhaseResponse());
         case 'GlobalInputResponse': return accessor(new global_input_response_js_1.GlobalInputResponse());
         case 'PlayerScoreResponse': return accessor(new player_score_response_js_1.PlayerScoreResponse());
+        case 'PointTapRequest': return accessor(new point_tap_request_js_1.PointTapRequest());
+        case 'PointTapResetRequest': return accessor(new point_tap_reset_request_js_1.PointTapResetRequest());
         case 'TIMPlayerInput': return accessor(new timplayer_input_js_1.TIMPlayerInput());
         case 'TIMMappedAreaAdd': return accessor(new timmapped_area_add_js_1.TIMMappedAreaAdd());
         case 'TIMMappedAreaUpdate': return accessor(new timmapped_area_update_js_1.TIMMappedAreaUpdate());
@@ -169,6 +175,8 @@ function unionListToMessage(type, accessor, index) {
         case 'PhaseResponse': return accessor(index, new phase_response_js_1.PhaseResponse());
         case 'GlobalInputResponse': return accessor(index, new global_input_response_js_1.GlobalInputResponse());
         case 'PlayerScoreResponse': return accessor(index, new player_score_response_js_1.PlayerScoreResponse());
+        case 'PointTapRequest': return accessor(index, new point_tap_request_js_1.PointTapRequest());
+        case 'PointTapResetRequest': return accessor(index, new point_tap_reset_request_js_1.PointTapResetRequest());
         case 'TIMPlayerInput': return accessor(index, new timplayer_input_js_1.TIMPlayerInput());
         case 'TIMMappedAreaAdd': return accessor(index, new timmapped_area_add_js_1.TIMMappedAreaAdd());
         case 'TIMMappedAreaUpdate': return accessor(index, new timmapped_area_update_js_1.TIMMappedAreaUpdate());
