@@ -36,6 +36,23 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   const img = new Image();
   let color = { r: 173, g: 179, b: 175 };
 
+  // class Ball {
+  //   constructor(x: number, y: number, size: number) {
+  //     this.x = x;
+  //     this.y = y;
+  //     this.size = size;
+  //   }
+
+  //   draw(_ctx: CanvasRenderingContext2D) {
+  //     _ctx.beginPath();
+  //     _ctx.fillStyle = `rgb(255,0,0)`;
+  //     _ctx.rect(this.x, this,y, this.size, this.size);
+  //     _ctx.closePath();
+  //   }
+  // }
+
+  // let newBall = new Ball(100, 100, 50);
+
   useEffect(() => {
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
       color.r = inTIMMappedArea.color.r() * 255;
@@ -67,8 +84,6 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
         // };
 
         const render = () => {
-          //archit test
-
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.beginPath();
           ctx.lineWidth = 10;
@@ -76,6 +91,8 @@ const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
           ctx.rect(0, 0, canvas.width, canvas.height);
           ctx.stroke();
           ctx.closePath();
+
+          // newBall.draw(ctx);
 
           ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
           ctx.fillRect(pos[0], pos[1], 50, 50);
