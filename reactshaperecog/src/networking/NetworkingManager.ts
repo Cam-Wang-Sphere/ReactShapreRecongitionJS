@@ -208,7 +208,7 @@ export class NetworkingManager extends BaseNetworkingManager {
         mappedArea.yaw = rotation.y();
         mappedArea.shape = mappedAreaAdded.shape();
 
-        console.log('received tim mapped area. Distance = ', mappedArea.distance);
+        // console.log('received tim mapped area. Distance = ', mappedArea.distance);
 
         this.emit(Message.TIMMappedAreaAdd.toString(), mappedArea);
     }
