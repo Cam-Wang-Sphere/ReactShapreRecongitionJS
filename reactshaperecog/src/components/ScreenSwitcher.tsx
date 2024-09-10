@@ -40,7 +40,7 @@ const ScreenSwitcher = ({
       connectFunction={inConnectFunction}
       inConnectNetworkingManager={inNetworkingManager}
     />,
-    <TapnSlashInput inNetworkingManager={inNetworkingManager} />,
+    <TNS inNetworkingManager={inNetworkingManager} />,
     <DrawingWidget
       inNetworkingManager={inNetworkingManager}
       inRecognizer={inSSDollarRecognizer}
