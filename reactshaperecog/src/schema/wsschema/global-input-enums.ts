@@ -7,5 +7,6 @@ export enum GlobalInputEnums {
   Drawing = 3,
   Buttons = 4,
   TapAsteroid = 5,
-  Max = 6
+  PointTap = 6,
+  Max = 7
 }

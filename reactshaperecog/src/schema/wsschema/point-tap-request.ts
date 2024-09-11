@@ -30,13 +30,18 @@ pitch():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-roll():number {
+yaw():number {
   const offset = this.bb!.__offset(this.bb_pos, 8);
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
+roll():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
 static startPointTapRequest(builder:flatbuffers.Builder) {
-  builder.startObject(3);
+  builder.startObject(4);
 }
 
 static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
@@ -47,8 +52,12 @@ static addPitch(builder:flatbuffers.Builder, pitch:number) {
   builder.addFieldFloat32(1, pitch, 0.0);
 }
 
+static addYaw(builder:flatbuffers.Builder, yaw:number) {
+  builder.addFieldFloat32(2, yaw, 0.0);
+}
+
 static addRoll(builder:flatbuffers.Builder, roll:number) {
-  builder.addFieldFloat32(2, roll, 0.0);
+  builder.addFieldFloat32(3, roll, 0.0);
 }
 
 static endPointTapRequest(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -56,10 +65,11 @@ static endPointTapRequest(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createPointTapRequest(builder:flatbuffers.Builder, sessionId:number, pitch:number, roll:number):flatbuffers.Offset {
+static createPointTapRequest(builder:flatbuffers.Builder, sessionId:number, pitch:number, yaw:number, roll:number):flatbuffers.Offset {
   PointTapRequest.startPointTapRequest(builder);
   PointTapRequest.addSessionId(builder, sessionId);
   PointTapRequest.addPitch(builder, pitch);
+  PointTapRequest.addYaw(builder, yaw);
   PointTapRequest.addRoll(builder, roll);
   return PointTapRequest.endPointTapRequest(builder);
 }

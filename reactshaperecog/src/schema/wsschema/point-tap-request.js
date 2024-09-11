@@ -28,12 +28,16 @@ var PointTapRequest = /** @class */ (function () {
         var offset = this.bb.__offset(this.bb_pos, 6);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     };
-    PointTapRequest.prototype.roll = function () {
+    PointTapRequest.prototype.yaw = function () {
         var offset = this.bb.__offset(this.bb_pos, 8);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     };
+    PointTapRequest.prototype.roll = function () {
+        var offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    };
     PointTapRequest.startPointTapRequest = function (builder) {
-        builder.startObject(3);
+        builder.startObject(4);
     };
     PointTapRequest.addSessionId = function (builder, sessionId) {
         builder.addFieldInt32(0, sessionId, 0);
@@ -41,17 +45,21 @@ var PointTapRequest = /** @class */ (function () {
     PointTapRequest.addPitch = function (builder, pitch) {
         builder.addFieldFloat32(1, pitch, 0.0);
     };
+    PointTapRequest.addYaw = function (builder, yaw) {
+        builder.addFieldFloat32(2, yaw, 0.0);
+    };
     PointTapRequest.addRoll = function (builder, roll) {
-        builder.addFieldFloat32(2, roll, 0.0);
+        builder.addFieldFloat32(3, roll, 0.0);
     };
     PointTapRequest.endPointTapRequest = function (builder) {
         var offset = builder.endObject();
         return offset;
     };
-    PointTapRequest.createPointTapRequest = function (builder, sessionId, pitch, roll) {
+    PointTapRequest.createPointTapRequest = function (builder, sessionId, pitch, yaw, roll) {
         PointTapRequest.startPointTapRequest(builder);
         PointTapRequest.addSessionId(builder, sessionId);
         PointTapRequest.addPitch(builder, pitch);
+        PointTapRequest.addYaw(builder, yaw);
         PointTapRequest.addRoll(builder, roll);
         return PointTapRequest.endPointTapRequest(builder);
     };

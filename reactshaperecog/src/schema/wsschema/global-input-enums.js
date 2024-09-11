@@ -10,6 +10,7 @@ var GlobalInputEnums;
     GlobalInputEnums[GlobalInputEnums["Drawing"] = 3] = "Drawing";
     GlobalInputEnums[GlobalInputEnums["Buttons"] = 4] = "Buttons";
     GlobalInputEnums[GlobalInputEnums["TapAsteroid"] = 5] = "TapAsteroid";
-    GlobalInputEnums[GlobalInputEnums["Max"] = 6] = "Max";
+    GlobalInputEnums[GlobalInputEnums["PointTap"] = 6] = "PointTap";
+    GlobalInputEnums[GlobalInputEnums["Max"] = 7] = "Max";
 })(GlobalInputEnums || (exports.GlobalInputEnums = GlobalInputEnums = {}));
 //# sourceMappingURL=global-input-enums.js.map
