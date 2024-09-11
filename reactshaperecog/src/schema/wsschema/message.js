@@ -4,6 +4,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 exports.unionToMessage = unionToMessage;
 exports.unionListToMessage = unionListToMessage;
+var admin_modify_asteroid_health_js_1 = require("../wsschema/admin-modify-asteroid-health.js");
+var admin_modify_asteroid_speed_js_1 = require("../wsschema/admin-modify-asteroid-speed.js");
+var admin_set_bot_count_js_1 = require("../wsschema/admin-set-bot-count.js");
+var admin_set_input_type_js_1 = require("../wsschema/admin-set-input-type.js");
+var admin_skip_phase_js_1 = require("../wsschema/admin-skip-phase.js");
+var admin_start_game_js_1 = require("../wsschema/admin-start-game.js");
 var client_login_request_js_1 = require("../wsschema/client-login-request.js");
 var client_login_response_js_1 = require("../wsschema/client-login-response.js");
 var generic_batch_request_js_1 = require("../wsschema/generic-batch-request.js");
@@ -91,6 +97,12 @@ var Message;
     Message[Message["TIMInteractableUpdate"] = 40] = "TIMInteractableUpdate";
     Message[Message["TIMInteractableDestroyed"] = 41] = "TIMInteractableDestroyed";
     Message[Message["TIMHitEvent"] = 42] = "TIMHitEvent";
+    Message[Message["AdminSetBotCount"] = 43] = "AdminSetBotCount";
+    Message[Message["AdminSetInputType"] = 44] = "AdminSetInputType";
+    Message[Message["AdminStartGame"] = 45] = "AdminStartGame";
+    Message[Message["AdminSkipPhase"] = 46] = "AdminSkipPhase";
+    Message[Message["AdminModifyAsteroidSpeed"] = 47] = "AdminModifyAsteroidSpeed";
+    Message[Message["AdminModifyAsteroidHealth"] = 48] = "AdminModifyAsteroidHealth";
 })(Message || (exports.Message = Message = {}));
 function unionToMessage(type, accessor) {
     switch (Message[type]) {
@@ -137,6 +149,12 @@ function unionToMessage(type, accessor) {
         case 'TIMInteractableUpdate': return accessor(new timinteractable_update_js_1.TIMInteractableUpdate());
         case 'TIMInteractableDestroyed': return accessor(new timinteractable_destroyed_js_1.TIMInteractableDestroyed());
         case 'TIMHitEvent': return accessor(new timhit_event_js_1.TIMHitEvent());
+        case 'AdminSetBotCount': return accessor(new admin_set_bot_count_js_1.AdminSetBotCount());
+        case 'AdminSetInputType': return accessor(new admin_set_input_type_js_1.AdminSetInputType());
+        case 'AdminStartGame': return accessor(new admin_start_game_js_1.AdminStartGame());
+        case 'AdminSkipPhase': return accessor(new admin_skip_phase_js_1.AdminSkipPhase());
+        case 'AdminModifyAsteroidSpeed': return accessor(new admin_modify_asteroid_speed_js_1.AdminModifyAsteroidSpeed());
+        case 'AdminModifyAsteroidHealth': return accessor(new admin_modify_asteroid_health_js_1.AdminModifyAsteroidHealth());
         default: return null;
     }
 }
@@ -185,6 +203,12 @@ function unionListToMessage(type, accessor, index) {
         case 'TIMInteractableUpdate': return accessor(index, new timinteractable_update_js_1.TIMInteractableUpdate());
         case 'TIMInteractableDestroyed': return accessor(index, new timinteractable_destroyed_js_1.TIMInteractableDestroyed());
         case 'TIMHitEvent': return accessor(index, new timhit_event_js_1.TIMHitEvent());
+        case 'AdminSetBotCount': return accessor(index, new admin_set_bot_count_js_1.AdminSetBotCount());
+        case 'AdminSetInputType': return accessor(index, new admin_set_input_type_js_1.AdminSetInputType());
+        case 'AdminStartGame': return accessor(index, new admin_start_game_js_1.AdminStartGame());
+        case 'AdminSkipPhase': return accessor(index, new admin_skip_phase_js_1.AdminSkipPhase());
+        case 'AdminModifyAsteroidSpeed': return accessor(index, new admin_modify_asteroid_speed_js_1.AdminModifyAsteroidSpeed());
+        case 'AdminModifyAsteroidHealth': return accessor(index, new admin_modify_asteroid_health_js_1.AdminModifyAsteroidHealth());
         default: return null;
     }
 }
