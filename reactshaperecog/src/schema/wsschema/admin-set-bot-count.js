@@ -24,7 +24,7 @@ var AdminSetBotCount = /** @class */ (function () {
         var offset = this.bb.__offset(this.bb_pos, 4);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     };
-    AdminSetBotCount.prototype.asteroidCount = function () {
+    AdminSetBotCount.prototype.botCount = function () {
         var offset = this.bb.__offset(this.bb_pos, 6);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     };
@@ -34,17 +34,17 @@ var AdminSetBotCount = /** @class */ (function () {
     AdminSetBotCount.addSessionId = function (builder, sessionId) {
         builder.addFieldInt32(0, sessionId, 0);
     };
-    AdminSetBotCount.addAsteroidCount = function (builder, asteroidCount) {
-        builder.addFieldInt32(1, asteroidCount, 0);
+    AdminSetBotCount.addBotCount = function (builder, botCount) {
+        builder.addFieldInt32(1, botCount, 0);
     };
     AdminSetBotCount.endAdminSetBotCount = function (builder) {
         var offset = builder.endObject();
         return offset;
     };
-    AdminSetBotCount.createAdminSetBotCount = function (builder, sessionId, asteroidCount) {
+    AdminSetBotCount.createAdminSetBotCount = function (builder, sessionId, botCount) {
         AdminSetBotCount.startAdminSetBotCount(builder);
         AdminSetBotCount.addSessionId(builder, sessionId);
-        AdminSetBotCount.addAsteroidCount(builder, asteroidCount);
+        AdminSetBotCount.addBotCount(builder, botCount);
         return AdminSetBotCount.endAdminSetBotCount(builder);
     };
     return AdminSetBotCount;

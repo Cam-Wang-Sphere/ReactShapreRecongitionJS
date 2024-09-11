@@ -23,12 +23,13 @@ import { TIMMappedAreaRemoved } from '../schema/wsschema/timmapped-area-removed'
 import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
 import { FTIMInteractableData } from '../TIM/TIMInteractableData';
 import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
-import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent, TIMInteractableDestroyed } from '../schema/WSSchema';
+import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent, TIMInputInteractable, TIMInteractableDestroyed, TIMPlayerInputInteractable } from '../schema/WSSchema';
 import { GlobalInputEnums } from '../schema/WSSchema';
 import { FTIMHitEvent } from '../TIM/TIMHitEvent';
 import { Point } from '../Template/Recognizer';
 import { PointTapRequest } from '../schema/WSSchema';
 import { PointTapResetRequest } from '../schema/WSSchema';
+import { FTIMInputInteractable } from '../TIM/TIMInputInteractable';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -108,6 +109,38 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         TypeWrapper.startTypeWrapper(builder);
         TypeWrapper.addMessageType(builder, Message.TIMPlayerInput);
+        TypeWrapper.addMessage(builder, playerInputOffset);
+        const wrapperOffset = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(wrapperOffset);
+        const buff = builder.asUint8Array();
+
+        this.socket?.send(buff);
+    }
+
+    public sendTIMInputInteractableEvents = (inputEvents: FTIMInputInteractable[]) =>
+    {
+        if(inputEvents.length === 0)
+        {
+            return;
+        }
+
+        const builder = new flatbuffers.Builder();
+
+        TIMPlayerInputInteractable.startInputEventsVector(builder, inputEvents.length);
+
+        inputEvents.forEach((ie: FTIMInputInteractable)=>{ 
+            TIMInputInteractable.createTIMInputInteractable(builder, ie.netHandle);
+        })
+        const inputEventsOffset = builder.endVector();
+
+        TIMPlayerInputInteractable.startTIMPlayerInputInteractable(builder);
+        TIMPlayerInputInteractable.addSessionId(builder, this.sessionId);
+        TIMPlayerInputInteractable.addInputEvents(builder, inputEventsOffset);
+        const playerInputOffset = TIMPlayerInputInteractable.endTIMPlayerInputInteractable(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.TIMPlayerInputInteractable);
         TypeWrapper.addMessage(builder, playerInputOffset);
         const wrapperOffset = TypeWrapper.endTypeWrapper(builder);
 

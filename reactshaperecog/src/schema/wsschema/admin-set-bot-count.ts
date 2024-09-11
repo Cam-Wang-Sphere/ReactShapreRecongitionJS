@@ -25,7 +25,7 @@ sessionId():number {
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
-asteroidCount():number {
+botCount():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
@@ -38,8 +38,8 @@ static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
   builder.addFieldInt32(0, sessionId, 0);
 }
 
-static addAsteroidCount(builder:flatbuffers.Builder, asteroidCount:number) {
-  builder.addFieldInt32(1, asteroidCount, 0);
+static addBotCount(builder:flatbuffers.Builder, botCount:number) {
+  builder.addFieldInt32(1, botCount, 0);
 }
 
 static endAdminSetBotCount(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -47,10 +47,10 @@ static endAdminSetBotCount(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createAdminSetBotCount(builder:flatbuffers.Builder, sessionId:number, asteroidCount:number):flatbuffers.Offset {
+static createAdminSetBotCount(builder:flatbuffers.Builder, sessionId:number, botCount:number):flatbuffers.Offset {
   AdminSetBotCount.startAdminSetBotCount(builder);
   AdminSetBotCount.addSessionId(builder, sessionId);
-  AdminSetBotCount.addAsteroidCount(builder, asteroidCount);
+  AdminSetBotCount.addBotCount(builder, botCount);
   return AdminSetBotCount.endAdminSetBotCount(builder);
 }
 }
