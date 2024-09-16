@@ -13,11 +13,11 @@ interface TapnSlashProps {
 }
 
 //global variables
-let color = { r: 173, g: 179, b: 175 };
+let color = { r: 173, g: 179, b: 175 }; // color for the frame
 let canvasWidth = window.innerHeight;
 let canvasHeight = window.innerHeight;
 const borderWidth = 20;
-let req: number = 0;
+let req = 0;
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
@@ -39,7 +39,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   });
 
   useEffect(() => {
-    //networking message handlers
+    //networking message handlers---------------------------------------------------
 
     //update color of the frame
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
@@ -54,19 +54,34 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       console.log(inTIMInteractableData.tags);
     };
 
+    inNetworkingManager?.on(
+      Message.TIMMappedAreaAdd.toString(),
+      handleTIMMappedAreaAdd
+    );
+    inNetworkingManager?.on(
+      Message.TIMInteractableData.toString(),
+      handleTIMInteractableData
+    );
+
     //Asteroid class----------------------------------------------------------------
     class Asteroid {
       x: number;
       y: number;
       size: number;
+      tag: string;
       speedx: number;
       speedy: number;
       color: { r: number; g: number; b: number };
 
-      constructor(_x: number, _y: number, _size: number) {
+      constructor(_x: number, _y: number, _tag: string) {
         this.x = _x;
         this.y = _y;
-        this.size = _size;
+        this.size = 15;
+        this.tag = _tag;
+        _tag === "small" && (this.size = 15);
+        _tag === "medium" && (this.size = 25);
+        _tag === "large" && (this.size = 35);
+
         this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
         this.speedy = Math.random() * (3 - 1.2) + 1.2;
         this.color = {
@@ -92,14 +107,14 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         _ctx.closePath();
       }
     }
-    //End of asteroid class-----------------------------------------------------------
+    //End of asteroid class----------------------------------------------------------
 
     // canvas variables
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
 
     for (let i = 0; i < 10; i++) {
-      Asteroids.push(new Asteroid(20, 20, 25));
+      Asteroids.push(new Asteroid(20, 20, "small"));
     }
 
     //canvas functions
@@ -114,7 +129,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       //clear canvas every frame
       _ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      //frame - canvas outline
+      //frame: canvas outline
       _ctx.beginPath();
       _ctx.lineWidth = 10;
       _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
@@ -122,7 +137,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       _ctx.stroke();
       _ctx.closePath();
 
-      //drawing all asteroids
+      //draw all asteroids
       for (let asteroid of Asteroids) {
         asteroid.draw(_ctx);
       }
@@ -147,23 +162,19 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         canvasHeight = canvas.height;
       }
 
-      inNetworkingManager?.on(
-        Message.TIMMappedAreaAdd.toString(),
-        handleTIMMappedAreaAdd
-      );
-      inNetworkingManager?.on(
-        Message.TIMInteractableData.toString(),
-        handleTIMInteractableData
-      );
-
       return () => {
         //cancel requested animation
         cancelAnimationFrame(req);
 
-        //deregister networking messages
+        //deregister networking messages----------------------------------------------
         inNetworkingManager?.off(
           Message.TIMMappedAreaAdd.toString(),
           handleTIMMappedAreaAdd
+        );
+
+        inNetworkingManager?.off(
+          Message.TIMInteractableData.toString(),
+          handleTIMInteractableData
         );
       };
     }
@@ -192,7 +203,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
-    // console.log("X: " + x + "Y: " + y);
+    console.log("X: " + x + "Y: " + y);
 
     let Event: ETriggerEvent = ETriggerEvent.Started;
     let Pos: Vector2 = new Vector2(x, y);
