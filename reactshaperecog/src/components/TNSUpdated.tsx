@@ -7,6 +7,7 @@ import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import { FTIMMappedArea } from "../TIM/TIMMappedArea";
 import { Message } from "../schema/WSSchema";
 import { FTIMInteractableData } from "../TIM/TIMInteractableData";
+// import { TIMInteractableDestroyed } from "../TIM/TIMInteractableDestroyed";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -17,7 +18,7 @@ let color = { r: 173, g: 179, b: 175 }; // color for the frame
 let canvasWidth = window.innerHeight;
 let canvasHeight = window.innerHeight;
 const borderWidth = 20;
-let req = 0;
+let reqAnimFrame = 0;
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
@@ -25,7 +26,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
 
-  // states
+  // react states
   const [isDrawing, setIsDrawing] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
@@ -41,17 +42,37 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   useEffect(() => {
     //networking message handlers---------------------------------------------------
 
-    //update color of the frame
+    //assign color of the frame
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
       color.r = inTIMMappedArea.color.r() * 255;
       color.g = inTIMMappedArea.color.g() * 255;
       color.b = inTIMMappedArea.color.b() * 255;
     };
 
+    // spawn new asteroid, add asteroid to array, assign tag and handle
     const handleTIMInteractableData = (
       inTIMInteractableData: FTIMInteractableData
     ): void => {
-      console.log(inTIMInteractableData.tags);
+      let handle = inTIMInteractableData.handle;
+      let tag = inTIMInteractableData.tags.toString().substring(14);
+      Asteroids.push(new Asteroid(100, 100, tag, handle));
+      console.log("spawn new asteroid");
+    };
+
+    //if the handle of asteroid matches, update location
+    const handleTIMInteractableUpdate = (
+      inTIMInteractableUpdate: FTIMInteractableData
+    ): void => {
+      let handle = inTIMInteractableUpdate.handle;
+      let location = inTIMInteractableUpdate.location;
+      // location.x *= canvasWidth;
+      // location.y *= canvasHeight;
+      location.x = location.x * -1 * canvasWidth;
+      location.y = location.y * -1 * canvasHeight;
+      for (let asteroid of Asteroids) {
+        asteroid.handle === handle && asteroid.update(location);
+        // console.log(handle, ": ", location);
+      }
     };
 
     inNetworkingManager?.on(
@@ -63,41 +84,49 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       handleTIMInteractableData
     );
 
+    inNetworkingManager?.on(
+      Message.TIMInteractableUpdate.toString(),
+      handleTIMInteractableUpdate
+    );
+
     //Asteroid class----------------------------------------------------------------
     class Asteroid {
       x: number;
       y: number;
-      size: number;
-      tag: string;
-      speedx: number;
-      speedy: number;
+      size: number; //radius
+      tag: string; //small, medium, large
+      handle: number; //ID of asteroid
+      // speedx: number;
+      // speedy: number;
       color: { r: number; g: number; b: number };
 
-      constructor(_x: number, _y: number, _tag: string) {
+      constructor(_x: number, _y: number, _tag: string, _handle: number) {
         this.x = _x;
         this.y = _y;
         this.size = 15;
         this.tag = _tag;
-        _tag === "small" && (this.size = 15);
-        _tag === "medium" && (this.size = 25);
-        _tag === "large" && (this.size = 35);
+        _tag === "small" && (this.size = 25);
+        _tag === "medium" && (this.size = 35);
+        _tag === "large" && (this.size = 45);
+        this.handle = _handle;
 
-        this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-        this.speedy = Math.random() * (3 - 1.2) + 1.2;
+        // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
+        // this.speedy = Math.random() * (3 - 1.2) + 1.2;
         this.color = {
           r: Math.floor(Math.random() * 255),
           g: Math.floor(Math.random() * 255),
           b: Math.floor(Math.random() * 255),
         };
       }
-      update() {
-        this.x += this.speedx;
-        this.y += this.speedy;
-
-        (this.x >= canvasWidth - borderWidth || this.x < borderWidth) &&
-          (this.x = borderWidth); //border width
-        (this.y >= canvasHeight - borderWidth || this.y < borderWidth) &&
-          (this.y = Math.floor(Math.random() * canvasHeight));
+      update(pos: Vector2) {
+        this.x = pos.x;
+        this.y = pos.y;
+        // this.x += this.speedx;
+        // this.y += this.speedy;
+        // (this.x >= canvasWidth - borderWidth || this.x < borderWidth) &&
+        //   (this.x = borderWidth); //border width
+        // (this.y >= canvasHeight - borderWidth || this.y < borderWidth) &&
+        //   (this.y = Math.floor(Math.random() * canvasHeight));
       }
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
@@ -113,16 +142,16 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
 
-    for (let i = 0; i < 10; i++) {
-      Asteroids.push(new Asteroid(20, 20, "small"));
-    }
+    // for (let i = 0; i < 10; i++) {
+    //   Asteroids.push(new Asteroid(20, 20, "small"));
+    // }
 
     //canvas functions
     const update = () => {
       //updating all asteroid positions
-      for (let asteroid of Asteroids) {
-        asteroid.update();
-      }
+      // for (let asteroid of Asteroids) {
+      //   asteroid.update();
+      // }
     };
 
     const draw = (_ctx: CanvasRenderingContext2D) => {
@@ -147,7 +176,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const loop = (_ctx: CanvasRenderingContext2D) => {
       update();
       draw(_ctx);
-      req = requestAnimationFrame(() => {
+      reqAnimFrame = requestAnimationFrame(() => {
         loop(_ctx);
       });
     };
@@ -164,7 +193,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
       return () => {
         //cancel requested animation
-        cancelAnimationFrame(req);
+        cancelAnimationFrame(reqAnimFrame);
 
         //deregister networking messages----------------------------------------------
         inNetworkingManager?.off(
@@ -175,6 +204,11 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         inNetworkingManager?.off(
           Message.TIMInteractableData.toString(),
           handleTIMInteractableData
+        );
+
+        inNetworkingManager?.off(
+          Message.TIMInteractableUpdate.toString(),
+          handleTIMInteractableUpdate
         );
       };
     }
@@ -283,8 +317,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     let Inputs: FTIMInputEvent[] = [];
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputEvents(Inputs);
-
-    // console.log(x, " ", y);
   };
 
   return (
