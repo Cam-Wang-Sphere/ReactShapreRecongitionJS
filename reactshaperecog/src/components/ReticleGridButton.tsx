@@ -64,7 +64,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   }, []);
 
   return (
-    <SimpleGrid columns={2} spacing={8} mt="80%">
+    <SimpleGrid columns={2} spacing={8} mt="50%">
       {Icons.map((Icon, index) => (
         <Box
           key={index}

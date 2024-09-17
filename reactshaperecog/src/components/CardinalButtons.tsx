@@ -52,7 +52,7 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
       // animation={spinAnimation}
       animate={{ rotate: 45, scale: 1.1 }}
       m="50px"
-      mt="90%"
+      mt="50%"
     >
       {Icons.map((Icon, index) => (
         <Box
