@@ -4,6 +4,7 @@ import { Message } from "../schema/wsschema/message";
 import { GlobalInputEnums } from "../schema/WSSchema";
 import ConnectionScreen from "./ConnectionScreen";
 import DrawingWidget from "./DrawingWidget";
+import SlashDrawingWidget from "./SlashDrawingWidget";
 import TilesInput from "./TilesInput";
 import TapnSlashInput from "./TapnSlashInput";
 import TNS from "./TNSUpdated";
@@ -48,6 +49,7 @@ const ScreenSwitcher = ({
     <TilesInput inNetworkingManager={inNetworkingManager} />,
     <RadarView inNetworkingManager={inNetworkingManager} />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
+    <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
   ];
 
   useEffect(() => {

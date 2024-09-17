@@ -46,6 +46,8 @@ export { RepeaterBroadcastBinaryResponse } from './wsschema/repeater-broadcast-b
 export { RepeaterLoginRequest } from './wsschema/repeater-login-request.js';
 export { ShapeRequest } from './wsschema/shape-request.js';
 export { ShapeResponse } from './wsschema/shape-response.js';
+export { SlashRequest } from './wsschema/slash-request.js';
+export { SlashResponse } from './wsschema/slash-response.js';
 export { TIMHitEvent } from './wsschema/timhit-event.js';
 export { TIMInputEvent } from './wsschema/timinput-event.js';
 export { TIMInputInteractable } from './wsschema/timinput-interactable.js';

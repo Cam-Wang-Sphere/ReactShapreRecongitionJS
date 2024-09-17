@@ -8,5 +8,6 @@ export enum GlobalInputEnums {
   Buttons = 4,
   TapAsteroid = 5,
   PointTap = 6,
-  Max = 7
+  Slash = 7,
+  Max = 8
 }

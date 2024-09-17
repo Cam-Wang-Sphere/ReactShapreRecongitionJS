@@ -38,6 +38,8 @@ import { RepeaterBroadcastBinaryResponse } from '../wsschema/repeater-broadcast-
 import { RepeaterLoginRequest } from '../wsschema/repeater-login-request.js';
 import { ShapeRequest } from '../wsschema/shape-request.js';
 import { ShapeResponse } from '../wsschema/shape-response.js';
+import { SlashRequest } from '../wsschema/slash-request.js';
+import { SlashResponse } from '../wsschema/slash-response.js';
 import { TIMHitEvent } from '../wsschema/timhit-event.js';
 import { TIMInputInteractable } from '../wsschema/timinput-interactable.js';
 import { TIMInteractableData } from '../wsschema/timinteractable-data.js';
@@ -82,36 +84,38 @@ export enum Message {
   LateConnectPayloadResponse = 25,
   ShapeRequest = 26,
   ShapeResponse = 27,
-  PlayerNameRequest = 28,
-  PlayerNameResponse = 29,
-  PhaseResponse = 30,
-  GlobalInputResponse = 31,
-  PlayerScoreResponse = 32,
-  PointTapRequest = 33,
-  PointTapResetRequest = 34,
-  TIMPlayerInput = 35,
-  TIMMappedAreaAdd = 36,
-  TIMMappedAreaUpdate = 37,
-  TIMMappedAreaRemoved = 38,
-  TIMInteractableData = 39,
-  TIMInteractableUpdate = 40,
-  TIMInteractableDestroyed = 41,
-  TIMHitEvent = 42,
-  TIMInputInteractable = 43,
-  TIMPlayerInputInteractable = 44,
-  AdminSetBotCount = 45,
-  AdminSetInputType = 46,
-  AdminStartGame = 47,
-  AdminSkipPhase = 48,
-  AdminModifyAsteroidSpeed = 49,
-  AdminModifyAsteroidHealth = 50,
-  AdminSetStartingPhase = 51
+  SlashRequest = 28,
+  SlashResponse = 29,
+  PlayerNameRequest = 30,
+  PlayerNameResponse = 31,
+  PhaseResponse = 32,
+  GlobalInputResponse = 33,
+  PlayerScoreResponse = 34,
+  PointTapRequest = 35,
+  PointTapResetRequest = 36,
+  TIMPlayerInput = 37,
+  TIMMappedAreaAdd = 38,
+  TIMMappedAreaUpdate = 39,
+  TIMMappedAreaRemoved = 40,
+  TIMInteractableData = 41,
+  TIMInteractableUpdate = 42,
+  TIMInteractableDestroyed = 43,
+  TIMHitEvent = 44,
+  TIMInputInteractable = 45,
+  TIMPlayerInputInteractable = 46,
+  AdminSetBotCount = 47,
+  AdminSetInputType = 48,
+  AdminStartGame = 49,
+  AdminSkipPhase = 50,
+  AdminModifyAsteroidSpeed = 51,
+  AdminModifyAsteroidHealth = 52,
+  AdminSetStartingPhase = 53
 }
 
 export function unionToMessage(
   type: Message,
-  accessor: (obj:AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
-): AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+  accessor: (obj:AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null
+): AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(new PingServerRequest())! as PingServerRequest;
@@ -141,6 +145,8 @@ export function unionToMessage(
     case 'LateConnectPayloadResponse': return accessor(new LateConnectPayloadResponse())! as LateConnectPayloadResponse;
     case 'ShapeRequest': return accessor(new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(new ShapeResponse())! as ShapeResponse;
+    case 'SlashRequest': return accessor(new SlashRequest())! as SlashRequest;
+    case 'SlashResponse': return accessor(new SlashResponse())! as SlashResponse;
     case 'PlayerNameRequest': return accessor(new PlayerNameRequest())! as PlayerNameRequest;
     case 'PlayerNameResponse': return accessor(new PlayerNameResponse())! as PlayerNameResponse;
     case 'PhaseResponse': return accessor(new PhaseResponse())! as PhaseResponse;
@@ -171,9 +177,9 @@ export function unionToMessage(
 
 export function unionListToMessage(
   type: Message, 
-  accessor: (index: number, obj:AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
+  accessor: (index: number, obj:AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest) => AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null, 
   index: number
-): AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
+): AdminModifyAsteroidHealth|AdminModifyAsteroidSpeed|AdminSetBotCount|AdminSetInputType|AdminSetStartingPhase|AdminSkipPhase|AdminStartGame|ClientLoginRequest|ClientLoginResponse|GenericBatchRequest|GenericBatchResponse|GlobalInputResponse|JsonToBinaryRequest|JsonToBinaryResponse|LateConnectPayloadRequest|LateConnectPayloadResponse|MediaPlaneLoginRequest|MobileToMediaPlaneLoginRequest|MobileToMediaPlaneLogoutRequest|PhaseResponse|PingMediaPlaneRequest|PingMediaPlaneResponse|PingMediaPlaneUnreliableRequest|PingMediaPlaneUnreliableResponse|PingServerRequest|PingServerResponse|PingServerUnreliableRequest|PingServerUnreliableResponse|PlayerNameRequest|PlayerNameResponse|PlayerScoreResponse|PointTapRequest|PointTapResetRequest|RepeaterBinaryResponse|RepeaterBroadcastBinaryResponse|RepeaterLoginRequest|ShapeRequest|ShapeResponse|SlashRequest|SlashResponse|TIMHitEvent|TIMInputInteractable|TIMInteractableData|TIMInteractableDestroyed|TIMInteractableUpdate|TIMMappedAreaAdd|TIMMappedAreaRemoved|TIMMappedAreaUpdate|TIMPlayerInput|TIMPlayerInputInteractable|WebClientLoginRequest|WebClientLoginResponse|WebClientLogoutRequest|null {
   switch(Message[type]) {
     case 'NONE': return null; 
     case 'PingServerRequest': return accessor(index, new PingServerRequest())! as PingServerRequest;
@@ -203,6 +209,8 @@ export function unionListToMessage(
     case 'LateConnectPayloadResponse': return accessor(index, new LateConnectPayloadResponse())! as LateConnectPayloadResponse;
     case 'ShapeRequest': return accessor(index, new ShapeRequest())! as ShapeRequest;
     case 'ShapeResponse': return accessor(index, new ShapeResponse())! as ShapeResponse;
+    case 'SlashRequest': return accessor(index, new SlashRequest())! as SlashRequest;
+    case 'SlashResponse': return accessor(index, new SlashResponse())! as SlashResponse;
     case 'PlayerNameRequest': return accessor(index, new PlayerNameRequest())! as PlayerNameRequest;
     case 'PlayerNameResponse': return accessor(index, new PlayerNameResponse())! as PlayerNameResponse;
     case 'PhaseResponse': return accessor(index, new PhaseResponse())! as PhaseResponse;

@@ -4,18 +4,11 @@
     "module": "commonjs",
     "strict": true,
     "outDir": "./src/generated",
-    "rootDir": "./src",
+    "rootDir": "./src/schema",
     "sourceMap": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
   },
   "compileOnSave": false,
   "include": [
-    "./src/schema/*.ts",
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./src/types/declarations.d.ts"
+      "./src/schema/*.ts"
   ]
 }
