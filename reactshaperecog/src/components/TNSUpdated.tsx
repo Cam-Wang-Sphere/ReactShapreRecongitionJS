@@ -71,16 +71,13 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
-
-      console.log("asteroid (handle: " + handle + ") location:");
-      console.log(location);
+      // console.log("asteroid (handle: " + handle + ") location:");
+      // console.log(location);
       location.x *= canvasWidth;
       location.y *= canvasHeight;
-      // location.x = location.x * -1 * canvasWidth;
-      // location.y = location.y * -1 * canvasHeight;
+
       for (let asteroid of Asteroids) {
         asteroid.handle === handle && asteroid.updatePosition(location);
-        // console.log(handle, ": ", location);
       }
     };
 
@@ -91,17 +88,16 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let handle: number = +inTIMInteractableDestroyed;
       Asteroids.forEach((asteroid, index) => {
         if (asteroid.handle === handle) {
-          //check destroyed
-          // let newArr = Asteroids.filter((ele, ind) => ind !== index);
-          // Asteroids = newArr;
+          let newArr = Asteroids.filter((ele, ind) => ind !== index);
+          Asteroids = newArr;
         }
       });
-      // console.log(
-      //   "Asteroid (handle: " +
-      //     handle +
-      //     ") Destroyed. Total asteroids: " +
-      //     Asteroids.length
-      // );
+      console.log(
+        "Asteroid (handle: " +
+          handle +
+          ") Destroyed. Total asteroids: " +
+          Asteroids.length
+      );
     };
 
     inNetworkingManager?.on(
@@ -139,9 +135,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         this.y = _y;
         this.size = 20;
         this.tag = _tag;
-        _tag === "Small" && (this.size = 20);
-        _tag === "Medium" && (this.size = 35);
-        _tag === "Large" && (this.size = 50);
+        _tag === "Small" && (this.size = 15);
+        _tag === "Medium" && (this.size = 30);
+        _tag === "Large" && (this.size = 45);
         this.handle = _handle;
 
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
@@ -155,12 +151,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       updatePosition(pos: Vector2) {
         this.x = pos.x;
         this.y = pos.y;
-        // this.x += this.speedx;
-        // this.y += this.speedy;
-        // (this.x >= canvasWidth - borderWidth || this.x < borderWidth) &&
-        //   (this.x = borderWidth); //border width
-        // (this.y >= canvasHeight - borderWidth || this.y < borderWidth) &&
-        //   (this.y = Math.floor(Math.random() * canvasHeight));
       }
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
