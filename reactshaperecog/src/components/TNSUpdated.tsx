@@ -57,7 +57,12 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
       Asteroids.push(new Asteroid(100, 100, tag, handle));
-      console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
+      console.log(
+        "New Asteroid Spawned (handle: " +
+          handle +
+          "). Total asteroids: " +
+          Asteroids.length
+      );
     };
 
     //if the handle of asteroid matches, update location
@@ -66,6 +71,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
+
+      console.log("asteroid (handle: " + handle + ") location:");
+      console.log(location);
       location.x *= canvasWidth;
       location.y *= canvasHeight;
       // location.x = location.x * -1 * canvasWidth;
@@ -83,11 +91,17 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let handle: number = +inTIMInteractableDestroyed;
       Asteroids.forEach((asteroid, index) => {
         if (asteroid.handle === handle) {
-          let newArr = Asteroids.filter((ele, ind) => ind !== index);
-          Asteroids = newArr;
+          //check destroyed
+          // let newArr = Asteroids.filter((ele, ind) => ind !== index);
+          // Asteroids = newArr;
         }
       });
-      console.log("Asteroid Destroyed. Total asteroids: " + Asteroids.length);
+      // console.log(
+      //   "Asteroid (handle: " +
+      //     handle +
+      //     ") Destroyed. Total asteroids: " +
+      //     Asteroids.length
+      // );
     };
 
     inNetworkingManager?.on(

@@ -6,6 +6,8 @@ import ConnectionScreen from "./ConnectionScreen";
 import DrawingWidget from "./DrawingWidget";
 import SlashDrawingWidget from "./SlashDrawingWidget";
 import TilesInput from "./TilesInput";
+import ReticleGridButton from "./ReticleGridButton";
+import CardinalButtons from "./CardinalButtons";
 import TapnSlashInput from "./TapnSlashInput";
 import TNS from "./TNSUpdated";
 import RadarView from "./RadarViewInput";
@@ -46,7 +48,8 @@ const ScreenSwitcher = ({
       inNetworkingManager={inNetworkingManager}
       inRecognizer={inSSDollarRecognizer}
     />,
-    <TilesInput inNetworkingManager={inNetworkingManager} />,
+    <ReticleGridButton inNetworkingManager={inNetworkingManager} />,
+    <CardinalButtons inNetworkingManager={inNetworkingManager} />,
     <RadarView inNetworkingManager={inNetworkingManager} />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
