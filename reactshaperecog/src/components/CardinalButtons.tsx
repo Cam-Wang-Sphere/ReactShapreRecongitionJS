@@ -24,11 +24,11 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
     setSelectedIndex(-1);
   }
 
-  const spin = keyframes`
-    from {transform:  scale(1.1) rotate(45deg); }
-    to {transform:  scale(1.1) rotate(45deg); }
-  `;
-  const spinAnimation = `${spin} infinite 1s linear`;
+  // const spin = keyframes`
+  //   from {transform:  scale(1.1) rotate(45deg); }
+  //   to {transform:  scale(1.1) rotate(45deg); }
+  // `;
+  // const spinAnimation = `${spin} infinite 1s linear`;
 
   const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
@@ -68,7 +68,7 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
             scale: selectedIndex === index ? 0.9 : 1.0,
             opacity: selectedIndex === index ? 0.2 : 1,
           }}
-          borderRadius="500px"
+          borderRadius="120px"
           onClick={() => handleButtonClick(index)}
         >
           {Icon}
