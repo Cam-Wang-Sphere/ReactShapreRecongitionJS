@@ -76,30 +76,27 @@ const App = () => {
 
   // networking function
   // to be passed in as a prop to a component
-  const connectToServer = (address: string) => 
-  {
-    if (!networkingManager)
-    {
+  const connectToServer = (address: string) => {
+    if (!networkingManager) {
       const newNetworkingManager = new NetworkingManager(address);
       newNetworkingManager
-      .connect()
-      .then(() => {
-        setNetworkingManager(newNetworkingManager);
-        console.log("set networking manager");
-      })
-      .catch(() => {
-        console.log("failed to connect");
-      });
-    }
-    else
-    {
-      networkingManager.connect()
-      .then(() => {
-        console.log("reconnected");
-      })
-      .catch(() => {
-        console.log("failed to connect since already connected");
-      });
+        .connect()
+        .then(() => {
+          setNetworkingManager(newNetworkingManager);
+          console.log("set networking manager");
+        })
+        .catch(() => {
+          console.log("failed to connect");
+        });
+    } else {
+      networkingManager
+        .connect()
+        .then(() => {
+          console.log("reconnected");
+        })
+        .catch(() => {
+          console.log("failed to connect since already connected");
+        });
     }
   };
 
@@ -109,10 +106,11 @@ const App = () => {
     "Connection/Name",
     "Tap n Slash",
     "Draw",
-    "Tiles",
+    "Button Grid",
+    "Button Cardinal",
     "Radar View",
     "Point Tap",
-    "Slash"
+    "Slash",
   ];
 
   // Initialization when the component
