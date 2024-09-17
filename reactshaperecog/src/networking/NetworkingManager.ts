@@ -1,5 +1,6 @@
 import * as flatbuffers from 'flatbuffers';
 import { ShapeRequest } from './../schema/wsschema/shape-request';
+import { SlashRequest } from './../schema/wsschema/slash-request';
 import { TypeWrapper } from '../schema/wsschema/type-wrapper';
 import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
@@ -71,6 +72,26 @@ export class NetworkingManager extends BaseNetworkingManager {
         TypeWrapper.startTypeWrapper(builder);
         TypeWrapper.addMessageType(builder, Message.ShapeRequest);
         TypeWrapper.addMessage(builder, builtShapeRequest);
+        const BuiltTypeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(BuiltTypeWrapper);
+        const buf = builder.asUint8Array();
+        
+        this.socket?.send(buf);
+    }
+
+    public sendSlashRequest = (slashInt : number) => 
+    {
+        const builder = new flatbuffers.Builder(256);
+
+        SlashRequest.startSlashRequest(builder);
+        SlashRequest.addSlashId(builder, slashInt);
+        SlashRequest.addSessionId(builder, this.sessionId);
+        const builtSlashRequest = ShapeRequest.endShapeRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.SlashRequest);
+        TypeWrapper.addMessage(builder, builtSlashRequest);
         const BuiltTypeWrapper = TypeWrapper.endTypeWrapper(builder);
 
         builder.finish(BuiltTypeWrapper);

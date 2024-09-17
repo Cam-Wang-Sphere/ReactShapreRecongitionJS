@@ -253,7 +253,7 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
 
     if (slashTypeVal != SlashEnum.Slash_NONE) 
     {
-      inNetworkingManager?.sendShapeRequest(slashTypeVal);
+      inNetworkingManager?.sendSlashRequest(slashTypeVal);
       setDrawResult(slashTypeName);
     } else {
       setDrawResult("No Match.");
