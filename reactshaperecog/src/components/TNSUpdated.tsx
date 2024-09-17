@@ -7,7 +7,8 @@ import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import { FTIMMappedArea } from "../TIM/TIMMappedArea";
 import { Message } from "../schema/WSSchema";
 import { FTIMInteractableData } from "../TIM/TIMInteractableData";
-// import { TIMInteractableDestroyed } from "../TIM/TIMInteractableDestroyed";
+import { TIMInteractableDestroyed } from "../schema/WSSchema";
+import { forEach } from "lodash";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -56,7 +57,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
       Asteroids.push(new Asteroid(100, 100, tag, handle));
-      console.log("spawn new asteroid");
+      console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
     };
 
     //if the handle of asteroid matches, update location
@@ -65,14 +66,28 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
-      // location.x *= canvasWidth;
-      // location.y *= canvasHeight;
-      location.x = location.x * -1 * canvasWidth;
-      location.y = location.y * -1 * canvasHeight;
+      location.x *= canvasWidth;
+      location.y *= canvasHeight;
+      // location.x = location.x * -1 * canvasWidth;
+      // location.y = location.y * -1 * canvasHeight;
       for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.update(location);
+        asteroid.handle === handle && asteroid.updatePosition(location);
         // console.log(handle, ": ", location);
       }
+    };
+
+    //removing destroyed asteroid from array
+    const handleTIMInteractableDestroyed = (
+      inTIMInteractableDestroyed: TIMInteractableDestroyed
+    ): void => {
+      let handle: number = +inTIMInteractableDestroyed;
+      Asteroids.forEach((asteroid, index) => {
+        if (asteroid.handle === handle) {
+          let newArr = Asteroids.filter((ele, ind) => ind !== index);
+          Asteroids = newArr;
+        }
+      });
+      console.log("Asteroid Destroyed. Total asteroids: " + Asteroids.length);
     };
 
     inNetworkingManager?.on(
@@ -89,6 +104,11 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       handleTIMInteractableUpdate
     );
 
+    inNetworkingManager?.on(
+      Message.TIMInteractableDestroyed.toString(),
+      handleTIMInteractableDestroyed
+    );
+
     //Asteroid class----------------------------------------------------------------
     class Asteroid {
       x: number;
@@ -103,11 +123,11 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       constructor(_x: number, _y: number, _tag: string, _handle: number) {
         this.x = _x;
         this.y = _y;
-        this.size = 15;
+        this.size = 20;
         this.tag = _tag;
-        _tag === "small" && (this.size = 25);
-        _tag === "medium" && (this.size = 35);
-        _tag === "large" && (this.size = 45);
+        _tag === "Small" && (this.size = 20);
+        _tag === "Medium" && (this.size = 35);
+        _tag === "Large" && (this.size = 50);
         this.handle = _handle;
 
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
@@ -118,7 +138,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           b: Math.floor(Math.random() * 255),
         };
       }
-      update(pos: Vector2) {
+      updatePosition(pos: Vector2) {
         this.x = pos.x;
         this.y = pos.y;
         // this.x += this.speedx;
