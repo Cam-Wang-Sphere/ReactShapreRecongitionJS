@@ -216,12 +216,12 @@ const App = () => {
         <GridItem
           area="Main"
           rowStart={_index === 2 ? 2 : 3}
+          // rowStart={_index === 2 ? 2 : 3}
           // rowEnd={14}
           colSpan={5}
           alignItems={"center"}
-          // h="75vh"
-          h={isLandscape ? "80vh" : "75vh"}
-          w={isLandscape ? "95vw" : "100%"}
+          h={isLandscape ? "80vh" : "50vh"}
+          // w={isLandscape ? "95vw" : "100%"}
           mt={isLandscape ? "-2%" : "0"}
         >
           <ScreenSwitcher

@@ -18,7 +18,6 @@ interface TapnSlashProps {
 let color = { r: 173, g: 179, b: 175 }; // color for the frame
 let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
-const borderWidth = 20;
 let reqAnimFrame = 0;
 // let canvas = HTMLCanvasElement;
 
@@ -32,12 +31,13 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
+  let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
+    canvasWidth = HTMLcanvas.width;
+    canvasHeight = HTMLcanvas.height;
+  };
+
   useEffect(() => {
-    let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
-      canvasWidth = HTMLcanvas.width;
-      canvasHeight = HTMLcanvas.height;
-    };
-    //update canvas size when screen orientation changes
+    //update canvas size when screen orientation changes----------------------------
     const resizeEvent = window.addEventListener("resize", () => {
       const orientationType = window.screen.orientation.type;
       orientationType === "landscape-primary"
@@ -46,6 +46,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
       if (canvasRef.current) {
         updateCanvasSize(canvasRef.current);
+        canvasRect.current = canvasRef.current.getBoundingClientRect();
       }
     });
 
@@ -65,13 +66,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       // let scale = inTIMInteractableData.scale;
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
-      Asteroids.push(new Asteroid(100, 100, tag, handle));
-      console.log(
-        "New Asteroid Spawned). Total asteroids: " + Asteroids.length
-      );
-      // console.log(scale);
+      Asteroids.push(new Asteroid(-50, -50, tag, handle));
+      console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
     };
-    // console.log(canvasWidth);
 
     //if the handle of asteroid matches, update location
     const handleTIMInteractableUpdate = (
@@ -84,6 +81,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
       for (let asteroid of Asteroids) {
         asteroid.handle === handle && asteroid.updatePosition(location);
+        asteroid.handle === handle && asteroid.showTapState();
       }
     };
 
@@ -98,12 +96,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           Asteroids = newArr;
         }
       });
-      console.log(
-        "Asteroid (handle: " +
-          handle +
-          ") Destroyed. Total asteroids: " +
-          Asteroids.length
-      );
+      console.log("Asteroid Destroyed. Total asteroids: " + Asteroids.length);
     };
 
     inNetworkingManager?.on(
@@ -132,8 +125,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       size: number; //radius
       tag: string; //small, medium, large
       handle: number; //ID of asteroid
-      // speedx: number;
-      // speedy: number;
+
       color: { r: number; g: number; b: number };
 
       constructor(_x: number, _y: number, _tag: string, _handle: number) {
@@ -145,9 +137,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         _tag === "Medium" && (this.size = 30);
         _tag === "Large" && (this.size = 45);
         this.handle = _handle;
-
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-        // this.speedy = Math.random() * (3 - 1.2) + 1.2;
+
         this.color = {
           r: Math.floor(Math.random() * 255),
           g: Math.floor(Math.random() * 255),
@@ -158,6 +149,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         this.x = pos.x;
         this.y = pos.y;
       }
+
+      showTapState() {}
+
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
         _ctx.fillStyle = `rgb(${this.color.r} ${this.color.g} ${this.color.b})`;
@@ -189,7 +183,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         asteroid.draw(_ctx);
       }
 
-      //frame- canvas outline
+      //draw canvas frame/outline every frame
       _ctx.beginPath();
       _ctx.lineWidth = 10;
       _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
@@ -214,8 +208,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         canvasRect.current = canvas.getBoundingClientRect();
         updateCanvasSize(canvas);
         loop(ctx);
-        // canvasWidth = canvas.width;
-        // canvasHeight = canvas.height;
       }
     }
 
@@ -380,9 +372,12 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchEnd={endDrawing}
           onTouchMove={draw}
           ref={canvasRef}
-          height={window.innerHeight * 0.85}
+          // height={window.innerHeight * 0.85} // TO DO--------------
+          height={
+            isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
+          }
           width={
-            isLandscape ? window.innerWidth * 0.92 : window.innerWidth * 0.8
+            isLandscape ? window.innerWidth * 0.95 : window.innerWidth * 0.8 // TO DO--------------
           }
         />
       </GridItem>

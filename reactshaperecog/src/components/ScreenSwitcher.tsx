@@ -64,7 +64,6 @@ const ScreenSwitcher = ({
       Message.GlobalInputResponse.toString(),
       handleGlobalInputResponse
     );
-
     // cleaning up
     return () => {
       inNetworkingManager?.off(
@@ -77,10 +76,12 @@ const ScreenSwitcher = ({
   return (
     <div>
       <HStack justifyContent="space-evenly">
-        <ScoreWidget
-          inNetworkingManager={inNetworkingManager}
-          inPlayerData={inPlayerData}
-        />
+        {inSelectedIndex != 2 && (
+          <ScoreWidget
+            inNetworkingManager={inNetworkingManager}
+            inPlayerData={inPlayerData}
+          />
+        )}
       </HStack>
       {inputTypes[inSelectedIndex]}
     </div>
