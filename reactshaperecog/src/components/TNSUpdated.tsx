@@ -33,6 +33,10 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   const [isLandscape, setIsLandscape] = useState(false);
 
   useEffect(() => {
+    let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
+      canvasWidth = HTMLcanvas.width;
+      canvasHeight = HTMLcanvas.height;
+    };
     //update canvas size when screen orientation changes
     const resizeEvent = window.addEventListener("resize", () => {
       const orientationType = window.screen.orientation.type;
@@ -44,11 +48,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         updateCanvasSize(canvasRef.current);
       }
     });
-
-    let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
-      canvasWidth = HTMLcanvas.width;
-      canvasHeight = HTMLcanvas.height;
-    };
 
     //networking message handlers---------------------------------------------------
 
