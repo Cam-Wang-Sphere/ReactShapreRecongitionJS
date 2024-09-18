@@ -9,6 +9,6 @@ var ButtonTypeEnum;
     ButtonTypeEnum[ButtonTypeEnum["Reticle2"] = 2] = "Reticle2";
     ButtonTypeEnum[ButtonTypeEnum["Reticle3"] = 3] = "Reticle3";
     ButtonTypeEnum[ButtonTypeEnum["Reticle4"] = 4] = "Reticle4";
-    ButtonTypeEnum[ButtonTypeEnum["MAX"] = 5] = "MAX";
+    ButtonTypeEnum[ButtonTypeEnum["Max"] = 5] = "Max";
 })(ButtonTypeEnum || (exports.ButtonTypeEnum = ButtonTypeEnum = {}));
 //# sourceMappingURL=button-type-enum.js.map

@@ -6,5 +6,5 @@ export enum ButtonTypeEnum {
   Reticle2 = 2,
   Reticle3 = 3,
   Reticle4 = 4,
-  MAX = 5
+  Max = 5
 }
