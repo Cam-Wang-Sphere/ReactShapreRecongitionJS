@@ -9,6 +9,8 @@ import SvgDiamondReticle from "../assets/Icons/DiamondReticle.tsx";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
+import { EButtonTypeEnum } from "../schema/ebutton-type-enum.ts";
+
 const Icons = [
   <SvgSquareReticle />,
   <SvgTriangleReticle />,
@@ -34,15 +36,18 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
 
   const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
-    inNetworkingManager?.sendShapeRequest(index);
     console.log("selected index = ", index);
+
+    const correspondingButton: EButtonTypeEnum = index + 1;
+    inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
+
     DelayAction();
   };
 
   // react method for sending index...
   useEffect(() => {
     return () => {
-      inNetworkingManager?.sendShapeRequest(selectedIndex);
+      inNetworkingManager?.sendButtonTypeRequest(selectedIndex);
     };
   }, []);
 

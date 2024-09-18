@@ -31,6 +31,8 @@ import { Point } from '../Template/Recognizer';
 import { PointTapRequest } from '../schema/WSSchema';
 import { PointTapResetRequest } from '../schema/WSSchema';
 import { FTIMInputInteractable } from '../TIM/TIMInputInteractable';
+import { EButtonTypeEnum } from '../schema/ebutton-type-enum';
+import { ButtonRequest } from '../schema/WSSchema';
 
 // similar to ENET client overrides.
 // just create the senders / message handlers here.
@@ -224,6 +226,27 @@ export class NetworkingManager extends BaseNetworkingManager {
         TypeWrapper.startTypeWrapper(builder);
         TypeWrapper.addMessageType(builder, Message.PointTapResetRequest);
         TypeWrapper.addMessage(builder, pointTapResetRequest);
+        const typeWrapper = TypeWrapper.endTypeWrapper(builder);
+
+        builder.finish(typeWrapper);
+
+        const buf = builder.asUint8Array();
+
+        this.socket?.send(buf);
+    }
+
+    public sendButtonTypeRequest = (inButton: EButtonTypeEnum) =>
+    {
+        const builder = new flatbuffers.Builder(256);
+
+        ButtonRequest.startButtonRequest(builder);
+        ButtonRequest.addSessionId(builder, this.sessionId);
+        ButtonRequest.addButtonInput(builder, inButton);
+        const buttonRequest = ButtonRequest.endButtonRequest(builder);
+
+        TypeWrapper.startTypeWrapper(builder);
+        TypeWrapper.addMessageType(builder, Message.ButtonRequest);
+        TypeWrapper.addMessage(builder, buttonRequest);
         const typeWrapper = TypeWrapper.endTypeWrapper(builder);
 
         builder.finish(typeWrapper);
