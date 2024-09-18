@@ -32,30 +32,24 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
-  //screen orientation
-  const resizeEvent = window.addEventListener("resize", () => {
-    const orientationType = window.screen.orientation.type;
-    orientationType === "landscape-primary"
-      ? setIsLandscape(true)
-      : setIsLandscape(false);
-
-    if (canvasRef.current) {
-      setCanvasSize(canvasRef.current);
-    }
-  });
-
-  let setCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
-    canvasWidth = HTMLcanvas.width;
-    canvasHeight = HTMLcanvas.height;
-
-    // canvasWidth = window.innerWidth;
-    // canvasHeight = window.innerHeight;
-
-    // console.log(canvasWidth + "," + canvasHeight);
-    // console.log(window.innerWidth + "," + window.innerHeight);
-  };
-
   useEffect(() => {
+    //update canvas size when screen orientation changes
+    const resizeEvent = window.addEventListener("resize", () => {
+      const orientationType = window.screen.orientation.type;
+      orientationType === "landscape-primary"
+        ? setIsLandscape(true)
+        : setIsLandscape(false);
+
+      if (canvasRef.current) {
+        updateCanvasSize(canvasRef.current);
+      }
+    });
+
+    let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
+      canvasWidth = HTMLcanvas.width;
+      canvasHeight = HTMLcanvas.height;
+    };
+
     //networking message handlers---------------------------------------------------
 
     //assign color of the frame
@@ -219,33 +213,33 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       if (ctx) {
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
+        updateCanvasSize(canvas);
         loop(ctx);
         // canvasWidth = canvas.width;
         // canvasHeight = canvas.height;
-        setCanvasSize(canvas);
       }
-
-      return () => {
-        //cancel requested animation
-        cancelAnimationFrame(reqAnimFrame);
-
-        //deregister networking messages----------------------------------------------
-        inNetworkingManager?.off(
-          Message.TIMMappedAreaAdd.toString(),
-          handleTIMMappedAreaAdd
-        );
-
-        inNetworkingManager?.off(
-          Message.TIMInteractableData.toString(),
-          handleTIMInteractableData
-        );
-
-        inNetworkingManager?.off(
-          Message.TIMInteractableUpdate.toString(),
-          handleTIMInteractableUpdate
-        );
-      };
     }
+
+    return () => {
+      //cancel requested animation
+      cancelAnimationFrame(reqAnimFrame);
+
+      //deregister networking messages----------------------------------------------
+      inNetworkingManager?.off(
+        Message.TIMMappedAreaAdd.toString(),
+        handleTIMMappedAreaAdd
+      );
+
+      inNetworkingManager?.off(
+        Message.TIMInteractableData.toString(),
+        handleTIMInteractableData
+      );
+
+      inNetworkingManager?.off(
+        Message.TIMInteractableUpdate.toString(),
+        handleTIMInteractableUpdate
+      );
+    };
   }, [inNetworkingManager]);
 
   const startDrawing = (
