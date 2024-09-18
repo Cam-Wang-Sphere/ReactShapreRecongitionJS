@@ -124,10 +124,6 @@ const App = () => {
     });
   }, []);
 
-  const AddTemplate = (TemplateName: string) => {
-    templateManager.SaveTemplate(TemplateName);
-  };
-
   const AddScore = (x: number) => {
     setScore(score + x);
     setScoreText("Score: " + score);
@@ -231,6 +227,7 @@ const App = () => {
             inSSDollarRecognizer={Recognizer}
             inSelectHandle={selectHandle}
             inSelectedIndex={_index}
+            inTemplateManager={templateManager}
           />
         </GridItem>
       </Grid>

@@ -18,12 +18,15 @@ import RandomPlayerDataWidget from "./../components/RandomPlayerDataWidget";
 import { HStack } from "@chakra-ui/react";
 import { WSPlayerData } from "../player/WSPlayerData";
 import PointTapInput from "./PointTapInput";
+import AddTemplateWidget from "./AddTemplate";
+import { TemplateManager } from "../Template/TemplateManager";
 
 interface ScreenSwitcherProps {
   inNetworkingManager: NetworkingManager | null;
   inSelectHandle: (index: number) => void;
   inConnectFunction: (address: string) => void; // @TODO NATHAN: Rework...
   inSSDollarRecognizer: DollarRecognizer;
+  inTemplateManager : TemplateManager;
   inSelectedIndex: number;
   inPlayerData: WSPlayerData | null;
 }
@@ -35,10 +38,18 @@ const ScreenSwitcher = ({
   inConnectFunction,
   inSSDollarRecognizer,
   inPlayerData,
+  inTemplateManager,
 }: ScreenSwitcherProps) => {
+
+  const AddTemplate = (TemplateName: string) => {
+    inTemplateManager.SaveTemplate(TemplateName);
+  };
+
   // @TODO NATHAN: MAP PLEASE !
   const inputTypes = [
-    <div></div>,
+    <AddTemplateWidget
+       AddTemplateFunction={AddTemplate}
+    />,
     <ConnectionScreen
       connectFunction={inConnectFunction}
       inConnectNetworkingManager={inNetworkingManager}
@@ -54,6 +65,8 @@ const ScreenSwitcher = ({
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
   ];
+
+
 
   useEffect(() => {
     const handleGlobalInputResponse = (inGlobalInput: EWSGlobalInputTypes) => {
