@@ -1,39 +1,22 @@
 import React, { useState } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager.ts";
-import {
-  Flex,
-  Grid,
-  GridItem,
-  Spacer,
-  Box,
-  HStack,
-  Button,
-  ButtonGroup,
-  SimpleGrid,
-  Center,
-  keyframes,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid } from "@chakra-ui/react";
 
-import {
-  ArrowUpIcon,
-  ArrowBackIcon,
-  CloseIcon,
-  AddIcon,
-  CheckIcon,
-  MinusIcon,
-} from "@chakra-ui/icons";
-
-import SvgArrow from "../assets/Icons/arrow.tsx";
-import Svgtick from "../assets/Icons/tick.tsx";
-import SvgCircle from "../assets/Icons/circle.tsx";
-import Svgtriangle from "../assets/Icons/triangle.tsx";
-import SvgLightning from "../assets/Icons/lightning.tsx";
-import SvgBow from "../assets/Icons/bow.tsx";
-import { Fade } from "@chakra-ui/react";
+import SvgSquareReticle from "../assets/Icons/SqaureReticle.tsx";
+import SvgTriangleReticle from "../assets/Icons/TriangleReticle.tsx";
+import SvgCircleReticle from "../assets/Icons/CircleReticle.tsx";
+import SvgDiamondReticle from "../assets/Icons/DiamondReticle.tsx";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-const Icons = [<SvgArrow />, <SvgBow />, <Svgtick />, <Svgtriangle />];
+const Icons = [
+  <SvgSquareReticle />,
+  <SvgTriangleReticle />,
+  <SvgCircleReticle />,
+  <SvgDiamondReticle />,
+];
+
+const colors = [];
 
 interface ReticleGridButtonProps {
   inNetworkingManager: NetworkingManager | null;

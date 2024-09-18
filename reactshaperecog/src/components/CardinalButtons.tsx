@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager.ts";
 import { Box, SimpleGrid, keyframes } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import SvgArrow from "../assets/Icons/arrow.tsx";
-import Svgtick from "../assets/Icons/tick.tsx";
-import Svgtriangle from "../assets/Icons/triangle.tsx";
-import SvgBow from "../assets/Icons/bow.tsx";
+import SvgSquareReticle from "../assets/Icons/SqaureReticle.tsx";
+import SvgTriangleReticle from "../assets/Icons/TriangleReticle.tsx";
+import SvgCircleReticle from "../assets/Icons/CircleReticle.tsx";
+import SvgDiamondReticle from "../assets/Icons/DiamondReticle.tsx";
 import { useEffect, useRef } from "react";
 
-const Icons = [<SvgArrow />, <SvgBow />, <Svgtick />, <Svgtriangle />];
+const Icons = [
+  <SvgSquareReticle />,
+  <SvgTriangleReticle />,
+  <SvgCircleReticle />,
+  <SvgDiamondReticle />,
+];
 
 interface CardinalButtonsProps {
   inNetworkingManager: NetworkingManager | null;
@@ -61,7 +66,7 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
           bgGradient="linear(to-l, #7928CA, #FF0080)"
           height="120px"
           width="120px"
-          as={motion.button}
+          as={motion.div}
           initial={false}
           animate={{
             rotate: -45,
