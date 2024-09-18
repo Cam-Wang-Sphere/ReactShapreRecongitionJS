@@ -87,9 +87,9 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
     }
   };
 
-  // Slash enums are labeled as degree anti-clockwise from polar origin <1,0>.
-  // So, Slash_E points east at 0/360 degrees, Slash_N points north at 90^d, 
-  // and Slash_SW points diagonally south-west at 225^d.
+  // Slash enums are labeled as degrees clockwise/anti-clockwise from polar origin <1,0>.
+  // So, Slash_E points east at 0 degrees, Slash_N points north at -90^d, 
+  // and Slash_SW points diagonally south-west at +135^d.
   enum SlashEnum {
     Slash_W    = 0, // ←    ±180
     Slash_NW   = 1, // ↖    -135
@@ -102,6 +102,18 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
     Slash_MAX  = 8,
     Slash_NONE = 9
   }
+  const namesArray = [
+    "Slash ←",
+    "Slash ↖",
+    "Slash ↑",
+    "Slash ↗",
+    "Slash →",
+    "Slash ↘",
+    "Slash ↓",
+    "Slash ↙",
+    "Slash MAX",
+    "Slash NONE",
+  ];
 
   function GetAngleFromPoints(points: Point[]) {
     if (points.length < 2)
@@ -119,15 +131,6 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
 
   // Return the appropriate slash enum given an angle in the range [-180,+180] degrees.
   function GetSlashTypeFromAngle(angle: number): string {
-    if (angle < 0)
-    {
-      // Do some error check here.
-    }
-    if (angle > 359)
-    {
-      // Do some error check here.
-    }
-
     let step = 45.0;
     let step_half = step / 2.0;
     
@@ -254,7 +257,7 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
     if (slashTypeVal != SlashEnum.Slash_NONE) 
     {
       inNetworkingManager?.sendSlashRequest(slashTypeVal);
-      setDrawResult(slashTypeName);
+      setDrawResult(namesArray[slashTypeVal]);
     } else {
       setDrawResult("No Match.");
     }
