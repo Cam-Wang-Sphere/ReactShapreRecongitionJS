@@ -16,10 +16,11 @@ interface TapnSlashProps {
 
 //global variables
 let color = { r: 173, g: 179, b: 175 }; // color for the frame
-let canvasWidth = window.innerHeight;
+let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 const borderWidth = 20;
 let reqAnimFrame = 0;
+// let canvas = HTMLCanvasElement;
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
@@ -34,11 +35,25 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //screen orientation
   const resizeEvent = window.addEventListener("resize", () => {
     const orientationType = window.screen.orientation.type;
-    // console.log(orientationType);
     orientationType === "landscape-primary"
       ? setIsLandscape(true)
       : setIsLandscape(false);
+
+    if (canvasRef.current) {
+      setCanvasSize(canvasRef.current);
+    }
   });
+
+  let setCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
+    canvasWidth = HTMLcanvas.width;
+    canvasHeight = HTMLcanvas.height;
+
+    // canvasWidth = window.innerWidth;
+    // canvasHeight = window.innerHeight;
+
+    // console.log(canvasWidth + "," + canvasHeight);
+    // console.log(window.innerWidth + "," + window.innerHeight);
+  };
 
   useEffect(() => {
     //networking message handlers---------------------------------------------------
@@ -54,16 +69,16 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const handleTIMInteractableData = (
       inTIMInteractableData: FTIMInteractableData
     ): void => {
+      // let scale = inTIMInteractableData.scale;
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
       Asteroids.push(new Asteroid(100, 100, tag, handle));
       console.log(
-        "New Asteroid Spawned (handle: " +
-          handle +
-          "). Total asteroids: " +
-          Asteroids.length
+        "New Asteroid Spawned). Total asteroids: " + Asteroids.length
       );
+      // console.log(scale);
     };
+    // console.log(canvasWidth);
 
     //if the handle of asteroid matches, update location
     const handleTIMInteractableUpdate = (
@@ -71,8 +86,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
-      // console.log("asteroid (handle: " + handle + ") location:");
-      // console.log(location);
       location.x *= canvasWidth;
       location.y *= canvasHeight;
 
@@ -166,10 +179,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
 
-    // for (let i = 0; i < 10; i++) {
-    //   Asteroids.push(new Asteroid(20, 20, "small"));
-    // }
-
     //canvas functions
     const update = () => {
       //updating all asteroid positions
@@ -182,18 +191,18 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       //clear canvas every frame
       _ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      //frame: canvas outline
+      //draw all asteroids
+      for (let asteroid of Asteroids) {
+        asteroid.draw(_ctx);
+      }
+
+      //frame- canvas outline
       _ctx.beginPath();
       _ctx.lineWidth = 10;
       _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
       _ctx.rect(0, 0, canvasWidth, canvasHeight);
       _ctx.stroke();
       _ctx.closePath();
-
-      //draw all asteroids
-      for (let asteroid of Asteroids) {
-        asteroid.draw(_ctx);
-      }
     };
 
     //loop through canvas functions every frame
@@ -211,8 +220,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
         loop(ctx);
-        canvasWidth = canvas.width;
-        canvasHeight = canvas.height;
+        // canvasWidth = canvas.width;
+        // canvasHeight = canvas.height;
+        setCanvasSize(canvas);
       }
 
       return () => {

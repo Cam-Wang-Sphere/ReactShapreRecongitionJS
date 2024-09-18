@@ -174,7 +174,7 @@ const App = () => {
         }}
       >
         {/* Heading------------------------------ */}
-        {!isLandscape && (
+        {/* {!isLandscape && (
           <GridItem rowSpan={1} colSpan={1} area="Heading">
             <NavMenu
               Names={namesArray}
@@ -186,15 +186,32 @@ const App = () => {
               inPlayerData={playerData}
             />
           </GridItem>
-        )}
-        {!isLandscape && (
+        )} */}
+        {/* {!isLandscape && (
           <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
             <Center>
               <Heading color={"red.500"}>PreFE</Heading>
             </Center>
           </GridItem>
-        )}
+        )} */}
 
+        <GridItem rowSpan={1} colSpan={1} area="Heading">
+          <NavMenu
+            Names={namesArray}
+            onSelect={selectHandle}
+            inSelectedIndex={_index}
+          />
+          <GameState
+            inNetworkingManager={networkingManager}
+            inPlayerData={playerData}
+          />
+        </GridItem>
+
+        <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
+          <Center>
+            <Heading color={"red.500"}>PreFE</Heading>
+          </Center>
+        </GridItem>
         {/* Main content------------------------------ */}
         <GridItem
           area="Main"
