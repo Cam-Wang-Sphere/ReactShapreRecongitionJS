@@ -60,10 +60,10 @@ const ScreenSwitcher = ({
       inRecognizer={inSSDollarRecognizer}
     />,
     <ReticleGridButton inNetworkingManager={inNetworkingManager} />,
-    <CardinalButtons inNetworkingManager={inNetworkingManager} />,
     <RadarView inNetworkingManager={inNetworkingManager} />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
+    <CardinalButtons inNetworkingManager={inNetworkingManager} />,
   ];
 
 
