@@ -247,9 +247,9 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
       }
     }
 
-    let angle = GetAngleFromPoints(pointArray);
-    let slashTypeName:string = GetSlashTypeFromAngle(angle);
-    let slashTypeVal:number = SlashEnum[slashTypeName]
+    const angle: number = GetAngleFromPoints(pointArray);
+    const slashTypeName: string = GetSlashTypeFromAngle(angle);
+    const slashTypeVal: number = SlashEnum[slashTypeName as keyof typeof SlashEnum];
 
     if (slashTypeVal != SlashEnum.Slash_NONE) 
     {
