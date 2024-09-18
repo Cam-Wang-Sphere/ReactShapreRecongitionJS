@@ -1,5 +1,5 @@
 import { BasePlayerData } from "./BasePlayerData";
-import { PhaseEnums } from '../schema/wsschema/phase-enums'
+import { EWSPhaseEnums } from "../schema/ewsphase-enums";
 
 export class WSPlayerData extends BasePlayerData
 {
@@ -9,7 +9,7 @@ export class WSPlayerData extends BasePlayerData
     }
 
     // probs shouldn't be in a player state but for the sake of demonstration
-    public getCurrentPhase(): PhaseEnums
+    public getCurrentPhase(): EWSPhaseEnums
     {
         return this.curreentPhase;
     }
@@ -24,7 +24,7 @@ export class WSPlayerData extends BasePlayerData
         this.teamId = inTeamId;
     }
 
-    public setCurrentPhase(inCurrentPhase: PhaseEnums): void
+    public setCurrentPhase(inCurrentPhase: EWSPhaseEnums): void
     {
         this.curreentPhase = inCurrentPhase;
     }
@@ -35,10 +35,10 @@ export class WSPlayerData extends BasePlayerData
     }
 
     protected teamId: number = WSPlayerData.noTeamId;
-    protected curreentPhase: PhaseEnums = WSPlayerData.defaultPhase;
+    protected curreentPhase: EWSPhaseEnums = WSPlayerData.defaultPhase;
     protected score: number = WSPlayerData.defaultScore;
 
     public static readonly noTeamId: number = -1;
-    public static readonly defaultPhase: PhaseEnums.None;
+    public static readonly defaultPhase: EWSPhaseEnums.None;
     public static readonly defaultScore: number = 0;
 }

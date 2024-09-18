@@ -6,14 +6,14 @@ import { Message } from '../schema/wsschema/message';
 import { PingServerRequest } from '../schema/wsschema/ping-server-request';
 import { ClientLoginResponse } from '../schema/wsschema/client-login-response';
 import { PhaseResponse } from '../schema/wsschema/phase-response';
-import { PhaseEnums } from '../schema/wsschema/phase-enums'
+import { EWSPhaseEnums } from '../schema/ewsphase-enums';
 import { PlayerNameRequest } from '../schema/wsschema/player-name-request';
 import { BaseNetworkingManager } from './BaseNetworkingManager';
 import { PlayerNameResponse } from '../schema/wsschema/player-name-response';
 import { TIMInputEvent } from '../schema/wsschema/timinput-event';
 import { FTIMInputEvent } from '../TIM/TIMInputEvent';
 import { TIMPlayerInput } from '../schema/wsschema/timplayer-input';
-import { ETriggerState } from '../schema/wsschema/etrigger-state';
+import { ETriggerStateSchema } from '../schema/etrigger-state-schema';
 import { TIMMappedAreaAdd } from '../schema/wsschema/timmapped-area-add';
 import { FTIMMappedArea } from '../TIM/TIMMappedArea';
 import { Vector2 } from '../TIM/Vector2';
@@ -25,7 +25,7 @@ import { TIMInteractableData } from '../schema/wsschema/timinteractable-data';
 import { FTIMInteractableData } from '../TIM/TIMInteractableData';
 import { TIMInteractableUpdate } from '../schema/wsschema/timinteractable-update';
 import { GlobalInputResponse, PlayerScoreResponse, TIMHitEvent, TIMInputInteractable, TIMInteractableDestroyed, TIMPlayerInputInteractable } from '../schema/WSSchema';
-import { GlobalInputEnums } from '../schema/WSSchema';
+import { EWSGlobalInputTypes } from '../schema/ewsglobal-input-types';
 import { FTIMHitEvent } from '../TIM/TIMHitEvent';
 import { Point } from '../Template/Recognizer';
 import { PointTapRequest } from '../schema/WSSchema';
@@ -112,7 +112,7 @@ export class NetworkingManager extends BaseNetworkingManager {
         TIMPlayerInput.startInputEventsVector(builder, inputEvents.length);
 
         inputEvents.forEach((ie: FTIMInputEvent)=>{ 
-            const eventType = ie.EventType as number as ETriggerState;
+            const eventType = ie.EventType as number as ETriggerStateSchema;
             TIMInputEvent.createTIMInputEvent(builder, 
                 ie.AreaHandle.ToInt(), 
                 ie.Index, 
@@ -277,7 +277,7 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         console.log('received phase response = ', phaseResponse.phaseId());
 
-        this.emit(Message.PhaseResponse.toString(),  PhaseEnums[phaseResponse.phaseId()]);
+        this.emit(Message.PhaseResponse.toString(),  EWSPhaseEnums[phaseResponse.phaseId()]);
     }
 
     protected handlePlayerNameResponse = (typeWrapper: TypeWrapper) =>
@@ -405,7 +405,7 @@ export class NetworkingManager extends BaseNetworkingManager {
         const globalInputResponse = new GlobalInputResponse();
         typeWrapper.message(globalInputResponse);
 
-        const inputScreenEnum: GlobalInputEnums = globalInputResponse.currentInput();
+        const inputScreenEnum: EWSGlobalInputTypes = globalInputResponse.currentInput();
 
         console.log('received global input response. Input = ', inputScreenEnum.toString());
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
 import { Message } from "../schema/wsschema/message";
-import { GlobalInputEnums } from "../schema/WSSchema";
+import { EWSGlobalInputTypes } from "../schema/ewsglobal-input-types";
 import ConnectionScreen from "./ConnectionScreen";
 import DrawingWidget from "./DrawingWidget";
 import SlashDrawingWidget from "./SlashDrawingWidget";
@@ -56,7 +56,7 @@ const ScreenSwitcher = ({
   ];
 
   useEffect(() => {
-    const handleGlobalInputResponse = (inGlobalInput: GlobalInputEnums) => {
+    const handleGlobalInputResponse = (inGlobalInput: EWSGlobalInputTypes) => {
       inSelectHandle(inGlobalInput);
     };
 

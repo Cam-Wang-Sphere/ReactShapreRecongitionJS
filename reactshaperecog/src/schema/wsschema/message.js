@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 exports.unionToMessage = unionToMessage;
 exports.unionListToMessage = unionListToMessage;
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 var admin_modify_asteroid_health_js_1 = require("../wsschema/admin-modify-asteroid-health.js");
 var admin_modify_asteroid_speed_js_1 = require("../wsschema/admin-modify-asteroid-speed.js");
 var admin_set_bot_count_js_1 = require("../wsschema/admin-set-bot-count.js");

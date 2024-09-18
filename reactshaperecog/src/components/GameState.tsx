@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { WSPlayerData } from "../player/WSPlayerData";
 import { NetworkingManager } from "../networking/NetworkingManager";
 import { Message } from "../schema/WSSchema";
-import { PhaseEnums } from "../schema/WSSchema";
+import { EWSPhaseEnums } from "../schema/ewsphase-enums";
 
 interface GameStateProps {
   inPlayerData: WSPlayerData | null;
@@ -20,7 +20,7 @@ const GameState = ({ inPlayerData, inNetworkingManager }: GameStateProps) =>
           inPlayerData?.setSessionId(inSessionId);
           console.log('set the players sessionId to = ', inSessionId, ' in the gamestate handler');
         }
-        const handlePhaseResponse = (inPhase: PhaseEnums) =>
+        const handlePhaseResponse = (inPhase: EWSPhaseEnums) =>
         {
           inPlayerData?.setCurrentPhase(inPhase);
           console.log('set the players current phase to = ', inPhase, ' in the gamestate handler');
