@@ -374,7 +374,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           ref={canvasRef}
           // height={window.innerHeight * 0.85} // TO DO--------------
           height={
-            isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
+            isLandscape ? window.innerHeight * 0.6 : window.innerHeight * 0.88
           }
           width={
             isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
