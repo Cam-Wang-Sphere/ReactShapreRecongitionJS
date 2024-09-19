@@ -364,8 +364,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchMove={draw}
           ref={canvasRef}
           // height={window.innerHeight * 0.85} // TO DO--------------
-          height={window.innerHeight}
-          width={window.innerWidth}
+          height={window.innerHeight * 0.9}
+          width={window.innerWidth * 0.9}
           // height={
           //   isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
           // }
