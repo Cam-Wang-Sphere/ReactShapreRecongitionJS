@@ -220,7 +220,7 @@ const App = () => {
           alignItems={"center"}
           h={isLandscape ? "80vh" : "50vh"}
           // w={isLandscape ? "95vw" : "100%"}
-          mt={isLandscape ? "-11%" : _index === 2 ? "-50%" : "-80%"}
+          mt={isLandscape ? "-4%" : _index === 2 ? "-25%" : "0"}
         >
           <ScreenSwitcher
             inPlayerData={playerData}
