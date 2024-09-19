@@ -256,7 +256,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
-    console.log("X: " + x + "Y: " + y);
+    // console.log("X: " + x + "Y: " + y);
 
     let Event: ETriggerEvent = ETriggerEvent.Started;
     let Pos: Vector2 = new Vector2(x, y);
@@ -377,7 +377,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
             isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
           }
           width={
-            isLandscape ? window.innerWidth * 0.95 : window.innerWidth * 0.8 // TO DO--------------
+            isLandscape ? window.innerWidth * 1 : window.innerWidth * 0.8 // TO DO--------------
           }
         />
       </GridItem>
