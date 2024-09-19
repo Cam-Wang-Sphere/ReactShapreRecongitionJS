@@ -156,6 +156,7 @@ const App = () => {
       style={{
         position: "relative",
       }}
+      bg="#1F1F1F"
     >
       <Grid
         // className="landscape"

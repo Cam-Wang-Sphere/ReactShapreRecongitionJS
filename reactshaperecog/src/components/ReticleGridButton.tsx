@@ -18,7 +18,7 @@ const Icons = [
   <SvgDiamondReticle />,
 ];
 
-const colors = [];
+const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
 
 interface ReticleGridButtonProps {
   inNetworkingManager: NetworkingManager | null;
@@ -56,12 +56,20 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
       {Icons.map((Icon, index) => (
         <Box
           key={index}
-          bg={selectedIndex === index ? "teal" : "white"}
+          // bg={selectedIndex === index ? "teal" : "#494949"}
+          bg="#494949"
           height="150px"
+          borderWidth="2px"
+          borderColor="#080808"
           borderRadius="md"
+          // boxShadow="inner"
           as={motion.div}
           whileTap={{ scale: 0.9 }}
           // transition="0.5s linear"
+          animate={{
+            scale: selectedIndex === index ? 0.9 : 1.0,
+            opacity: selectedIndex === index ? 0 : 1,
+          }}
           transition={{ transition: "0.5", ease: "linear" }}
           onClick={() => handleButtonClick(index)}
         >

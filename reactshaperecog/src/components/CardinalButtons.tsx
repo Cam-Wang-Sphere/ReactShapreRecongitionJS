@@ -15,6 +15,7 @@ const Icons = [
   <SvgCircleReticle />,
   <SvgDiamondReticle />,
 ];
+const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
 
 interface CardinalButtonsProps {
   inNetworkingManager: NetworkingManager | null;
@@ -42,7 +43,7 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
 
     const correspondingButton: EButtonTypeEnum = index + 1;
     inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
-    
+
     DelayAction();
   };
 
@@ -67,7 +68,11 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
         <Box
           key={index}
           // bg={selectedIndex === index ? "teal" : "white"}
-          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          // bgGradient="linear(to-l, #7928CA, #FF0080)"
+          // bg={colors[index]}
+          bg="#494949"
+          borderWidth="2px"
+          borderColor="#080808"
           height="120px"
           width="120px"
           as={motion.div}
@@ -75,7 +80,7 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
           animate={{
             rotate: -45,
             scale: selectedIndex === index ? 0.9 : 1.0,
-            opacity: selectedIndex === index ? 0.2 : 1,
+            opacity: selectedIndex === index ? 0 : 1,
           }}
           borderRadius="120px"
           onClick={() => handleButtonClick(index)}
