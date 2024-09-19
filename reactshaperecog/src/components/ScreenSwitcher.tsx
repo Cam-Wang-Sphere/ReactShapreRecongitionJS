@@ -89,7 +89,7 @@ const ScreenSwitcher = ({
         h="100px"
         mt="-10%"
       >
-        {inSelectedIndex != 2 && (
+        {inSelectedIndex != 2 && inSelectedIndex != 1 && (
           <ScoreWidget
             inNetworkingManager={inNetworkingManager}
             inPlayerData={inPlayerData}
