@@ -10,9 +10,10 @@ var EWSGlobalInputTypes;
     EWSGlobalInputTypes[EWSGlobalInputTypes["TapSlash"] = 2] = "TapSlash";
     EWSGlobalInputTypes[EWSGlobalInputTypes["Drawing"] = 3] = "Drawing";
     EWSGlobalInputTypes[EWSGlobalInputTypes["Buttons"] = 4] = "Buttons";
-    EWSGlobalInputTypes[EWSGlobalInputTypes["TapAsteroid"] = 5] = "TapAsteroid";
-    EWSGlobalInputTypes[EWSGlobalInputTypes["PointTap"] = 6] = "PointTap";
-    EWSGlobalInputTypes[EWSGlobalInputTypes["Slash"] = 7] = "Slash";
-    EWSGlobalInputTypes[EWSGlobalInputTypes["Max"] = 8] = "Max";
+    EWSGlobalInputTypes[EWSGlobalInputTypes["ButtonsCardinal"] = 5] = "ButtonsCardinal";
+    EWSGlobalInputTypes[EWSGlobalInputTypes["TapAsteroid"] = 6] = "TapAsteroid";
+    EWSGlobalInputTypes[EWSGlobalInputTypes["PointTap"] = 7] = "PointTap";
+    EWSGlobalInputTypes[EWSGlobalInputTypes["Slash"] = 8] = "Slash";
+    EWSGlobalInputTypes[EWSGlobalInputTypes["Max"] = 9] = "Max";
 })(EWSGlobalInputTypes || (exports.EWSGlobalInputTypes = EWSGlobalInputTypes = {}));
 //# sourceMappingURL=ewsglobal-input-types.js.map

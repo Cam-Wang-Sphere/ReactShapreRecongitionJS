@@ -107,10 +107,10 @@ const App = () => {
     "Tap n Slash",
     "Draw",
     "Button Grid",
+    "Button Cardinal",
     "Radar View",
     "Point Tap",
     "Slash",
-    "Button Cardinal",
   ];
 
   // Initialization when the component

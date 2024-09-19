@@ -8,8 +8,9 @@ export enum EWSGlobalInputTypes {
   TapSlash = 2,
   Drawing = 3,
   Buttons = 4,
-  TapAsteroid = 5,
-  PointTap = 6,
-  Slash = 7,
-  Max = 8
+  ButtonsCardinal = 5,
+  TapAsteroid = 6,
+  PointTap = 7,
+  Slash = 8,
+  Max = 9
 }
