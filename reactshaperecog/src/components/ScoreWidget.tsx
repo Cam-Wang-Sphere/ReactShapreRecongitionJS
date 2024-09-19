@@ -22,7 +22,7 @@ const ScoreWidget = ({
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
   async function DelayAction() {
-    await delay(300);
+    await delay(1000);
     setisScoreChanged(false);
   }
 

@@ -12,13 +12,6 @@ import { motion } from "framer-motion";
 
 import { EButtonTypeEnum } from "../schema/ebutton-type-enum.ts";
 
-const Icons = [
-  <SvgSquareReticle />,
-  <SvgTriangleReticle />,
-  <SvgCircleReticle />,
-  <SvgDiamondReticle />,
-];
-
 const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
 
 interface ReticleGridButtonProps {
@@ -44,12 +37,13 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   async function DelayAction() {
     await delay(200);
     setSelectedIndex(-1);
-    await delay(200);
+    await delay(800);
     setFeedbackIndex(-1);
   }
 
   const handleButtonClick = (index: number) => {
     setSelectedIndex(index);
+    setFeedbackIndex(index);
     console.log("selected index = ", index);
 
     const correspondingButton: EButtonTypeEnum = index + 1;
@@ -58,12 +52,18 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
     DelayAction();
   };
 
+  const Icons = [
+    <SvgSquareReticle />,
+    <SvgTriangleReticle />,
+    <SvgCircleReticle />,
+    <SvgDiamondReticle />,
+  ];
+
   // react method for sending index...
   useEffect(() => {
     const handleScoreEvent = (inScore: number) => {
       setisScoreChanged(true);
       getScoreDirection(inScore);
-      // console.log(isIncreasing);
       DelayAction();
     };
 
@@ -82,40 +82,101 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   }, []);
 
   return (
-    <SimpleGrid columns={2} spacing={8} mt="30%">
-      {Icons.map((Icon, index) => (
-        <Box
-          key={index}
-          // bg={selectedIndex === index ? "teal" : "#494949"}
-          // bg="#494949"
-          bg={
-            selectedIndex === index
-              ? isScoreChanged
-                ? isIncreasing
-                  ? "green"
-                  : "red"
+    <Box mt="30%" h="36vh" w="80vw">
+      <SimpleGrid
+        columns={2}
+        spacing={8}
+        h="100%"
+        w="100%"
+        style={{
+          position: "relative",
+        }}
+      >
+        {Icons.map((Icon, index) => (
+          <Box
+            key={index}
+            bg={
+              FeedbackIndex === index
+                ? isScoreChanged
+                  ? isIncreasing
+                    ? "green"
+                    : "red"
+                  : "#494949"
                 : "#494949"
-              : "#494949"
-          }
-          height="150px"
-          borderWidth="2px"
-          borderColor="#080808"
-          borderRadius="md"
-          // boxShadow="inner"
-          as={motion.div}
-          whileTap={{ scale: 0.9 }}
-          // transition="0.5s linear"
-          animate={{
-            scale: selectedIndex === index ? 0.9 : 1.0,
-            opacity: selectedIndex === index ? 0 : 1,
-          }}
-          transition={{ transition: "0.5", ease: "linear" }}
-          onClick={() => handleButtonClick(index)}
-        >
-          {Icon}
-        </Box>
-      ))}
-    </SimpleGrid>
+            }
+            height="150px"
+            borderWidth="2px"
+            borderColor="#080808"
+            borderRadius="md"
+            as={motion.div}
+            animate={{
+              scale: selectedIndex === index ? (isScoreChanged ? 20 : 1) : 1,
+              opacity: selectedIndex === index ? 0.9 : 0.3,
+            }}
+            transition="0.3s ease-out"
+          ></Box>
+        ))}
+      </SimpleGrid>
+
+      <SimpleGrid
+        columns={2}
+        spacing={8}
+        h="100%"
+        w="100%"
+        // bg="blue"
+        mt="-100%"
+        style={{
+          position: "relative",
+        }}
+      >
+        {Icons.map((Icon, index) => (
+          <Box
+            key={index}
+            // bg={selectedIndex === index ? "teal" : "#494949"}
+            // bg="#494949"
+            bg={
+              FeedbackIndex === index
+                ? isScoreChanged
+                  ? isIncreasing
+                    ? "green"
+                    : "red"
+                  : "#494949"
+                : "#494949"
+            }
+            height="150px"
+            borderWidth="2px"
+            borderColor="#080808"
+            borderRadius="md"
+            as={motion.div}
+            whileTap={{ scale: 0.9 }}
+            // transition="0.5s linear"
+            animate={{
+              scale: selectedIndex === index ? 0.9 : 1.0,
+              // opacity: selectedIndex === index ? 0.7 : 1,
+            }}
+            // transition={{ transition: "0.5", ease: "linear" }}
+            onClick={() => handleButtonClick(index)}
+          >
+            {Icon}
+            {/* <Box
+            as={motion.div}
+            bg="pink"
+            animate={{
+              scale: FeedbackIndex === index ? 5 : 1.0,
+              opacity: FeedbackIndex === index ? 0.8 : 0,
+            }}
+            transition="1s linear"
+            h="100%"
+            w="100%"
+            mt="-100%"
+            style={{
+              position: "relative",
+            }}
+          ></Box> */}
+          </Box>
+        ))}
+      </SimpleGrid>
+    </Box>
   );
 };
 
