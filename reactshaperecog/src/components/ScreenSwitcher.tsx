@@ -26,7 +26,7 @@ interface ScreenSwitcherProps {
   inSelectHandle: (index: number) => void;
   inConnectFunction: (address: string) => void; // @TODO NATHAN: Rework...
   inSSDollarRecognizer: DollarRecognizer;
-  inTemplateManager : TemplateManager;
+  inTemplateManager: TemplateManager;
   inSelectedIndex: number;
   inPlayerData: WSPlayerData | null;
 }
@@ -40,16 +40,13 @@ const ScreenSwitcher = ({
   inPlayerData,
   inTemplateManager,
 }: ScreenSwitcherProps) => {
-
   const AddTemplate = (TemplateName: string) => {
     inTemplateManager.SaveTemplate(TemplateName);
   };
 
   // @TODO NATHAN: MAP PLEASE !
   const inputTypes = [
-    <AddTemplateWidget
-       AddTemplateFunction={AddTemplate}
-    />,
+    <AddTemplateWidget AddTemplateFunction={AddTemplate} />,
     <ConnectionScreen
       connectFunction={inConnectFunction}
       inConnectNetworkingManager={inNetworkingManager}
@@ -65,8 +62,6 @@ const ScreenSwitcher = ({
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
   ];
-
-
 
   useEffect(() => {
     const handleGlobalInputResponse = (inGlobalInput: EWSGlobalInputTypes) => {
@@ -88,7 +83,12 @@ const ScreenSwitcher = ({
 
   return (
     <div>
-      <HStack justifyContent="space-evenly">
+      <HStack
+        justifyContent="space-evenly"
+        alignItems="top"
+        h="100px"
+        mt="-10%"
+      >
         {inSelectedIndex != 2 && (
           <ScoreWidget
             inNetworkingManager={inNetworkingManager}

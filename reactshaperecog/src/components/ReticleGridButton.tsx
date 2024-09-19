@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager.ts";
 import { Box, SimpleGrid } from "@chakra-ui/react";
-
+import { Message } from "../schema/wsschema/message";
+import { WSPlayerData } from "../player/WSPlayerData";
 import SvgSquareReticle from "../assets/Icons/SqaureReticle.tsx";
 import SvgTriangleReticle from "../assets/Icons/TriangleReticle.tsx";
 import SvgCircleReticle from "../assets/Icons/CircleReticle.tsx";
@@ -22,16 +23,29 @@ const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
 
 interface ReticleGridButtonProps {
   inNetworkingManager: NetworkingManager | null;
+  // inPlayerData: WSPlayerData | null;
 }
 
 const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [FeedbackIndex, setFeedbackIndex] = useState(-1);
 
+  const [isIncreasing, setisIncreasing] = useState(false);
+  const [isScoreChanged, setisScoreChanged] = useState(false);
+
+  let prevScore = 0;
+  let ScoreColor: string = "white";
+  let getScoreDirection = (score: number) => {
+    score > prevScore ? setisIncreasing(true) : setisIncreasing(false);
+    prevScore = score;
+  };
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
   async function DelayAction() {
     await delay(200);
     setSelectedIndex(-1);
+    await delay(200);
+    setFeedbackIndex(-1);
   }
 
   const handleButtonClick = (index: number) => {
@@ -46,18 +60,43 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
 
   // react method for sending index...
   useEffect(() => {
+    const handleScoreEvent = (inScore: number) => {
+      setisScoreChanged(true);
+      getScoreDirection(inScore);
+      // console.log(isIncreasing);
+      DelayAction();
+    };
+
+    inNetworkingManager?.on(
+      Message.PlayerScoreResponse.toString(),
+      handleScoreEvent
+    );
+
     return () => {
       inNetworkingManager?.sendButtonTypeRequest(selectedIndex);
+      inNetworkingManager?.off(
+        Message.PlayerScoreResponse.toString(),
+        handleScoreEvent
+      );
     };
   }, []);
 
   return (
-    <SimpleGrid columns={2} spacing={8} mt="50%">
+    <SimpleGrid columns={2} spacing={8} mt="30%">
       {Icons.map((Icon, index) => (
         <Box
           key={index}
           // bg={selectedIndex === index ? "teal" : "#494949"}
-          bg="#494949"
+          // bg="#494949"
+          bg={
+            selectedIndex === index
+              ? isScoreChanged
+                ? isIncreasing
+                  ? "green"
+                  : "red"
+                : "#494949"
+              : "#494949"
+          }
           height="150px"
           borderWidth="2px"
           borderColor="#080808"
