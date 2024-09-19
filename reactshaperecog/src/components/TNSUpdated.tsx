@@ -377,7 +377,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
             isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
           }
           width={
-            isLandscape ? window.innerWidth * 1 : window.innerWidth * 0.8 // TO DO--------------
+            isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
           }
         />
       </GridItem>
