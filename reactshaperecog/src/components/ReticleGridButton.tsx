@@ -110,10 +110,11 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
             borderRadius="md"
             as={motion.div}
             animate={{
-              scale: selectedIndex === index ? (isScoreChanged ? 20 : 1) : 1,
-              opacity: selectedIndex === index ? 0.9 : 0.3,
+              scale:
+                selectedIndex === index ? (isScoreChanged ? 20 : 0.9) : 0.9,
+              opacity: selectedIndex === index ? 1 : 0.5,
             }}
-            transition="0.3s ease-out"
+            transition="0.5s ease-out"
           ></Box>
         ))}
       </SimpleGrid>
@@ -123,7 +124,6 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
         spacing={8}
         h="100%"
         w="100%"
-        // bg="blue"
         mt="-100%"
         style={{
           position: "relative",
