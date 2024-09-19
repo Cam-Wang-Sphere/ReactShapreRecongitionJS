@@ -32,6 +32,7 @@ import NavMenu from "./components/NavMenu";
 import { WSPlayerData } from "./player/WSPlayerData";
 import GameState from "./components/GameState";
 import ScreenSwitcher from "./components/ScreenSwitcher";
+import IsConnectedWidget from "./components/IsConnectedWidget";
 
 const UserInputKey = "UserInput";
 
@@ -206,7 +207,7 @@ const App = () => {
 
         <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
           <Center>
-            <Heading color={"red.500"}>PreFE</Heading>
+            <IsConnectedWidget inNetworkingManager={networkingManager} />
           </Center>
         </GridItem>
         {/* Main content------------------------------ */}

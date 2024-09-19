@@ -16,9 +16,17 @@ export class BaseNetworkingManager extends EventEmitter {
     protected playerGuid: string = crypto.randomUUID();
     protected playerSecret: string = "NathanLovesFood";
 
+    public static readonly websocketStatusEventName: string = "websocketStatus";
+
     constructor(private url: string)
     {
         super();
+    }
+
+    public isConnected(): boolean
+    {
+        if (!this.socket) return false;
+        return this.socket.readyState === WebSocket.OPEN;
     }
 
     public sendPingServerRequest = (): void =>
@@ -69,7 +77,7 @@ export class BaseNetworkingManager extends EventEmitter {
     {
         return new Promise((resolve, reject) =>
         {
-            if (this.socket && (this.socket.OPEN || this.socket.CONNECTING))
+            if (this.socket && this.isConnected())
             {
                 alert('already connected to websocket with ip = ' + this.url);
                 reject('already connected');
@@ -86,11 +94,13 @@ export class BaseNetworkingManager extends EventEmitter {
             {
                 this.sendClientLoginRequest();
                 alert("Connected to websocket with ip = " + this.url);
+                this.emit(BaseNetworkingManager.websocketStatusEventName, true);
                 resolve();
             };
             this.socket.onerror = (error) => 
             {
                 alert("Could not connect to ip = " + this.url);
+                this.emit(BaseNetworkingManager.websocketStatusEventName, false);
                 reject(error);
             };
             this.socket.onmessage = (event) => 
@@ -100,6 +110,7 @@ export class BaseNetworkingManager extends EventEmitter {
             this.socket.onclose = () =>
             {
                 console.log('websocket connection closed');
+                this.emit(BaseNetworkingManager.websocketStatusEventName, false);
             };
         })
     };
