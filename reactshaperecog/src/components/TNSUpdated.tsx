@@ -350,16 +350,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         position: "relative",
       }}
     >
-      <GridItem
-        area="TapRegion"
-        style={{
-          position: "relative",
-        }}
-        h="100%"
-        w="100%"
-        rowStart={1}
-        colStart={1}
-      >
+      <GridItem area="TapRegion" rowStart={1} colStart={1}>
         <canvas
           style={{
             position: "relative",
@@ -373,12 +364,14 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchMove={draw}
           ref={canvasRef}
           // height={window.innerHeight * 0.85} // TO DO--------------
-          height={
-            isLandscape ? window.innerHeight * 0.6 : window.innerHeight * 0.88
-          }
-          width={
-            isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
-          }
+          height={window.innerHeight}
+          width={window.innerWidth}
+          // height={
+          //   isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
+          // }
+          // width={
+          //   isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
+          // }
         />
       </GridItem>
     </Grid>
