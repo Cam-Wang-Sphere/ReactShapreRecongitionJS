@@ -33,6 +33,7 @@ import { WSPlayerData } from "./player/WSPlayerData";
 import GameState from "./components/GameState";
 import ScreenSwitcher from "./components/ScreenSwitcher";
 import IsConnectedWidget from "./components/IsConnectedWidget";
+import SuccessOverlay from "./components/SuccessOverlay";
 
 const UserInputKey = "UserInput";
 
@@ -239,6 +240,7 @@ const App = () => {
             inSelectedIndex={_index}
             inTemplateManager={templateManager}
           />
+          <SuccessOverlay inPlayerData={playerData} />
         </GridItem>
       </Grid>
     </Container>
