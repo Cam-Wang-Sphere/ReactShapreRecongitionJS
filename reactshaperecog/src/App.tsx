@@ -223,7 +223,7 @@ const App = () => {
           mt={
             isLandscape
               ? _index === 2
-                ? "-15%"
+                ? "-14%"
                 : "-4%"
               : _index === 2
               ? "-25%"
