@@ -77,7 +77,7 @@ const ScoreWidget = ({
 
   return (
     <div>
-      {/* <SuccessOverlay inPlayerData={inPlayerData} /> */}
+      <SuccessOverlay inPlayerData={inPlayerData} />
       <VStack justifyContent="center" gap="-5px">
         <Text fontSize="lg" color="#868686">
           Score:

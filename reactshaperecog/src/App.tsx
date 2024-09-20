@@ -240,7 +240,7 @@ const App = () => {
             inSelectedIndex={_index}
             inTemplateManager={templateManager}
           />
-          <SuccessOverlay inPlayerData={playerData} />
+          {/* <SuccessOverlay inPlayerData={playerData} /> */}
         </GridItem>
       </Grid>
     </Container>
