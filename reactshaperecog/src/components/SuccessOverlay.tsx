@@ -36,6 +36,9 @@ const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
         return;
       }
 
+      // don't play anything if no change happened
+      if (newScore == oldScore) return;
+
       // playing haptics if possible
       if (navigator.vibrate) 
       {
