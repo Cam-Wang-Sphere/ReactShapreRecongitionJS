@@ -47,13 +47,6 @@ const CardinalButtons = ({ inNetworkingManager }: CardinalButtonsProps) => {
     DelayAction();
   };
 
-  // react method for sending index...
-  useEffect(() => {
-    return () => {
-      inNetworkingManager?.sendButtonTypeRequest(selectedIndex);
-    };
-  }, []);
-
   return (
     <SimpleGrid
       as={motion.div}

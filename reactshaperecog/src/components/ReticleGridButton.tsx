@@ -59,28 +59,6 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
     <SvgDiamondReticle />,
   ];
 
-  // react method for sending index...
-  useEffect(() => {
-    const handleScoreEvent = (inScore: number) => {
-      setisScoreChanged(true);
-      getScoreDirection(inScore);
-      DelayAction();
-    };
-
-    inNetworkingManager?.on(
-      Message.PlayerScoreResponse.toString(),
-      handleScoreEvent
-    );
-
-    return () => {
-      inNetworkingManager?.sendButtonTypeRequest(selectedIndex);
-      inNetworkingManager?.off(
-        Message.PlayerScoreResponse.toString(),
-        handleScoreEvent
-      );
-    };
-  }, []);
-
   return (
     <Box mt="30%" h="36vh" w="80vw">
       <SimpleGrid

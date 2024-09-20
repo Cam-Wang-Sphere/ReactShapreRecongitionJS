@@ -60,13 +60,6 @@ const TilesInput = ({ inNetworkingManager }: TilesInputProps) => {
     DelayAction();
   };
 
-  // react method for sending index...
-  useEffect(() => {
-    return () => {
-      inNetworkingManager?.sendShapeRequest(selectedIndex);
-    };
-  }, []);
-
   return (
     <SimpleGrid columns={2} spacing={10} autoRows={"true"}>
       {Icons.map((Icon, index) => (
