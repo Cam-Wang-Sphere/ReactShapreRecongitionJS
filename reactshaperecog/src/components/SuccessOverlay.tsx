@@ -5,6 +5,7 @@ import { Message } from "../schema/wsschema/message";
 import SuccessSound from "../assets/sounds/SuccessSound.wav";
 import FailSound from "../assets/sounds/IncorrectSound.wav";
 import { WSPlayerData } from "../player/WSPlayerData";
+import { isIOS } from 'react-device-detect'
 
 interface SuccessOverlayProps {
   inPlayerData: WSPlayerData | null;
@@ -28,7 +29,7 @@ const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
       // playing fail sound if you didn't get a score
       if (newScore < oldScore) 
       {
-        if (shouldPlaySounds) 
+        if (!isIOS && shouldPlaySounds) 
         {
           const failAudio = new Audio(FailSound);
           failAudio.play();
@@ -40,13 +41,13 @@ const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
       if (newScore == oldScore) return;
 
       // playing haptics if possible
-      if (navigator.vibrate) 
+      if (!isIOS && navigator.vibrate) 
       {
         navigator.vibrate(hapticTime);
       }
 
       // play sounds if possible
-      if (shouldPlaySounds) {
+      if (!isIOS && shouldPlaySounds) {
         const successAudio = new Audio(SuccessSound);
         successAudio.play();
       }
