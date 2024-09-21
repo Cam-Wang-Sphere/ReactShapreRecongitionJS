@@ -19,13 +19,16 @@ let color = { r: 173, g: 179, b: 175 }; // color for the frame
 let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
-// let canvas = HTMLCanvasElement;
+const asteroidImg = new Image();
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
+  // asteroidImg.src = "../assets/Icons/asteroid.png";
+  asteroidImg.src =
+    "https://clipart-library.com/images_k/asteroid-transparent/asteroid-transparent-5.png";
 
   // react states
   const [isDrawing, setIsDrawing] = useState(false);
@@ -123,27 +126,28 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       x: number;
       y: number;
       size: number; //radius
+      originalSize: number;
       tag: string; //small, medium, large
       handle: number; //ID of asteroid
 
-      color: { r: number; g: number; b: number };
+      // color: { r: number; g: number; b: number };
 
       constructor(_x: number, _y: number, _tag: string, _handle: number) {
         this.x = _x;
         this.y = _y;
         this.size = 20;
         this.tag = _tag;
-        _tag === "Small" && (this.size = 15);
-        _tag === "Medium" && (this.size = 30);
-        _tag === "Large" && (this.size = 45);
+        _tag === "Small" && (this.size = 55);
+        _tag === "Medium" && (this.size = 70);
+        _tag === "Large" && (this.size = 95);
         this.handle = _handle;
+        this.originalSize = this.size;
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-
-        this.color = {
-          r: Math.floor(Math.random() * 255),
-          g: Math.floor(Math.random() * 255),
-          b: Math.floor(Math.random() * 255),
-        };
+        // this.color = {
+        //   r: Math.floor(Math.random() * 255),
+        //   g: Math.floor(Math.random() * 255),
+        //   b: Math.floor(Math.random() * 255),
+        // };
       }
       updatePosition(pos: Vector2) {
         this.x = pos.x;
@@ -154,8 +158,14 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        _ctx.fillStyle = `rgb(${this.color.r} ${this.color.g} ${this.color.b})`;
-        _ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        // _ctx.fillStyle = `rgb(${this.color.r} ${this.color.g} ${this.color.b})`;
+        // _ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        // asteroidImg.onload = () => {
+        // _ctx.fillStyle = "red";
+        _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
+        // _ctx.fillRect(this.x, this.y, this.size, this.size);
+        // _ctx.globalAlpha = 0.2;
+        // };
         _ctx.fill();
         _ctx.closePath();
       }
@@ -165,13 +175,26 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     // canvas variables
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
+    // Asteroids.push(new Asteroid(120, 100, "Medium", 2));
+    // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
+    // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
+    // Asteroids.push(new Asteroid(100, 500, "Medium", 3));
+
+    //sort asteroids by distance so that ones closer overlap the ones further away
+    const sortAsteroidsByDistance = () => {
+      Asteroids.sort((a, b) => {
+        if (a.handle > b.handle) return -1; //replace handle with distance
+        if (a.handle < b.handle) return 1;
+        return 0;
+      });
+    };
 
     //canvas functions
     const update = () => {
       //updating all asteroid positions
-      // for (let asteroid of Asteroids) {
-      //   asteroid.update();
-      // }
+      for (let asteroid of Asteroids) {
+        // asteroid.showTapState();
+      }
     };
 
     const draw = (_ctx: CanvasRenderingContext2D) => {

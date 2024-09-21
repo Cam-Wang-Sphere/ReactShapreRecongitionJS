@@ -13,17 +13,22 @@ import { motion } from "framer-motion";
 import { EButtonTypeEnum } from "../schema/ebutton-type-enum.ts";
 
 const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
+const Icons = [
+  <SvgSquareReticle />,
+  <SvgTriangleReticle />,
+  <SvgCircleReticle />,
+  <SvgDiamondReticle />,
+];
 
 interface ReticleGridButtonProps {
   inNetworkingManager: NetworkingManager | null;
-  // inPlayerData: WSPlayerData | null;
 }
 
 const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [FeedbackIndex, setFeedbackIndex] = useState(-1);
 
-  const [isIncreasing, setisIncreasing] = useState(false);
+  const [isIncreasing, setisIncreasing] = useState(true);
   const [isScoreChanged, setisScoreChanged] = useState(false);
 
   let prevScore = 0;
@@ -37,27 +42,24 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   async function DelayAction() {
     await delay(200);
     setSelectedIndex(-1);
-    await delay(800);
+    await delay(1000); //cooldown time
     setFeedbackIndex(-1);
+    setisIncreasing(true);
   }
 
   const handleButtonClick = (index: number) => {
-    setSelectedIndex(index);
-    setFeedbackIndex(index);
-    console.log("selected index = ", index);
+    if (isIncreasing) {
+      setSelectedIndex(index);
+      setFeedbackIndex(index);
+      console.log("selected index = ", index);
 
-    const correspondingButton: EButtonTypeEnum = index + 1;
-    inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
+      const correspondingButton: EButtonTypeEnum = index + 1;
+      inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
 
-    DelayAction();
+      setisIncreasing(false);
+      DelayAction();
+    }
   };
-
-  const Icons = [
-    <SvgSquareReticle />,
-    <SvgTriangleReticle />,
-    <SvgCircleReticle />,
-    <SvgDiamondReticle />,
-  ];
 
   // react method for sending index...
   useEffect(() => {
@@ -95,6 +97,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
         {Icons.map((Icon, index) => (
           <Box
             key={index}
+            // bg="green"
             bg={
               FeedbackIndex === index
                 ? isScoreChanged
@@ -110,8 +113,9 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
             borderRadius="md"
             as={motion.div}
             animate={{
+              // scale: selectedIndex === index ? 20 : 0.8,
               scale:
-                selectedIndex === index ? (isScoreChanged ? 20 : 0.9) : 0.9,
+                selectedIndex === index ? (isScoreChanged ? 20 : 0.8) : 0.8,
               opacity: selectedIndex === index ? 1 : 0.5,
             }}
             transition="0.5s ease-out"
@@ -148,7 +152,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
             borderColor="#080808"
             borderRadius="md"
             as={motion.div}
-            whileTap={{ scale: 0.9 }}
+            // whileTap={{ scale: 0.9 }}
             // transition="0.5s linear"
             animate={{
               scale: selectedIndex === index ? 0.9 : 1.0,
