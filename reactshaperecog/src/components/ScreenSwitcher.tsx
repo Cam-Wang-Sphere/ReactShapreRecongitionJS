@@ -72,6 +72,13 @@ const ScreenSwitcher = ({
       Message.GlobalInputResponse.toString(),
       handleGlobalInputResponse
     );
+
+    // @TODO NATHAN: fix to resolve screen switch order dependencies
+    // if (inPlayerData)
+    // {
+    //   handleGlobalInputResponse(inPlayerData.getCurrentInput());
+    // }
+
     // cleaning up
     return () => {
       inNetworkingManager?.off(

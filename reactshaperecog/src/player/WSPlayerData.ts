@@ -1,5 +1,6 @@
 import { BasePlayerData } from "./BasePlayerData";
 import { EWSPhaseEnums } from "../schema/ewsphase-enums";
+import { EWSGlobalInputTypes } from "../schema/ewsglobal-input-types";
 
 export class WSPlayerData extends BasePlayerData
 {
@@ -19,6 +20,11 @@ export class WSPlayerData extends BasePlayerData
         return this.score;
     }
 
+    public getCurrentInput(): EWSGlobalInputTypes
+    {
+        return this.currentInput;
+    }
+
     public setTeamId(inTeamId: number): void
     {
         this.teamId = inTeamId;
@@ -34,11 +40,18 @@ export class WSPlayerData extends BasePlayerData
         this.score = inScore;
     }
 
+    public setCurrentInput(inCurrentInput: EWSGlobalInputTypes): void
+    {
+        this.currentInput = inCurrentInput;
+    }
+
     protected teamId: number = WSPlayerData.noTeamId;
     protected curreentPhase: EWSPhaseEnums = WSPlayerData.defaultPhase;
     protected score: number = WSPlayerData.defaultScore;
+    protected currentInput: EWSGlobalInputTypes = WSPlayerData.defaultInputType;
 
     public static readonly noTeamId: number = -1;
     public static readonly defaultPhase: EWSPhaseEnums.None;
     public static readonly defaultScore: number = 0;
+    public static readonly defaultInputType: EWSGlobalInputTypes.Drawing;
 }

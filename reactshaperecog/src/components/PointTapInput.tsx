@@ -3,6 +3,7 @@ import { NetworkingManager } from "../networking/NetworkingManager";
 import { GridItem } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
 import { Button, HStack, Text } from "@chakra-ui/react";
+import { isIOS } from 'react-device-detect'
 
 interface PointTapInputProps
 {
@@ -34,15 +35,6 @@ const PointTapInput = ({ inNetworkingManager }: PointTapInputProps) => {
         {
             window.addEventListener('deviceorientation', handleOrientationEvent);
             setHasStarted(true);
-            // alert('Started gyroscope recording');
-
-            // this is to request permission for IMU access on IOS
-            const requestPermission = (DeviceOrientationEvent as unknown as DeviceOrientationEventiOS).requestPermission;
-            const iOS = typeof requestPermission === 'function';
-            if (iOS) 
-            {
-                requestPermission();
-            }
         };
     };
 
@@ -51,7 +43,11 @@ const PointTapInput = ({ inNetworkingManager }: PointTapInputProps) => {
     };
 
     useEffect(() => {
-        startRecording();
+
+        if (!isIOS)
+        {
+            startRecording();
+        }
 
         return () => {
             window.removeEventListener('deviceorientation', handleOrientationEvent);
