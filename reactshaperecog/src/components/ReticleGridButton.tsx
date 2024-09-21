@@ -56,15 +56,6 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
       const correspondingButton: EButtonTypeEnum = index + 1;
       inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
 
-    DelayAction();
-  };
-
-  const Icons = [
-    <SvgSquareReticle />,
-    <SvgTriangleReticle />,
-    <SvgCircleReticle />,
-    <SvgDiamondReticle />,
-  ];
       setisIncreasing(false);
       DelayAction();
     }
