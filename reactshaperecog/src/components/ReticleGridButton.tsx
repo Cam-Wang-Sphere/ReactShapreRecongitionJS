@@ -28,39 +28,27 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [FeedbackIndex, setFeedbackIndex] = useState(-1);
 
-  const [isIncreasing, setisIncreasing] = useState(false);
+  const [isIncreasing, setisIncreasing] = useState(true);
   const [isScoreChanged, setisScoreChanged] = useState(false);
-  const [cooldownExpired, setcooldownExpired] = useState(true);
 
   let prevScore = 0;
   let ScoreColor: string = "white";
   let getScoreDirection = (score: number) => {
-    cooldownExpired &&
-      (score > prevScore ? setisIncreasing(true) : setisIncreasing(false));
+    score > prevScore ? setisIncreasing(true) : setisIncreasing(false);
     prevScore = score;
   };
-
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
   async function DelayAction() {
-    await delay(200); //delay to reset index
+    await delay(200);
     setSelectedIndex(-1);
-
-    await delay(800); //delay for UI feedback flashes
+    await delay(1000); //cooldown time
     setFeedbackIndex(-1);
-    setisScoreChanged(false);
-  }
-
-  //delay for cooldown time
-  const coolDownTimer = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  async function startCooldown(ms: number) {
-    await delay(ms);
-    setcooldownExpired(true);
+    setisIncreasing(true);
   }
 
   const handleButtonClick = (index: number) => {
-    if (cooldownExpired) {
+    if (isIncreasing) {
       setSelectedIndex(index);
       setFeedbackIndex(index);
       console.log("selected index = ", index);
@@ -68,11 +56,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
       const correspondingButton: EButtonTypeEnum = index + 1;
       inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
 
-      if (!isIncreasing) {
-        setcooldownExpired(false);
-        startCooldown(1000);
-      }
-
+      setisIncreasing(false);
       DelayAction();
     }
   };
@@ -82,6 +66,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
     const handleScoreEvent = (inScore: number) => {
       setisScoreChanged(true);
       getScoreDirection(inScore);
+      DelayAction();
     };
 
     inNetworkingManager?.on(
