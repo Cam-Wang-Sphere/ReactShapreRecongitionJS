@@ -403,7 +403,6 @@ export class NetworkingManager extends BaseNetworkingManager {
         interactable.location = location;
         interactable.rotation = interactableUpdate.rotation();
         interactable.handle = interactableUpdate.netHandle();
-        interactable.normalized_radius = interactableUpdate.normalizedRadius();
 
         this.emit(Message.TIMInteractableUpdate.toString(), interactable);
     }
