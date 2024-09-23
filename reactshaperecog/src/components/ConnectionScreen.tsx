@@ -2,6 +2,7 @@ import React from "react";
 import NameEntry from "./NameEntry";
 import ConnectWidget from "./ConnectWidget";
 import ConnectBigDomeWidget from "./ConnectBigDomeWidget";
+import ConnectCDRWidget from "./ConnectCDRWidget";
 import { NetworkingManager } from "../networking/NetworkingManager";
 import { useState, useEffect } from "react";
 
@@ -33,6 +34,7 @@ const ConnectionScreen = ({ connectFunction, inConnectNetworkingManager }: Conne
         {/* {<AddTemplateWidget AddTemplateFunction={AddTemplate} />} */}
         <br></br>
         <ConnectBigDomeWidget connectFunction={connectFunction} />
+        <ConnectCDRWidget connectFunction={connectFunction} />
       </VStack>
     </Box>
   );

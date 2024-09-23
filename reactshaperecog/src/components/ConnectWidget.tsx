@@ -8,6 +8,7 @@ import {
   EditablePreview,
 } from "@chakra-ui/react";
 import { NetworkingConstants } from "../constants/NetworkingConstants";
+import AcceptCertButton from "./AcceptCertButton";
 
 interface ConnectWidgetProps {
   connectFunction: (address: string) => void;
@@ -72,6 +73,8 @@ const ConnectWidget = ({ connectFunction }: ConnectWidgetProps) => {
             </Button>
           </HStack>
         </div>
+
+        
       </div>
     </section>
   );

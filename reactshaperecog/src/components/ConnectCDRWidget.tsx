@@ -10,17 +10,16 @@ import {
 import { NetworkingConstants } from "../constants/NetworkingConstants";
 import AcceptCertButton from "./AcceptCertButton";
 
-interface ConnectBigDomeWidgetProps {
+interface ConnectCDRWidgetProps {
   connectFunction: (address: string) => void;
 }
 
-const ConnectWidget = ({ connectFunction }: ConnectBigDomeWidgetProps) => {
+const ConnectCDRWidget = ({ connectFunction }: ConnectCDRWidgetProps) => {
 
-  const fullAddress: string = "wss://" + NetworkingConstants.BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
-  const certAddress: string = "https://" + NetworkingConstants.BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
+  const fullAddress: string = "wss://" + NetworkingConstants.CDR_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
+  const certAddress: string = "https://" + NetworkingConstants.CDR_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
 
-  const tryConnectToBigDome = () => {
-    
+  const tryConnectToCDR = () => {
     connectFunction(fullAddress);
   };
 
@@ -42,17 +41,17 @@ const ConnectWidget = ({ connectFunction }: ConnectBigDomeWidgetProps) => {
               w={"100%"}
               h={"50px"}
               colorScheme="teal"
-              onClick={tryConnectToBigDome}
+              onClick={tryConnectToCDR}
             >
-              Connect To Big Dome
+              Connect To CDR
             </Button>
           </HStack>
 
-          <AcceptCertButton inURL={certAddress} inButtonText="Accept Big Dome Cert" />
+          <AcceptCertButton inURL={certAddress} inButtonText="Accept CDR Cert" />
         </div>
       </div>
     </section>
   );
 };
 
-export default ConnectWidget;
+export default ConnectCDRWidget;
