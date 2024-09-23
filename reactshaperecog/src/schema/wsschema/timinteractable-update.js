@@ -42,16 +42,20 @@ var TIMInteractableUpdate = /** @class */ (function () {
         var offset = this.bb.__offset(this.bb_pos, 12);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     };
-    TIMInteractableUpdate.prototype.tags = function (index, optionalEncoding) {
+    TIMInteractableUpdate.prototype.normalizedRadius = function () {
         var offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    };
+    TIMInteractableUpdate.prototype.tags = function (index, optionalEncoding) {
+        var offset = this.bb.__offset(this.bb_pos, 16);
         return offset ? this.bb.__string(this.bb.__vector(this.bb_pos + offset) + index * 4, optionalEncoding) : null;
     };
     TIMInteractableUpdate.prototype.tagsLength = function () {
-        var offset = this.bb.__offset(this.bb_pos, 14);
+        var offset = this.bb.__offset(this.bb_pos, 16);
         return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
     };
     TIMInteractableUpdate.startTIMInteractableUpdate = function (builder) {
-        builder.startObject(6);
+        builder.startObject(7);
     };
     TIMInteractableUpdate.addSessionId = function (builder, sessionId) {
         builder.addFieldInt32(0, sessionId, 0);
@@ -68,8 +72,11 @@ var TIMInteractableUpdate = /** @class */ (function () {
     TIMInteractableUpdate.addDistance = function (builder, distance) {
         builder.addFieldFloat32(4, distance, 0.0);
     };
+    TIMInteractableUpdate.addNormalizedRadius = function (builder, normalizedRadius) {
+        builder.addFieldFloat32(5, normalizedRadius, 0.0);
+    };
     TIMInteractableUpdate.addTags = function (builder, tagsOffset) {
-        builder.addFieldOffset(5, tagsOffset, 0);
+        builder.addFieldOffset(6, tagsOffset, 0);
     };
     TIMInteractableUpdate.createTagsVector = function (builder, data) {
         builder.startVector(4, data.length, 4);

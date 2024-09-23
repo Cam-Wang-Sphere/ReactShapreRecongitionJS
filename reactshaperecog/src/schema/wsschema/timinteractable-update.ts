@@ -50,20 +50,25 @@ distance():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
+normalizedRadius():number {
+  const offset = this.bb!.__offset(this.bb_pos, 14);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
 tags(index: number):string
 tags(index: number,optionalEncoding:flatbuffers.Encoding):string|Uint8Array
 tags(index: number,optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 14);
+  const offset = this.bb!.__offset(this.bb_pos, 16);
   return offset ? this.bb!.__string(this.bb!.__vector(this.bb_pos + offset) + index * 4, optionalEncoding) : null;
 }
 
 tagsLength():number {
-  const offset = this.bb!.__offset(this.bb_pos, 14);
+  const offset = this.bb!.__offset(this.bb_pos, 16);
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
 static startTIMInteractableUpdate(builder:flatbuffers.Builder) {
-  builder.startObject(6);
+  builder.startObject(7);
 }
 
 static addSessionId(builder:flatbuffers.Builder, sessionId:number) {
@@ -86,8 +91,12 @@ static addDistance(builder:flatbuffers.Builder, distance:number) {
   builder.addFieldFloat32(4, distance, 0.0);
 }
 
+static addNormalizedRadius(builder:flatbuffers.Builder, normalizedRadius:number) {
+  builder.addFieldFloat32(5, normalizedRadius, 0.0);
+}
+
 static addTags(builder:flatbuffers.Builder, tagsOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(5, tagsOffset, 0);
+  builder.addFieldOffset(6, tagsOffset, 0);
 }
 
 static createTagsVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {

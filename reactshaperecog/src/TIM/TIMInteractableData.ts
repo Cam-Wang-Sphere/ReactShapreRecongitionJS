@@ -7,5 +7,6 @@ export class FTIMInteractableData
     public distance: number = -1;
     public rotation: number = -1;
     public scale: number = -1;
+    public normalized_radius: number = -1;
     public tags: string[] = [];
 }
