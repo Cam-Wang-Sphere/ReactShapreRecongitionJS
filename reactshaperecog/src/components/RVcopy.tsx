@@ -1,395 +1,390 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NetworkingManager } from "../networking/NetworkingManager";
+import { NetworkingManager } from "./../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
 import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
-import { FTIMMappedArea } from "../TIM/TIMMappedArea";
-import { Message } from "../schema/WSSchema";
-import { FTIMInteractableData } from "../TIM/TIMInteractableData";
-import { TIMInteractableDestroyed } from "../schema/WSSchema";
-import { TIMHitEvent } from "../schema/WSSchema";
-import { forEach } from "lodash";
-import canvasTintImage from "canvas-tint-image";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
 }
 
-//global variables
-let color = { r: 173, g: 179, b: 175 }; // color for the frame
-let mappedAreaDist = 0;
-let asteroidSpawnDist = 0;
-let canvasWidth = window.innerWidth;
-let canvasHeight = window.innerHeight;
-let reqAnimFrame = 0;
-const asteroidImg = new Image();
+const canvasWidth = window.innerHeight;
+const canvasHeight = window.innerHeight;
 
-const RemapInRange = (
-  num: number,
-  inMin: number,
-  inMax: number,
-  outMin: number,
-  outMax: number
-) => ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-
-const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
-  //html canvas
+const TapnSlashInput = ({ inNetworkingManager }: TapnSlashProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
-  // asteroidImg.src = "../assets/Icons/asteroid.png";
-  asteroidImg.src =
-    "https://clipart-library.com/images_k/asteroid-transparent/asteroid-transparent-5.png";
-
-  // react states
   const [isDrawing, setIsDrawing] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
-  let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
-    canvasWidth = HTMLcanvas.width;
-    canvasHeight = HTMLcanvas.height;
+  const resizeEvent = window.addEventListener("resize", () => {
+    const orientationType = window.screen.orientation.type;
+    // console.log(orientationType);
+    orientationType === "landscape-primary"
+      ? setIsLandscape(true)
+      : setIsLandscape(false);
+  });
+
+  function generateRandFloat() {
+    var min = 0.3,
+      max = 0.5,
+      RandomNumber = Math.random() * (max - min) + min;
+
+    return RandomNumber;
+  }
+
+  const randomNum = (min: number, max: number) => {
+    var RandomNumber = Math.random() * (max - min) + min;
+
+    return RandomNumber;
   };
 
+  let speed = 6;
+  let radius = 40;
+  let opacity = 0.5;
+
+  let mouse = {
+    x: 0,
+    y: 0,
+  };
+
+  //different shapes
+  let asteroids = [
+    {
+      type: "circle",
+      x: 50,
+      y: 10,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 27,
+      isDestroyed: false,
+    },
+    {
+      type: "square",
+      x: 130,
+      y: -10,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 50,
+      isDestroyed: false,
+    },
+    {
+      type: "triangle",
+      x: 260,
+      y: 0,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 38,
+      isDestroyed: false,
+    },
+    {
+      type: "circle",
+      x: 50,
+      y: 10,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 27,
+      isDestroyed: false,
+    },
+    {
+      type: "square",
+      x: 130,
+      y: -10,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 50,
+      isDestroyed: false,
+    },
+    {
+      type: "triangle",
+      x: 260,
+      y: 0,
+      speed: 0.5,
+      color: "white",
+      opacity: 0.1,
+      size: 38,
+      isDestroyed: false,
+    },
+  ];
+
+  const resetAsteroid = (i: number) => {
+    asteroids[i].y = -10;
+    asteroids[i].color = "white";
+    asteroids[i].opacity = 0.1;
+    asteroids[i].isDestroyed = false;
+  };
+
+  let yDist = 300;
   useEffect(() => {
-    //update canvas size when screen orientation changes---------------------------------------------------------------------------------------------------------------
-    const resizeEvent = window.addEventListener("resize", () => {
-      const orientationType = window.screen.orientation.type;
-      orientationType === "landscape-primary"
-        ? setIsLandscape(true)
-        : setIsLandscape(false);
-
-      if (canvasRef.current) {
-        updateCanvasSize(canvasRef.current);
-        canvasRect.current = canvasRef.current.getBoundingClientRect();
-      }
-    });
-
-    //networking message handlers----------------------------------------------------------------------------------------------------------------------------------------
-
-    //assign color of the frame
-    const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
-      color.r = inTIMMappedArea.color.r() * 255;
-      color.g = inTIMMappedArea.color.g() * 255;
-      color.b = inTIMMappedArea.color.b() * 255;
-      mappedAreaDist = inTIMMappedArea.distance;
-    };
-
-    // spawn new asteroid, add asteroid to array, assign tag and handle
-    const handleTIMInteractableData = (
-      inTIMInteractableData: FTIMInteractableData
-    ): void => {
-      // let scale = inTIMInteractableData.scale;
-      asteroidSpawnDist = inTIMInteractableData.distance;
-      let handle = inTIMInteractableData.handle;
-      let tag = inTIMInteractableData.tags.toString().substring(14);
-      Asteroids.push(new Asteroid(-50, -50, 1, tag, handle));
-      console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
-    };
-
-    //if the handle of asteroid matches, update location
-    const handleTIMInteractableUpdate = (
-      inTIMInteractableUpdate: FTIMInteractableData
-    ): void => {
-      let distance = inTIMInteractableUpdate.distance;
-      let handle = inTIMInteractableUpdate.handle;
-      let location = inTIMInteractableUpdate.location;
-      location.x *= canvasWidth;
-      let distanceFromFrame = distance - mappedAreaDist;
-      distanceFromFrame = RemapInRange(
-        distanceFromFrame,
-        mappedAreaDist,
-        7000,
-        canvasHeight,
-        0
-      );
-
-      for (let asteroid of Asteroids) {
-        asteroid.handle === handle &&
-          asteroid.updatePosition(new Vector2(location.x, distanceFromFrame));
-      }
-      // sortAsteroidsByDistance();
-    };
-
-    //removing destroyed asteroid from array
-    const handleTIMInteractableDestroyed = (
-      inTIMInteractableDestroyed: TIMInteractableDestroyed
-    ): void => {
-      let handle: number = +inTIMInteractableDestroyed;
-      Asteroids.forEach((asteroid, index) => {
-        if (asteroid.handle === handle) {
-          let newArr = Asteroids.filter((ele, ind) => ind !== index);
-          Asteroids = newArr;
-        }
-      });
-      console.log("Asteroid Destroyed. Total asteroids: " + Asteroids.length);
-    };
-
-    const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
-      let handle: number = +inTIMHitEvent.netHandle;
-      for (let asteroid of Asteroids) {
-        asteroid.handle === handle &&
-          asteroid.handle === handle &&
-          asteroid.showTapState();
-      }
-    };
-
-    inNetworkingManager?.on(
-      Message.TIMMappedAreaAdd.toString(),
-      handleTIMMappedAreaAdd
-    );
-    inNetworkingManager?.on(
-      Message.TIMInteractableData.toString(),
-      handleTIMInteractableData
-    );
-
-    inNetworkingManager?.on(
-      Message.TIMInteractableUpdate.toString(),
-      handleTIMInteractableUpdate
-    );
-
-    inNetworkingManager?.on(
-      Message.TIMInteractableDestroyed.toString(),
-      handleTIMInteractableDestroyed
-    );
-
-    inNetworkingManager?.on(Message.TIMHitEvent.toString(), handleTIMHitEvent);
-
-    //Asteroid class-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    class Asteroid {
-      x: number;
-      y: number;
-      size: number; //radius
-      tag: string; //small, medium, large
-      handle: number; //ID of asteroid
-      tintOpacity: number;
-      scaleFactor: number;
-      distance: number;
-      shape: number;
-      color: string;
-      originalSize: number;
-      // color: { r: number; g: number; b: number };
-
-      constructor(
-        _x: number,
-        _y: number,
-        _shape: number,
-        _tag: string,
-        _handle: number
-      ) {
-        this.x = _x;
-        this.y = _y;
-        this.size = 20;
-        this.shape = _shape;
-        this.tag = _tag;
-        _tag === "Small" && (this.size = 10);
-        _tag === "Medium" && (this.size = 25);
-        _tag === "Large" && (this.size = 40);
-        this.handle = _handle;
-        this.tintOpacity = 0;
-        this.scaleFactor = 0;
-        this.distance = 0;
-        this.color = "orange";
-        this.originalSize = this.size;
-      }
-      updatePosition(pos: Vector2) {
-        this.x = pos.x;
-        this.y = pos.y;
-        this.size += this.scaleFactor;
-      }
-
-      showTapState() {
-        this.size += 5;
-        this.color = "red";
-        setTimeout(() => {
-          this.size = this.originalSize;
-          this.color = "orange";
-        }, 200);
-      }
-
-      draw(_ctx: CanvasRenderingContext2D) {
-        _ctx.beginPath();
-        _ctx.globalAlpha = 1;
-        switch (this.shape) {
-          case 1: {
-            // console.log("Cirlce");
-            _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            break;
-          }
-          case 2: {
-            // console.log("Triangle");
-            _ctx.moveTo(this.x, this.y);
-            _ctx.lineTo(this.x - this.size, this.y + this.size + 4);
-            _ctx.lineTo(this.x + this.size, this.y + this.size + 4);
-            break;
-          }
-          case 3: {
-            // console.log("Square");
-            _ctx.rect(this.x, this.y, this.size, this.size);
-            break;
-          }
-          case 4: {
-            // console.log("Cross");
-            break;
-          }
-        }
-        _ctx.fillStyle = this.color;
-        _ctx.fill();
-        _ctx.closePath();
-      }
-    }
-    //End of asteroid class---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //Radar Pulse class-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    class RadarPulse {
-      x: number;
-      y: number;
-      radius: number; //radius
-      speed: number;
-      fillOpacity: number;
-      scaleFactor: number;
-      // color: { r: number; g: number; b: number };
-      color: { r: number; g: number; b: number };
-
-      constructor(
-        _x: number,
-        _y: number,
-        _speed: number,
-        _color: { r: number; g: number; b: number }
-      ) {
-        this.x = _x;
-        this.y = _y;
-        this.radius = 20;
-        this.speed = _speed;
-        this.fillOpacity = 0.5;
-        this.scaleFactor = 0;
-        this.color = _color;
-        // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-      }
-      radiate() {
-        this.radius += this.speed;
-        this.fillOpacity >= 0.01 && (this.fillOpacity -= 0.004);
-        if (this.radius / 2 > canvasHeight) {
-          this.radius = 20;
-          this.fillOpacity = 0.5;
-        }
-      }
-
-      draw(_ctx: CanvasRenderingContext2D) {
-        _ctx.beginPath();
-        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-        // _ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
-        _ctx.fillStyle = "grey";
-        _ctx.globalAlpha = this.fillOpacity;
-        _ctx.fill();
-        _ctx.closePath();
-      }
-    }
-    //End of Radar Pulse class---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    // canvas variables
     const canvas = canvasRef.current;
-    let Asteroids: Asteroid[] = [];
-    let RadarPulses: RadarPulse[] = [];
-    RadarPulses.push(new RadarPulse(canvasWidth / 2, canvasHeight, 14, color));
-
-    // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
-    // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
-    // Asteroids.push(new Asteroid(100, 500, "Medium", 3));
-
-    //sort asteroids by distance so that ones closer overlap the ones further away
-    const sortAsteroidsByDistance = () => {
-      Asteroids.sort((a, b) => {
-        if (a.distance > b.distance) return -1;
-        if (a.distance < b.distance) return 1;
-        return 0;
-      });
-    };
-
-    //canvas functions------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    const update = () => {
-      //updating all asteroid positions
-      for (let radarPulse of RadarPulses) {
-        radarPulse.radiate();
-      }
-    };
-
-    const draw = (_ctx: CanvasRenderingContext2D) => {
-      //clear canvas every frame------------------------
-      _ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      //draw all asteroids------------------------------
-      for (let asteroid of Asteroids) {
-        asteroid.draw(_ctx);
-      }
-
-      //draw all Radar pulses-------------------------
-      for (let radarPulse of RadarPulses) {
-        radarPulse.draw(_ctx);
-      }
-
-      // Player Ship-----------------------------------
-      _ctx.beginPath();
-      _ctx.globalAlpha = 1;
-      _ctx.arc(canvasWidth / 2, canvasHeight, 40, 0, 2 * Math.PI);
-      _ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
-      _ctx.fill();
-      _ctx.closePath();
-
-      //draw canvas frame/mapped area -----------------
-      _ctx.beginPath();
-      _ctx.lineWidth = 10;
-      _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
-      _ctx.rect(0, 0, canvasWidth, canvasHeight);
-      _ctx.stroke();
-      _ctx.closePath();
-    };
-
-    //loop through canvas functions every frame
-    const loop = (_ctx: CanvasRenderingContext2D) => {
-      update();
-      draw(_ctx);
-      reqAnimFrame = requestAnimationFrame(() => {
-        loop(_ctx);
-      });
-    };
-
     if (canvas) {
       const ctx = canvas.getContext("2d");
       if (ctx) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.globalAlpha = 1.0;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 5;
         ctxRef.current = ctx;
         canvasRect.current = canvas.getBoundingClientRect();
-        updateCanvasSize(canvas);
-        loop(ctx);
+
+        //mouse position
+        window.addEventListener("touchstart", (e) => {
+          mouse.x = e.touches[0].clientX;
+          mouse.y = e.touches[0].clientY;
+        });
+
+        for (var i = 0; i < asteroids.length; i++) {
+          // asteroids[i].x = Math.floor(Math.random() * canvas.width);
+          // asteroids[i].y = ;
+          //   asteroids[i].speed = generateRandFloat();
+        }
+
+        asteroids[3].x = asteroids[0].x;
+        asteroids[4].x = asteroids[1].x;
+        asteroids[5].x = asteroids[2].x;
+
+        asteroids[3].y = asteroids[0].y - yDist;
+        asteroids[4].y = asteroids[1].y - yDist;
+        asteroids[5].y = asteroids[2].y - yDist;
+
+        const render = () => {
+          //clear canavs
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          //Ship bottom hemisphere
+          ctx.beginPath();
+          ctx.globalAlpha = 1;
+          ctx.arc(canvas.width / 2, canvas.height, 40, 0, 2 * Math.PI);
+          ctx.fillStyle = "#39D7B9";
+          ctx.fill();
+          ctx.closePath();
+
+          //Radar Waves
+          ctx.beginPath();
+          ctx.arc(canvas.width / 2, canvas.height, radius, 0, 2 * Math.PI);
+          ctx.fillStyle = "#39D7B9";
+          ctx.globalAlpha = opacity;
+          ctx.fill();
+          ctx.closePath();
+
+          //shape asteroids
+
+          //circle 1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[0].opacity;
+          ctx.arc(
+            asteroids[0].x,
+            asteroids[0].y,
+            asteroids[0].size,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = asteroids[0].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //circle 2
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[3].opacity;
+          //   ctx.arc(
+          //     asteroids[3].x,
+          //     asteroids[3].y,
+          //     asteroids[3].size,
+          //     0,
+          //     Math.PI * 2
+          //   );
+          //   ctx.fillStyle = asteroids[3].color;
+          //   ctx.fill();
+          //   ctx.closePath();
+
+          //square1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[1].opacity;
+          ctx.rect(
+            asteroids[1].x,
+            asteroids[1].y,
+            asteroids[1].size,
+            asteroids[1].size
+          );
+          ctx.fillStyle = asteroids[1].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //square2
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[4].opacity;
+          //   ctx.rect(
+          //     asteroids[4].x,
+          //     asteroids[4].y,
+          //     asteroids[4].size,
+          //     asteroids[4].size
+          //   );
+          //   ctx.fillStyle = asteroids[4].color;
+          //   ctx.fill();
+          //   ctx.closePath();
+
+          //triangle1
+          ctx.beginPath();
+          ctx.globalAlpha = asteroids[2].opacity;
+          ctx.moveTo(asteroids[2].x, asteroids[2].y);
+          ctx.lineTo(
+            asteroids[2].x - asteroids[2].size,
+            asteroids[2].y + asteroids[2].size + 4
+          );
+          ctx.lineTo(
+            asteroids[2].x + asteroids[2].size,
+            asteroids[2].y + asteroids[2].size + 4
+          );
+          ctx.fillStyle = asteroids[2].color;
+          ctx.fill();
+          ctx.closePath();
+
+          //triangle2
+          //   ctx.beginPath();
+          //   ctx.globalAlpha = asteroids[5].opacity;
+          //   ctx.moveTo(asteroids[5].x, asteroids[5].y);
+          //   ctx.lineTo(
+          //     asteroids[5].x - asteroids[5].size,
+          //     asteroids[5].y + asteroids[5].size + 4
+          //   );
+          //   ctx.lineTo(
+          //     asteroids[5].x + asteroids[5].size,
+          //     asteroids[5].y + asteroids[5].size + 4
+          //   );
+          //   ctx.fillStyle = asteroids[5].color;
+          //   ctx.fill();
+          //   ctx.closePath();
+          //   let allTrue = booleanArray.every((val) => val === true); --------------------------------------------
+
+          for (var i = 0; i < asteroids.length; i++) {
+            //update speed
+            asteroids[i].y += asteroids[i].speed;
+
+            //tapping on asteroids
+            if (
+              mouse.x >= asteroids[i].x &&
+              mouse.x < asteroids[i].x + 150 &&
+              mouse.y >= asteroids[i].y &&
+              mouse.y < asteroids[i].y + 150
+            ) {
+              asteroids[i].opacity = 0;
+              asteroids[i].isDestroyed = true;
+              destroyedIndex++;
+              mouse.x = 0;
+              mouse.y = 0;
+            }
+
+            // if (destroyedIndex === 3) {
+            //   console.log("destroyed");
+            //   for (let j = 0; j < 3; j++) {
+            //     resetAsteroid(j);
+            //   }
+            //   destroyedIndex = 0;
+            //   mouse.x = 0;
+            //   mouse.y = 0;
+            //   index = 0;
+            // }
+
+            if (asteroids[i].y > canvas.height) {
+              //reset asteroids
+              resetAsteroid(i);
+              //reset mouse
+              mouse.x = 0;
+              mouse.y = 0;
+              index = 0;
+
+              //   console.log("reset");
+            }
+            //detect and light up enemy -----------
+            if (
+              !asteroids[i].isDestroyed &&
+              asteroids[i].y >= canvas.height - radius
+            ) {
+              asteroids[i].opacity = 0.8;
+            }
+
+            //fadeway asteroids
+            asteroids[i].opacity > 0.1 && (asteroids[i].opacity -= 0.001);
+          }
+
+          // change radius and opacity;
+          radius += speed;
+          opacity >= 0.01 && (opacity -= 0.004);
+
+          //reset radius and opacity
+          if (radius >= 900) {
+            radius = 40;
+          }
+          //   radius >= 900 && (radius = 40) &&( for (var i = 0; i < 5; i++) { enemyOpacity[i] = 0;} );
+          radius === 40 && (opacity = 0.5);
+
+          requestAnimationFrame(render);
+          requestAnimationFrame(animateColor);
+        };
+
+        render();
       }
     }
-
-    return () => {
-      //cancel requested animation
-      cancelAnimationFrame(reqAnimFrame);
-
-      //deregister networking messages------------------------------------------------------------------------------------------------------------------------------------------------------------
-      inNetworkingManager?.off(
-        Message.TIMMappedAreaAdd.toString(),
-        handleTIMMappedAreaAdd
-      );
-
-      inNetworkingManager?.off(
-        Message.TIMInteractableData.toString(),
-        handleTIMInteractableData
-      );
-
-      inNetworkingManager?.off(
-        Message.TIMInteractableUpdate.toString(),
-        handleTIMInteractableUpdate
-      );
-
-      inNetworkingManager?.off(
-        Message.TIMHitEvent.toString(),
-        handleTIMHitEvent
-      );
-    };
   }, [inNetworkingManager]);
+
+  var startTime = 0;
+  let flipColor = false;
+  var index = 0;
+  var intervalSwitch = 1000;
+  let destroyedIndex = 0;
+  //   let destroyedIndex: boolean[] = [];
+
+  let randomNoRepeats = (array: number[]) => {
+    var copy = array.slice(0);
+    return function () {
+      if (copy.length < 1) {
+        copy = array.slice(0);
+      }
+      var index = Math.floor(Math.random() * copy.length);
+      var item = copy[index];
+      copy.splice(index, 1);
+      return item;
+    };
+  };
+  var RandomIndex = randomNoRepeats([0, 1, 2]);
+
+  const animateColor = (time: number) => {
+    requestAnimationFrame(animateColor);
+
+    if (!startTime) {
+      startTime = time;
+    }
+    var elapsed = time - startTime;
+    if (elapsed > intervalSwitch) {
+      startTime = time;
+      flipColor = !flipColor;
+      //   var Randomnumber = Math.floor(randomNum(0, 3));
+      var Randomnumber;
+      if (flipColor) {
+        Randomnumber = RandomIndex();
+      }
+
+      //   console.log(Randomnumber);
+
+      for (let i = 0; i < 3; i++) {
+        !flipColor && (asteroids[i].color = "white");
+
+        if (flipColor && index < 5) {
+          i === Randomnumber && (asteroids[i].color = "orange");
+        }
+      }
+      //   console.log(index);
+      index++;
+    }
+  };
 
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
@@ -474,6 +469,14 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
 
+    // // canvas drawing------------------------------------------------
+    // const img = new Image();
+    // img.src = "https://k3no.com/Meetup/hang-in-there.jpg";
+    // // img.src = "../assets/Icons/asteroid.png";
+    // // ctxRef.current.fillRect(x, y, 100, 100);
+    // ctxRef.current.drawImage(img, 50, 50, 50, 50);
+    // console.log(img);
+
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
@@ -494,6 +497,8 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     let Inputs: FTIMInputEvent[] = [];
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputEvents(Inputs);
+
+    // console.log(x, " ", y);
   };
 
   return (
@@ -502,19 +507,57 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       templateColumns="repeat(1, 1fr)"
       templateAreas={`"TapRegion" "UIOverlay"`}
       gap={4}
-      pt="10px"
+      pt={"10px"}
       h="100%"
-      mt={isLandscape ? "-12%" : "-38%"}
       style={{
         position: "relative",
       }}
+      mt="-8%"
     >
-      <GridItem area="TapRegion" rowStart={1} colStart={1}>
-        <Text color="white">Radar View </Text>
+      <GridItem
+        area="UIOverlay"
+        // bg={"pink"}
+        bg="#1f1c1e"
+        // borderColor="#FF0099"
+        // borderWidth="5px"
+        style={{
+          position: "relative",
+        }}
+        h="98%"
+        w="100%"
+        rowStart={1}
+        colStart={1}
+      >
+        {/* <HStack justifyContent="space-between">
+          <Text fontSize="xl" color="#39D7B9" p="20px">
+            Name
+          </Text>
+          <Text fontSize="xl" color="#39D7B9" p="20px">
+            Score
+          </Text>
+        </HStack> */}
+      </GridItem>
+      <GridItem
+        area="TapRegion"
+        style={{
+          position: "relative",
+          // background: "blue",
+        }}
+        h="100%"
+        w="100%"
+        rowStart={1}
+        colStart={1}
+      >
         <canvas
           style={{
             position: "relative",
-            background: "#1f1c1e",
+            // background: "#1f1c1e",
+            // opacity: "0.5",
+            borderStyle: "solid",
+            borderColor: "#39D7B9",
+            borderWidth: "5px",
+            // height: "100%",
+            // width: "100%",
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
@@ -523,12 +566,24 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchEnd={endDrawing}
           onTouchMove={draw}
           ref={canvasRef}
-          height={window.innerHeight * 0.9}
-          width={window.innerWidth * 0.9}
+          height={window.innerHeight * 0.85}
+          width={
+            isLandscape ? window.innerWidth * 0.92 : window.innerWidth * 0.8
+          }
+          // height={isLandscape ? 370 : 570} // dynamic resize
+          // width={isLandscape ? 870 : 330}
         />
+        {/* <Box
+          bg={"pink"}
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+          }}
+        ></Box> */}
       </GridItem>
     </Grid>
   );
 };
 
-export default RadarView;
+export default TapnSlashInput;

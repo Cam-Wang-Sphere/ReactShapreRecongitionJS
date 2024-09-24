@@ -10,7 +10,7 @@ import ReticleGridButton from "./ReticleGridButton";
 import CardinalButtons from "./CardinalButtons";
 import TapnSlashInput from "./TapnSlashInput";
 import TNS from "./TNSUpdated";
-import RadarView from "./RVcopy";
+import RadarView from "./RadarViewInput";
 import { DollarRecognizer } from "../Template/Recognizer";
 import SuccessOverlay from "./../components/SuccessOverlay";
 import ScoreWidget from "./../components/ScoreWidget";
