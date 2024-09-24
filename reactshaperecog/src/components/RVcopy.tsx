@@ -23,7 +23,7 @@ let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
 
-const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
+const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -82,16 +82,15 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
       let radius = inTIMInteractableUpdate.normalized_radius;
-      let distance = inTIMInteractableUpdate.distance;
       location.x *= canvasWidth;
       location.y *= canvasHeight;
       radius *= canvasWidth;
 
       for (let asteroid of Asteroids) {
         asteroid.handle === handle &&
-          asteroid.updateTransform(location, radius, distance);
+          asteroid.updateTransform(location, radius);
       }
-      sortAsteroidsByDistance(); //so that ones closer overlap the ones further away
+      sortAsteroidsByDistance();
     };
 
     //removing destroyed asteroid from array
@@ -111,7 +110,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
       for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.showTapState();
+        asteroid.handle === handle &&
+          asteroid.handle === handle &&
+          asteroid.showTapState();
       }
     };
 
@@ -146,7 +147,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       handle: number; //ID of asteroid
       tintOpacity: number;
       scaleFactor: number;
-      distance: number;
 
       // color: { r: number; g: number; b: number };
 
@@ -162,7 +162,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         this.originalSize = this.size;
         this.tintOpacity = 0;
         this.scaleFactor = 0;
-        this.distance = 0;
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
         // this.color = {
         //   r: Math.floor(Math.random() * 255),
@@ -170,11 +169,10 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         //   b: Math.floor(Math.random() * 255),
         // };
       }
-      updateTransform(pos: Vector2, radius: number, dist: number) {
+      updateTransform(pos: Vector2, radius: number) {
         this.x = pos.x;
         this.y = pos.y;
         this.size = radius + this.scaleFactor;
-        this.distance = dist;
       }
 
       showTapState() {
@@ -214,8 +212,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     //sort asteroids by distance so that ones closer overlap the ones further away
     const sortAsteroidsByDistance = () => {
       Asteroids.sort((a, b) => {
-        if (a.distance > b.distance) return -1;
-        if (a.distance < b.distance) return 1;
+        if (a.handle > b.handle) return -1;
+        if (a.handle < b.handle) return 1;
         return 0;
       });
     };
@@ -403,13 +401,15 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       templateColumns="repeat(1, 1fr)"
       templateAreas={`"TapRegion" "UIOverlay"`}
       gap={4}
-      pt={"10px"}
+      pt="10px"
       h="100%"
+      mt={isLandscape ? "-12%" : "-38%"}
       style={{
         position: "relative",
       }}
     >
       <GridItem area="TapRegion" rowStart={1} colStart={1}>
+        <Text color="white">Radar View </Text>
         <canvas
           style={{
             position: "relative",
@@ -422,19 +422,12 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchEnd={endDrawing}
           onTouchMove={draw}
           ref={canvasRef}
-          // height={window.innerHeight * 0.85} // TO DO--------------
           height={window.innerHeight * 0.9}
           width={window.innerWidth * 0.9}
-          // height={
-          //   isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
-          // }
-          // width={
-          //   isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
-          // }
         />
       </GridItem>
     </Grid>
   );
 };
 
-export default TNS;
+export default RadarView;

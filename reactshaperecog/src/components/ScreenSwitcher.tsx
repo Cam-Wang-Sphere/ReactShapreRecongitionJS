@@ -10,7 +10,7 @@ import ReticleGridButton from "./ReticleGridButton";
 import CardinalButtons from "./CardinalButtons";
 import TapnSlashInput from "./TapnSlashInput";
 import TNS from "./TNSUpdated";
-import RadarView from "./RadarViewInput";
+import RadarView from "./RVcopy";
 import { DollarRecognizer } from "../Template/Recognizer";
 import SuccessOverlay from "./../components/SuccessOverlay";
 import ScoreWidget from "./../components/ScoreWidget";
@@ -96,12 +96,14 @@ const ScreenSwitcher = ({
         h="100px"
         mt="-10%"
       >
-        {inSelectedIndex != 2 && inSelectedIndex != 1 && (
-          <ScoreWidget
-            inNetworkingManager={inNetworkingManager}
-            inPlayerData={inPlayerData}
-          />
-        )}
+        {inSelectedIndex != 2 &&
+          inSelectedIndex != 1 &&
+          inSelectedIndex != 6 && (
+            <ScoreWidget
+              inNetworkingManager={inNetworkingManager}
+              inPlayerData={inPlayerData}
+            />
+          )}
       </HStack>
       {inputTypes[inSelectedIndex]}
     </div>
