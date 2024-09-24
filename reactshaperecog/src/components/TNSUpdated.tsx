@@ -8,7 +8,9 @@ import { FTIMMappedArea } from "../TIM/TIMMappedArea";
 import { Message } from "../schema/WSSchema";
 import { FTIMInteractableData } from "../TIM/TIMInteractableData";
 import { TIMInteractableDestroyed } from "../schema/WSSchema";
+import { TIMHitEvent } from "../schema/WSSchema";
 import { forEach } from "lodash";
+import canvasTintImage from "canvas-tint-image";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -79,13 +81,16 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
+      let radius = inTIMInteractableUpdate.normalized_radius;
       location.x *= canvasWidth;
       location.y *= canvasHeight;
+      radius *= canvasWidth;
 
       for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.updatePosition(location);
-        asteroid.handle === handle && asteroid.showTapState();
+        asteroid.handle === handle &&
+          asteroid.updateTransform(location, radius);
       }
+      sortAsteroidsByDistance();
     };
 
     //removing destroyed asteroid from array
@@ -100,6 +105,15 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         }
       });
       console.log("Asteroid Destroyed. Total asteroids: " + Asteroids.length);
+    };
+
+    const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
+      let handle: number = +inTIMHitEvent.netHandle;
+      for (let asteroid of Asteroids) {
+        asteroid.handle === handle &&
+          asteroid.handle === handle &&
+          asteroid.showTapState();
+      }
     };
 
     inNetworkingManager?.on(
@@ -121,6 +135,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       handleTIMInteractableDestroyed
     );
 
+    inNetworkingManager?.on(Message.TIMHitEvent.toString(), handleTIMHitEvent);
+
     //Asteroid class----------------------------------------------------------------
     class Asteroid {
       x: number;
@@ -129,6 +145,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       originalSize: number;
       tag: string; //small, medium, large
       handle: number; //ID of asteroid
+      tintOpacity: number;
+      scaleFactor: number;
 
       // color: { r: number; g: number; b: number };
 
@@ -142,6 +160,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         _tag === "Large" && (this.size = 95);
         this.handle = _handle;
         this.originalSize = this.size;
+        this.tintOpacity = 0;
+        this.scaleFactor = 0;
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
         // this.color = {
         //   r: Math.floor(Math.random() * 255),
@@ -149,24 +169,33 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         //   b: Math.floor(Math.random() * 255),
         // };
       }
-      updatePosition(pos: Vector2) {
+      updateTransform(pos: Vector2, radius: number) {
         this.x = pos.x;
         this.y = pos.y;
+        this.size = radius + this.scaleFactor;
       }
 
-      showTapState() {}
+      showTapState() {
+        this.scaleFactor = 20;
+        this.tintOpacity = 0.7;
+        setTimeout(() => {
+          this.tintOpacity = 0;
+          this.scaleFactor = 0;
+        }, 500);
+      }
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        // _ctx.fillStyle = `rgb(${this.color.r} ${this.color.g} ${this.color.b})`;
-        // _ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
         // asteroidImg.onload = () => {
-        // _ctx.fillStyle = "red";
-        _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
-        // _ctx.fillRect(this.x, this.y, this.size, this.size);
-        // _ctx.globalAlpha = 0.2;
-        // };
-        _ctx.fill();
+
+        _ctx.drawImage(
+          canvasTintImage(asteroidImg, "red", this.tintOpacity),
+          this.x,
+          this.y,
+          this.size,
+          this.size
+        );
+        // _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
         _ctx.closePath();
       }
     }
@@ -252,6 +281,11 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       inNetworkingManager?.off(
         Message.TIMInteractableUpdate.toString(),
         handleTIMInteractableUpdate
+      );
+
+      inNetworkingManager?.off(
+        Message.TIMHitEvent.toString(),
+        handleTIMHitEvent
       );
     };
   }, [inNetworkingManager]);
