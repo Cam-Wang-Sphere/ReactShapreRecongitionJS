@@ -42,7 +42,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
   };
 
   useEffect(() => {
-    //update canvas size when screen orientation changes----------------------------
+    //update canvas size when screen orientation changes---------------------------------------------------------------------------------------------------------------
     const resizeEvent = window.addEventListener("resize", () => {
       const orientationType = window.screen.orientation.type;
       orientationType === "landscape-primary"
@@ -55,7 +55,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       }
     });
 
-    //networking message handlers---------------------------------------------------
+    //networking message handlers----------------------------------------------------------------------------------------------------------------------------------------
 
     //assign color of the frame
     const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
@@ -81,16 +81,15 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     ): void => {
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
-      let radius = inTIMInteractableUpdate.normalized_radius;
+      let distance = inTIMInteractableUpdate.distance;
       location.x *= canvasWidth;
       location.y *= canvasHeight;
-      radius *= canvasWidth;
 
       for (let asteroid of Asteroids) {
         asteroid.handle === handle &&
-          asteroid.updateTransform(location, radius);
+          asteroid.updateTransform(location, distance);
       }
-      sortAsteroidsByDistance();
+      // sortAsteroidsByDistance();
     };
 
     //removing destroyed asteroid from array
@@ -137,16 +136,16 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
 
     inNetworkingManager?.on(Message.TIMHitEvent.toString(), handleTIMHitEvent);
 
-    //Asteroid class----------------------------------------------------------------
+    //Asteroid class-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     class Asteroid {
       x: number;
       y: number;
       size: number; //radius
-      originalSize: number;
       tag: string; //small, medium, large
       handle: number; //ID of asteroid
       tintOpacity: number;
       scaleFactor: number;
+      distance: number;
 
       // color: { r: number; g: number; b: number };
 
@@ -159,9 +158,9 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
         _tag === "Medium" && (this.size = 70);
         _tag === "Large" && (this.size = 95);
         this.handle = _handle;
-        this.originalSize = this.size;
         this.tintOpacity = 0;
         this.scaleFactor = 0;
+        this.distance = 0;
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
         // this.color = {
         //   r: Math.floor(Math.random() * 255),
@@ -169,10 +168,10 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
         //   b: Math.floor(Math.random() * 255),
         // };
       }
-      updateTransform(pos: Vector2, radius: number) {
+      updateTransform(pos: Vector2, dist: number) {
         this.x = pos.x;
         this.y = pos.y;
-        this.size = radius + this.scaleFactor;
+        this.distance = dist;
       }
 
       showTapState() {
@@ -186,7 +185,55 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        // asteroidImg.onload = () => {
+        _ctx.drawImage(
+          canvasTintImage(asteroidImg, "red", this.tintOpacity),
+          this.x,
+          this.y,
+          this.size,
+          this.size
+        );
+        // _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
+        _ctx.closePath();
+      }
+    }
+    //End of asteroid class---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //Radar Pulse class-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    class RadarPulse {
+      x: number;
+      y: number;
+      size: number; //radius
+      tag: string; //small, medium, large
+      tintOpacity: number;
+      scaleFactor: number;
+
+      // color: { r: number; g: number; b: number };
+
+      constructor(_x: number, _y: number, _tag: string, _handle: number) {
+        this.x = _x;
+        this.y = _y;
+        this.size = 20;
+        this.tag = _tag;
+        _tag === "Small" && (this.size = 55);
+        _tag === "Medium" && (this.size = 70);
+        _tag === "Large" && (this.size = 95);
+        this.tintOpacity = 0;
+        this.scaleFactor = 0;
+
+        // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
+        // this.color = {
+        //   r: Math.floor(Math.random() * 255),
+        //   g: Math.floor(Math.random() * 255),
+        //   b: Math.floor(Math.random() * 255),
+        // };
+      }
+      updateTransform(pos: Vector2, dist: number) {
+        this.x = pos.x;
+        this.y = pos.y;
+      }
+
+      draw(_ctx: CanvasRenderingContext2D) {
+        _ctx.beginPath();
 
         _ctx.drawImage(
           canvasTintImage(asteroidImg, "red", this.tintOpacity),
@@ -199,11 +246,12 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
         _ctx.closePath();
       }
     }
-    //End of asteroid class----------------------------------------------------------
+    //End of Radar Pulse class---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // canvas variables
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
+    let RadarPulses: RadarPulse[] = [];
     // Asteroids.push(new Asteroid(120, 100, "Medium", 2));
     // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
     // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
@@ -212,30 +260,43 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     //sort asteroids by distance so that ones closer overlap the ones further away
     const sortAsteroidsByDistance = () => {
       Asteroids.sort((a, b) => {
-        if (a.handle > b.handle) return -1;
-        if (a.handle < b.handle) return 1;
+        if (a.distance > b.distance) return -1;
+        if (a.distance < b.distance) return 1;
         return 0;
       });
     };
 
-    //canvas functions
+    //canvas functions------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     const update = () => {
       //updating all asteroid positions
-      for (let asteroid of Asteroids) {
-        // asteroid.showTapState();
+      for (let radarPulse of RadarPulses) {
+        // radarPulse.updateTransform();
       }
     };
 
     const draw = (_ctx: CanvasRenderingContext2D) => {
-      //clear canvas every frame
+      //clear canvas every frame------------------------
       _ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      //draw all asteroids
+      //draw all asteroids------------------------------
       for (let asteroid of Asteroids) {
         asteroid.draw(_ctx);
       }
 
-      //draw canvas frame/outline every frame
+      //draw all Radar pulses-------------------------
+      for (let radarPulse of RadarPulses) {
+        radarPulse.draw(_ctx);
+      }
+
+      // Player Ship-----------------------------------
+      _ctx.beginPath();
+      _ctx.globalAlpha = 1;
+      _ctx.arc(canvasWidth / 2, canvasHeight, 40, 0, 2 * Math.PI);
+      _ctx.fillStyle = "#39D7B9";
+      _ctx.fill();
+      _ctx.closePath();
+
+      //draw canvas frame/mapped area -----------------
       _ctx.beginPath();
       _ctx.lineWidth = 10;
       _ctx.strokeStyle = `rgb(${color.r} ${color.g} ${color.b})`;
@@ -267,7 +328,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       //cancel requested animation
       cancelAnimationFrame(reqAnimFrame);
 
-      //deregister networking messages----------------------------------------------
+      //deregister networking messages------------------------------------------------------------------------------------------------------------------------------------------------------------
       inNetworkingManager?.off(
         Message.TIMMappedAreaAdd.toString(),
         handleTIMMappedAreaAdd

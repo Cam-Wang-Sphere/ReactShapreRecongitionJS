@@ -22,12 +22,17 @@ let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
+let mouseX = 100;
+let mouseY = 100;
 
 const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
-  //html canvas
+  //html canvases
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef2 = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const ctxRef2 = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
+  const canvasRect2 = useRef<DOMRect | null>(null);
   // asteroidImg.src = "../assets/Icons/asteroid.png";
   asteroidImg.src =
     "https://clipart-library.com/images_k/asteroid-transparent/asteroid-transparent-5.png";
@@ -52,6 +57,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       if (canvasRef.current) {
         updateCanvasSize(canvasRef.current);
         canvasRect.current = canvasRef.current.getBoundingClientRect();
+        canvasRect2.current = canvasRect.current;
       }
     });
 
@@ -205,6 +211,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
     // canvas variables
     const canvas = canvasRef.current;
+    const canvas2 = canvasRef2.current;
     let Asteroids: Asteroid[] = [];
     // Asteroids.push(new Asteroid(120, 100, "Medium", 2));
     // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
@@ -257,10 +264,14 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
     if (canvas) {
       const ctx = canvas.getContext("2d");
-      if (ctx) {
+      const ctx2 = canvas2?.getContext("2d");
+      if (ctx && ctx2) {
         ctxRef.current = ctx;
+        ctxRef2.current = ctx2;
         canvasRect.current = canvas.getBoundingClientRect();
+        canvasRect2.current = canvas.getBoundingClientRect();
         updateCanvasSize(canvas);
+        // updateCanvasSize(canvas2);
         loop(ctx);
       }
     }
@@ -292,6 +303,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     };
   }, [inNetworkingManager]);
 
+  let startX: number;
+  let startY: number;
+
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
@@ -312,10 +326,11 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
 
+    startX = x;
+    startY = y;
+
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
-
-    // console.log("X: " + x + "Y: " + y);
 
     let Event: ETriggerEvent = ETriggerEvent.Started;
     let Pos: Vector2 = new Vector2(x, y);
@@ -338,7 +353,6 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
 
   const endDrawing = () => {
     setIsDrawing(false);
-
     let Event: ETriggerEvent = ETriggerEvent.Completed;
     let Pos: Vector2 = new Vector2(0, 0);
     let DateTime: Date = new Date();
@@ -356,6 +370,8 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
     let Inputs: FTIMInputEvent[] = [];
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputEvents(Inputs);
+
+    ctxRef2.current?.clearRect(0, 0, canvasWidth, canvasHeight);
   };
 
   const draw = (
@@ -374,6 +390,24 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY -
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
+
+    mouseX = x;
+    mouseY = y;
+
+    if (ctxRef2.current) {
+      ctxRef2.current.beginPath();
+      ctxRef2.current.globalAlpha = 1;
+      ctxRef2.current.lineCap = "round";
+      ctxRef2.current.lineJoin = "round";
+      ctxRef2.current.strokeStyle = "grey";
+      ctxRef2.current.lineWidth = 8;
+      ctxRef2.current.moveTo(startX, startY);
+      ctxRef2.current.lineTo(mouseX, mouseY);
+      ctxRef2.current.stroke();
+      ctxRef2.current.closePath();
+    }
+    startX = mouseX;
+    startY = mouseY;
 
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
@@ -409,11 +443,12 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         position: "relative",
       }}
     >
-      <GridItem area="TapRegion" rowStart={1} colStart={1}>
+      <GridItem area="TapRegion" rowStart={1} colStart={1} bg="pink">
         <canvas
           style={{
             position: "relative",
             background: "#1f1c1e",
+            // background: "pink",
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
@@ -422,15 +457,25 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           onTouchEnd={endDrawing}
           onTouchMove={draw}
           ref={canvasRef}
-          // height={window.innerHeight * 0.85} // TO DO--------------
           height={window.innerHeight * 0.9}
           width={window.innerWidth * 0.9}
-          // height={
-          //   isLandscape ? window.innerHeight * 0.8 : window.innerHeight * 0.88
-          // }
-          // width={
-          //   isLandscape ? window.innerWidth * 1.4 : window.innerWidth * 0.8 // TO DO--------------
-          // }
+        />
+      </GridItem>
+      <GridItem area="TapRegion" rowStart={1} colStart={1}>
+        <canvas
+          style={{
+            position: "relative",
+            background: "rgba(255,0,0,0)",
+          }}
+          onMouseDown={startDrawing}
+          onMouseUp={endDrawing}
+          onMouseMove={draw}
+          onTouchStart={startDrawing}
+          onTouchEnd={endDrawing}
+          onTouchMove={draw}
+          ref={canvasRef2}
+          height={window.innerHeight * 0.9}
+          width={window.innerWidth * 0.9}
         />
       </GridItem>
     </Grid>
