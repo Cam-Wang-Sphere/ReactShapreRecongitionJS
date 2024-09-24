@@ -18,10 +18,20 @@ interface TapnSlashProps {
 
 //global variables
 let color = { r: 173, g: 179, b: 175 }; // color for the frame
+let mappedAreaDist = 0;
+let asteroidSpawnDist = 0;
 let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
+
+const RemapInRange = (
+  num: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number
+) => ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
 const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
   //html canvas
@@ -62,6 +72,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       color.r = inTIMMappedArea.color.r() * 255;
       color.g = inTIMMappedArea.color.g() * 255;
       color.b = inTIMMappedArea.color.b() * 255;
+      mappedAreaDist = inTIMMappedArea.distance;
     };
 
     // spawn new asteroid, add asteroid to array, assign tag and handle
@@ -69,9 +80,10 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       inTIMInteractableData: FTIMInteractableData
     ): void => {
       // let scale = inTIMInteractableData.scale;
+      asteroidSpawnDist = inTIMInteractableData.distance;
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
-      Asteroids.push(new Asteroid(-50, -50, tag, handle));
+      Asteroids.push(new Asteroid(-50, -50, 1, tag, handle));
       console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
     };
 
@@ -79,15 +91,22 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     const handleTIMInteractableUpdate = (
       inTIMInteractableUpdate: FTIMInteractableData
     ): void => {
+      let distance = inTIMInteractableUpdate.distance;
       let handle = inTIMInteractableUpdate.handle;
       let location = inTIMInteractableUpdate.location;
-      let distance = inTIMInteractableUpdate.distance;
       location.x *= canvasWidth;
-      location.y *= canvasHeight;
+      let distanceFromFrame = distance - mappedAreaDist;
+      distanceFromFrame = RemapInRange(
+        distanceFromFrame,
+        mappedAreaDist,
+        7000,
+        canvasHeight,
+        0
+      );
 
       for (let asteroid of Asteroids) {
         asteroid.handle === handle &&
-          asteroid.updateTransform(location, distance);
+          asteroid.updatePosition(new Vector2(location.x, distanceFromFrame));
       }
       // sortAsteroidsByDistance();
     };
@@ -146,53 +165,76 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       tintOpacity: number;
       scaleFactor: number;
       distance: number;
-
+      shape: number;
+      color: string;
+      originalSize: number;
       // color: { r: number; g: number; b: number };
 
-      constructor(_x: number, _y: number, _tag: string, _handle: number) {
+      constructor(
+        _x: number,
+        _y: number,
+        _shape: number,
+        _tag: string,
+        _handle: number
+      ) {
         this.x = _x;
         this.y = _y;
         this.size = 20;
+        this.shape = _shape;
         this.tag = _tag;
-        _tag === "Small" && (this.size = 55);
-        _tag === "Medium" && (this.size = 70);
-        _tag === "Large" && (this.size = 95);
+        _tag === "Small" && (this.size = 10);
+        _tag === "Medium" && (this.size = 25);
+        _tag === "Large" && (this.size = 40);
         this.handle = _handle;
         this.tintOpacity = 0;
         this.scaleFactor = 0;
         this.distance = 0;
-        // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-        // this.color = {
-        //   r: Math.floor(Math.random() * 255),
-        //   g: Math.floor(Math.random() * 255),
-        //   b: Math.floor(Math.random() * 255),
-        // };
+        this.color = "orange";
+        this.originalSize = this.size;
       }
-      updateTransform(pos: Vector2, dist: number) {
+      updatePosition(pos: Vector2) {
         this.x = pos.x;
         this.y = pos.y;
-        this.distance = dist;
+        this.size += this.scaleFactor;
       }
 
       showTapState() {
-        this.scaleFactor = 20;
-        this.tintOpacity = 0.7;
+        this.size += 5;
+        this.color = "red";
         setTimeout(() => {
-          this.tintOpacity = 0;
-          this.scaleFactor = 0;
-        }, 500);
+          this.size = this.originalSize;
+          this.color = "orange";
+        }, 200);
       }
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        _ctx.drawImage(
-          canvasTintImage(asteroidImg, "red", this.tintOpacity),
-          this.x,
-          this.y,
-          this.size,
-          this.size
-        );
-        // _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
+        _ctx.globalAlpha = 1;
+        switch (this.shape) {
+          case 1: {
+            // console.log("Cirlce");
+            _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            break;
+          }
+          case 2: {
+            // console.log("Triangle");
+            _ctx.moveTo(this.x, this.y);
+            _ctx.lineTo(this.x - this.size, this.y + this.size + 4);
+            _ctx.lineTo(this.x + this.size, this.y + this.size + 4);
+            break;
+          }
+          case 3: {
+            // console.log("Square");
+            _ctx.rect(this.x, this.y, this.size, this.size);
+            break;
+          }
+          case 4: {
+            // console.log("Cross");
+            break;
+          }
+        }
+        _ctx.fillStyle = this.color;
+        _ctx.fill();
         _ctx.closePath();
       }
     }
@@ -202,47 +244,44 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     class RadarPulse {
       x: number;
       y: number;
-      size: number; //radius
-      tag: string; //small, medium, large
-      tintOpacity: number;
+      radius: number; //radius
+      speed: number;
+      fillOpacity: number;
       scaleFactor: number;
-
       // color: { r: number; g: number; b: number };
+      color: { r: number; g: number; b: number };
 
-      constructor(_x: number, _y: number, _tag: string, _handle: number) {
+      constructor(
+        _x: number,
+        _y: number,
+        _speed: number,
+        _color: { r: number; g: number; b: number }
+      ) {
         this.x = _x;
         this.y = _y;
-        this.size = 20;
-        this.tag = _tag;
-        _tag === "Small" && (this.size = 55);
-        _tag === "Medium" && (this.size = 70);
-        _tag === "Large" && (this.size = 95);
-        this.tintOpacity = 0;
+        this.radius = 20;
+        this.speed = _speed;
+        this.fillOpacity = 0.5;
         this.scaleFactor = 0;
-
+        this.color = _color;
         // this.speedx = Math.random() * (3 - 1.2) + 1.2; //random in range
-        // this.color = {
-        //   r: Math.floor(Math.random() * 255),
-        //   g: Math.floor(Math.random() * 255),
-        //   b: Math.floor(Math.random() * 255),
-        // };
       }
-      updateTransform(pos: Vector2, dist: number) {
-        this.x = pos.x;
-        this.y = pos.y;
+      radiate() {
+        this.radius += this.speed;
+        this.fillOpacity >= 0.01 && (this.fillOpacity -= 0.004);
+        if (this.radius / 2 > canvasHeight) {
+          this.radius = 20;
+          this.fillOpacity = 0.5;
+        }
       }
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-
-        _ctx.drawImage(
-          canvasTintImage(asteroidImg, "red", this.tintOpacity),
-          this.x,
-          this.y,
-          this.size,
-          this.size
-        );
-        // _ctx.drawImage(asteroidImg, this.x, this.y, this.size, this.size);
+        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        // _ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+        _ctx.fillStyle = "grey";
+        _ctx.globalAlpha = this.fillOpacity;
+        _ctx.fill();
         _ctx.closePath();
       }
     }
@@ -252,7 +291,8 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     const canvas = canvasRef.current;
     let Asteroids: Asteroid[] = [];
     let RadarPulses: RadarPulse[] = [];
-    // Asteroids.push(new Asteroid(120, 100, "Medium", 2));
+    RadarPulses.push(new RadarPulse(canvasWidth / 2, canvasHeight, 14, color));
+
     // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
     // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
     // Asteroids.push(new Asteroid(100, 500, "Medium", 3));
@@ -270,7 +310,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     const update = () => {
       //updating all asteroid positions
       for (let radarPulse of RadarPulses) {
-        // radarPulse.updateTransform();
+        radarPulse.radiate();
       }
     };
 
@@ -292,7 +332,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
       _ctx.beginPath();
       _ctx.globalAlpha = 1;
       _ctx.arc(canvasWidth / 2, canvasHeight, 40, 0, 2 * Math.PI);
-      _ctx.fillStyle = "#39D7B9";
+      _ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
       _ctx.fill();
       _ctx.closePath();
 
