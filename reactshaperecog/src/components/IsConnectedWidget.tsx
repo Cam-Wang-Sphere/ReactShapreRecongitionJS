@@ -4,45 +4,54 @@ import { BaseNetworkingManager } from "../networking/BaseNetworkingManager";
 import { Message } from "../schema/WSSchema";
 import { Heading } from "@chakra-ui/react";
 
-
 interface IsConnectedWidgetProps {
-    inNetworkingManager: NetworkingManager | null;
+  inNetworkingManager: NetworkingManager | null;
 }
 
-const IsConnectedWidget = ({inNetworkingManager} : IsConnectedWidgetProps) => {
+const IsConnectedWidget = ({ inNetworkingManager }: IsConnectedWidgetProps) => {
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
-    const [isConnected, setIsConnected] = useState<boolean>(false);
+  useEffect(() => {
+    const handleWebsocketConnectionStatus = (
+      inWebsocketConnectionStatus: boolean
+    ) => {
+      setIsConnected(inWebsocketConnectionStatus);
+      console.log(
+        "in websocket connection status in IsConnectedWidget = ",
+        inWebsocketConnectionStatus
+      );
+    };
 
-    useEffect(() =>
-        {
-            const handleWebsocketConnectionStatus = (inWebsocketConnectionStatus: boolean) =>
-            {
-                setIsConnected(inWebsocketConnectionStatus);
-                console.log('in websocket connection status in IsConnectedWidget = ', inWebsocketConnectionStatus);
-            };
-    
-            inNetworkingManager?.on(NetworkingManager.websocketStatusEventName, handleWebsocketConnectionStatus);
-            console.log('connected manager message = ', NetworkingManager.websocketStatusEventName);
+    inNetworkingManager?.on(
+      NetworkingManager.websocketStatusEventName,
+      handleWebsocketConnectionStatus
+    );
+    console.log(
+      "connected manager message = ",
+      NetworkingManager.websocketStatusEventName
+    );
 
-            if (inNetworkingManager)
-            {
-                setIsConnected(inNetworkingManager.isConnected());
-            }
-    
-            // cleaning up
-            return () =>
-            {
-                inNetworkingManager?.off(NetworkingManager.websocketStatusEventName, handleWebsocketConnectionStatus);
-            };
-        }, [inNetworkingManager]);
+    if (inNetworkingManager) {
+      setIsConnected(inNetworkingManager.isConnected());
+    }
 
+    // cleaning up
+    return () => {
+      inNetworkingManager?.off(
+        NetworkingManager.websocketStatusEventName,
+        handleWebsocketConnectionStatus
+      );
+    };
+  }, [inNetworkingManager]);
 
-    return (
-        <div>
-            {/* <p style={{ color: 'white'}}>Connection Status: <span style={{ color: isConnected ? 'green' : 'red'}}>{isConnected ? 'Connected' : 'Disconnected'} </span> </p> */}
-            <Heading color={isConnected ? 'green' : 'red'}>PreFE</Heading>
-        </div>
-    )
+  return (
+    <div>
+      {/* <p style={{ color: 'white'}}>Connection Status: <span style={{ color: isConnected ? 'green' : 'red'}}>{isConnected ? 'Connected' : 'Disconnected'} </span> </p> */}
+      <Heading size="lg" color={isConnected ? "green" : "red"}>
+        {isConnected ? "Connected" : "Not Connected"}
+      </Heading>
+    </div>
+  );
 };
 
 export default IsConnectedWidget;

@@ -17,6 +17,7 @@
         "@types/node": "^22.1.0",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
+        "canvas-tint-image": "^2.1.1",
         "expo": "^51.0.31",
         "expo-screen-orientation": "~7.0.5",
         "flatbuffers": "^24.3.25",

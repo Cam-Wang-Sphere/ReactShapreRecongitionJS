@@ -96,12 +96,14 @@ const ScreenSwitcher = ({
         h="100px"
         mt="-10%"
       >
-        {inSelectedIndex != 2 && inSelectedIndex != 1 && (
-          <ScoreWidget
-            inNetworkingManager={inNetworkingManager}
-            inPlayerData={inPlayerData}
-          />
-        )}
+        {inSelectedIndex != 2 &&
+          inSelectedIndex != 1 &&
+          inSelectedIndex != 6 && (
+            <ScoreWidget
+              inNetworkingManager={inNetworkingManager}
+              inPlayerData={inPlayerData}
+            />
+          )}
       </HStack>
       {inputTypes[inSelectedIndex]}
     </div>

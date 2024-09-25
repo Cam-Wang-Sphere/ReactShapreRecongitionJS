@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager.ts";
 import { Box, SimpleGrid } from "@chakra-ui/react";
-import { Message } from "../schema/wsschema/message";
-import { WSPlayerData } from "../player/WSPlayerData";
+import { Message } from "../schema/wsschema/message.ts";
+import { WSPlayerData } from "../player/WSPlayerData.ts";
 import SvgSquareReticle from "../assets/Icons/SqaureReticle.tsx";
 import SvgTriangleReticle from "../assets/Icons/TriangleReticle.tsx";
 import SvgCircleReticle from "../assets/Icons/CircleReticle.tsx";
@@ -23,65 +23,70 @@ const Icons = [
 interface ReticleGridButtonProps {
   inNetworkingManager: NetworkingManager | null;
 }
+let prevScore = 0;
+let tileScale = 0.8;
+let ScoreColor: string = "#494949";
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [FeedbackIndex, setFeedbackIndex] = useState(-1);
+  // const [FeedbackIndex, setFeedbackIndex] = useState(-1);
 
-  const [isIncreasing, setisIncreasing] = useState(false);
-  const [isScoreChanged, setisScoreChanged] = useState(false);
+  const [isSuccessful, setisSuccessful] = useState(false);
+  // const [isScoreChanged, setisScoreChanged] = useState(false);
   const [cooldownExpired, setcooldownExpired] = useState(true);
 
-  let prevScore = 0;
-  let ScoreColor: string = "white";
-  let getScoreDirection = (score: number) => {
-    score > prevScore ? setisIncreasing(true) : setisIncreasing(false);
-    prevScore = score;
+  let getScoreColor = (condition: boolean) => {
+    condition ? (ScoreColor = "green") : (ScoreColor = "red");
   };
 
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  async function DelayAction() {
-    await delay(200); //delay to reset index
-    setSelectedIndex(-1);
+  //reset delay for successful condition
+  async function expandTilewithDelay(ms: number) {
+    await delay(ms);
+    tileScale = 20;
+  }
 
-    await delay(1000); //delay for UI feedback flashes
-    setFeedbackIndex(-1);
-    setisScoreChanged(false);
+  //reset delay for successful condition
+  async function successResetDelay(ms: number) {
+    await delay(ms);
+    setSelectedIndex(-1);
+    console.log("success delay");
+  }
+
+  //reset delay for successful condition
+  async function failResetDelay(ms: number) {
+    await delay(ms);
+    setSelectedIndex(-1);
+    console.log("fail delay");
   }
 
   //delay for cooldown time
-  const coolDownTimer = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
   async function startCooldown(ms: number) {
-    console.log("cooooldown starteds..");
     await delay(ms);
-    setcooldownExpired(true);
+    console.log("cooldown timer");
   }
 
   const handleButtonClick = (index: number) => {
-    console.log("score increasing is...." + isIncreasing);
-    if (!isIncreasing) {
-      setcooldownExpired(false);
-      startCooldown(1000);
-    }
-
     if (cooldownExpired) {
       setSelectedIndex(index);
-      setFeedbackIndex(index);
       console.log("selected index = ", index);
 
       const correspondingButton: EButtonTypeEnum = index + 1;
       inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
-      DelayAction();
+      successResetDelay(500);
     }
   };
 
   // react method for sending index...
   useEffect(() => {
+    let getScoreDirection = (score: number) => {
+      // score > prevScore ? setisSuccessful(true) : setisSuccessful(false);
+      score > prevScore ? (ScoreColor = "green") : (ScoreColor = "red");
+      prevScore = score;
+    };
     const handleScoreEvent = (inScore: number) => {
-      cooldownExpired && setisScoreChanged(true);
-      cooldownExpired && getScoreDirection(inScore);
+      getScoreDirection(inScore);
+      // console.log("score dir is:" + isSuccessful);
     };
 
     inNetworkingManager?.on(
@@ -112,25 +117,23 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
         {Icons.map((Icon, index) => (
           <Box
             key={index}
-            // bg="green"
-            bg={
-              FeedbackIndex === index
-                ? isScoreChanged
-                  ? isIncreasing
-                    ? "green"
-                    : "red"
-                  : "#494949"
-                : "#494949"
-            }
+            bg={ScoreColor}
+            // bg={
+            //   FeedbackIndex === index
+            //     ? isScoreChanged
+            //       ? isSuccessful
+            //         ? "green"
+            //         : "red"
+            //       : "#494949"
+            //     : "#494949"
+            // }
             height="150px"
             borderWidth="2px"
             borderColor="#080808"
             borderRadius="md"
             as={motion.div}
             animate={{
-              // scale: selectedIndex === index ? 20 : 0.8,
-              scale:
-                selectedIndex === index ? (isScoreChanged ? 20 : 0.8) : 0.8,
+              scale: selectedIndex === index ? 20 : 0.8,
               opacity: selectedIndex === index ? 1 : 0.5,
             }}
             transition="0.5s ease-out"
@@ -152,46 +155,27 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
           <Box
             key={index}
             // bg={selectedIndex === index ? "teal" : "#494949"}
-            // bg="#494949"
-            bg={
-              FeedbackIndex === index
-                ? isScoreChanged
-                  ? isIncreasing
-                    ? "green"
-                    : "red"
-                  : "#494949"
-                : "#494949"
-            }
+            bg="#494949"
+            // bg={
+            //   FeedbackIndex === index
+            //     ? isScoreChanged
+            //       ? isSuccessful
+            //         ? "green"
+            //         : "red"
+            //       : "#494949"
+            //     : "#494949"
+            // }
             height="150px"
             borderWidth="2px"
             borderColor="#080808"
             borderRadius="md"
             as={motion.div}
-            // whileTap={{ scale: 0.9 }}
-            // transition="0.5s linear"
             animate={{
               scale: selectedIndex === index ? 0.9 : 1.0,
-              // opacity: selectedIndex === index ? 0.7 : 1,
             }}
-            // transition={{ transition: "0.5", ease: "linear" }}
             onClick={() => handleButtonClick(index)}
           >
             {Icon}
-            {/* <Box
-            as={motion.div}
-            bg="pink"
-            animate={{
-              scale: FeedbackIndex === index ? 5 : 1.0,
-              opacity: FeedbackIndex === index ? 0.8 : 0,
-            }}
-            transition="1s linear"
-            h="100%"
-            w="100%"
-            mt="-100%"
-            style={{
-              position: "relative",
-            }}
-          ></Box> */}
           </Box>
         ))}
       </SimpleGrid>
