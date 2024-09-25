@@ -446,8 +446,6 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     };
   }, [inNetworkingManager]);
 
-  let Inputs: FTIMInputInteractable[] = [];
-
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
@@ -487,7 +485,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
       tappedAsteroidHandle
     );
-
+    let Inputs: FTIMInputInteractable[] = [];
     Inputs.push(NewInput);
     inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
 
