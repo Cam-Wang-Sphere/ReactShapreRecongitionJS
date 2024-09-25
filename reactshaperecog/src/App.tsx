@@ -34,6 +34,7 @@ import GameState from "./components/GameState";
 import ScreenSwitcher from "./components/ScreenSwitcher";
 import IsConnectedWidget from "./components/IsConnectedWidget";
 import SuccessOverlay from "./components/SuccessOverlay";
+import { FTIMMappedArea } from "./TIM/TIMMappedArea";
 
 const UserInputKey = "UserInput";
 

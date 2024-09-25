@@ -14,6 +14,11 @@ import canvasTintImage from "canvas-tint-image";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
+  frameColor: {
+    r: number;
+    g: number;
+    b: number;
+  };
 }
 
 //global variables
@@ -33,11 +38,12 @@ const RemapInRange = (
   outMax: number
 ) => ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
-const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
+const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
   //html canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasRect = useRef<DOMRect | null>(null);
+  color = frameColor;
   // asteroidImg.src = "../assets/Icons/asteroid.png";
   asteroidImg.src =
     "https://clipart-library.com/images_k/asteroid-transparent/asteroid-transparent-5.png";

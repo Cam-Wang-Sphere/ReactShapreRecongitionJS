@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NetworkingManager } from "./../networking/NetworkingManager";
+import { FTIMMappedArea } from "../TIM/TIMMappedArea";
 import { Message } from "../schema/wsschema/message";
 import { EWSGlobalInputTypes } from "../schema/ewsglobal-input-types";
 import ConnectionScreen from "./ConnectionScreen";
@@ -20,6 +21,8 @@ import { WSPlayerData } from "../player/WSPlayerData";
 import PointTapInput from "./PointTapInput";
 import AddTemplateWidget from "./AddTemplate";
 import { TemplateManager } from "../Template/TemplateManager";
+
+let Framecolor = { r: 173, g: 179, b: 175 }; // color for the frame
 
 interface ScreenSwitcherProps {
   inNetworkingManager: NetworkingManager | null;
@@ -51,14 +54,17 @@ const ScreenSwitcher = ({
       connectFunction={inConnectFunction}
       inConnectNetworkingManager={inNetworkingManager}
     />,
-    <TNS inNetworkingManager={inNetworkingManager} />,
+    <TNS inNetworkingManager={inNetworkingManager} frameColor={Framecolor} />,
     <DrawingWidget
       inNetworkingManager={inNetworkingManager}
       inRecognizer={inSSDollarRecognizer}
     />,
     <ReticleGridButton inNetworkingManager={inNetworkingManager} />,
     <CardinalButtons inNetworkingManager={inNetworkingManager} />,
-    <RadarView inNetworkingManager={inNetworkingManager} />,
+    <RadarView
+      inNetworkingManager={inNetworkingManager}
+      frameColor={Framecolor}
+    />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
   ];
@@ -73,6 +79,18 @@ const ScreenSwitcher = ({
       handleGlobalInputResponse
     );
 
+    //assign color of the frame
+    const handleTIMMappedAreaAdd = (inTIMMappedArea: FTIMMappedArea): void => {
+      Framecolor.r = inTIMMappedArea.color.r() * 255;
+      Framecolor.g = inTIMMappedArea.color.g() * 255;
+      Framecolor.b = inTIMMappedArea.color.b() * 255;
+    };
+
+    inNetworkingManager?.on(
+      Message.TIMMappedAreaAdd.toString(),
+      handleTIMMappedAreaAdd
+    );
+
     // @TODO NATHAN: fix to resolve screen switch order dependencies
     // if (inPlayerData)
     // {
@@ -84,6 +102,11 @@ const ScreenSwitcher = ({
       inNetworkingManager?.off(
         Message.GlobalInputResponse.toString(),
         handleGlobalInputResponse
+      );
+
+      inNetworkingManager?.off(
+        Message.TIMMappedAreaAdd.toString(),
+        handleTIMMappedAreaAdd
       );
     };
   }, [inNetworkingManager]);
