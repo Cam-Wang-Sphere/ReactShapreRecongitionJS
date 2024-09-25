@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
+import { FTIMInputInteractable } from "../TIM/TIMInputInteractable";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
 import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
@@ -29,6 +30,8 @@ let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
+let mouse = new Vector2(0, 0);
+let tappedAsteroidHandle: number;
 
 const RemapInRange = (
   num: number,
@@ -133,9 +136,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
-      for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.showTapState();
-      }
+      // for (let asteroid of Asteroids) {
+      // asteroid.handle === handle && asteroid.showTapState();
+      // }
     };
 
     inNetworkingManager?.on(
@@ -297,7 +300,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let RadarPulses: RadarPulse[] = [];
     RadarPulses.push(new RadarPulse(canvasWidth / 2, canvasHeight, 14, color));
 
-    // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
+    // Asteroids.push(new Asteroid(110, 400, 1, "Medium", 4));
     // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
     // Asteroids.push(new Asteroid(100, 500, "Medium", 3));
 
@@ -312,6 +315,20 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     //canvas functions------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     const update = () => {
+      //check if player taps on an asteroid
+      let tapArea = 50;
+      for (let asteroid of Asteroids) {
+        if (
+          mouse.x >= asteroid.x - tapArea &&
+          mouse.x <= asteroid.x + tapArea &&
+          mouse.y >= asteroid.y - tapArea &&
+          mouse.y <= asteroid.y + tapArea
+        ) {
+          asteroid.showTapState();
+          tappedAsteroidHandle = asteroid.handle;
+        }
+      }
+
       //updating all asteroid positions
       for (let radarPulse of RadarPulses) {
         radarPulse.radiate();
@@ -395,6 +412,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     };
   }, [inNetworkingManager]);
 
+  let Inputs: FTIMInputInteractable[] = [];
+
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
@@ -415,6 +434,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
 
+    mouse.x = x;
+    mouse.y = y;
+
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
@@ -426,17 +448,26 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
 
-    let NewInput: FTIMInputEvent = new FTIMInputEvent(
-      Handle,
-      0,
-      Pos,
-      Event,
-      Time
+    console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
+
+    let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
+      tappedAsteroidHandle
     );
 
-    let Inputs: FTIMInputEvent[] = [];
     Inputs.push(NewInput);
-    inNetworkingManager?.sendTIMInputEvents(Inputs);
+    inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
+
+    // let NewInput: FTIMInputEvent = new FTIMInputEvent(
+    //   Handle,
+    //   0,
+    //   Pos,
+    //   Event,
+    //   Time
+    // );
+
+    // let Inputs: FTIMInputEvent[] = [];
+    // Inputs.push(NewInput);
+    // inNetworkingManager?.sendTIMInputEvents(Inputs);
   };
 
   const endDrawing = () => {
@@ -447,45 +478,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let DateTime: Date = new Date();
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
-
-    let NewInput: FTIMInputEvent = new FTIMInputEvent(
-      Handle,
-      0,
-      Pos,
-      Event,
-      Time
-    );
-
-    let Inputs: FTIMInputEvent[] = [];
-    Inputs.push(NewInput);
-    inNetworkingManager?.sendTIMInputEvents(Inputs);
-  };
-
-  const draw = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    if (!isDrawing || !ctxRef.current || !canvasRect.current) {
-      return;
-    }
-    let x =
-      "touches" in e
-        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX -
-          canvasRect.current.left
-        : (e.nativeEvent as MouseEvent).offsetX;
-    let y =
-      "touches" in e
-        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY -
-          canvasRect.current.top
-        : (e.nativeEvent as MouseEvent).offsetY;
-
-    x /= canvasRect.current.width;
-    y /= canvasRect.current.height;
-
-    let Event: ETriggerEvent = ETriggerEvent.Ongoing;
-    let Pos: Vector2 = new Vector2(x, y);
-    let DateTime: Date = new Date();
-    let Time: number = DateTime.getTime();
-    let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
+    mouse.x = 0;
+    mouse.y = 0;
 
     let NewInput: FTIMInputEvent = new FTIMInputEvent(
       Handle,
