@@ -14,6 +14,11 @@ import canvasTintImage from "canvas-tint-image";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
+  frameColor: {
+    r: number;
+    g: number;
+    b: number;
+  };
 }
 
 //global variables
@@ -25,7 +30,7 @@ const asteroidImg = new Image();
 let mouseX = 100;
 let mouseY = 100;
 
-const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
+const TNS = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
   //html canvases
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasRef2 = useRef<HTMLCanvasElement | null>(null);
@@ -34,6 +39,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   const canvasRect = useRef<DOMRect | null>(null);
   const canvasRect2 = useRef<DOMRect | null>(null);
   // asteroidImg.src = "../assets/Icons/asteroid.png";
+  color = frameColor;
   asteroidImg.src =
     "https://clipart-library.com/images_k/asteroid-transparent/asteroid-transparent-5.png";
 
