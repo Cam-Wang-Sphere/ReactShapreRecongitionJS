@@ -481,13 +481,12 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
 
     console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
-
-    let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
-      tappedAsteroidHandle
-    );
     let Inputs: FTIMInputInteractable[] = [];
-
     if (tappedAsteroidHandle) {
+      let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
+        tappedAsteroidHandle
+      );
+
       Inputs.push(NewInput);
       inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
     }
