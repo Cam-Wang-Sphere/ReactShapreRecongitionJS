@@ -44,6 +44,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
   let updateCanvasSize = (HTMLcanvas: HTMLCanvasElement) => {
     canvasWidth = HTMLcanvas.width;
     canvasHeight = HTMLcanvas.height;
+    // console.log(canvasWidth + " , " + canvasHeight);
   };
 
   useEffect(() => {
@@ -89,9 +90,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
       let location = inTIMInteractableUpdate.location;
       let radius = inTIMInteractableUpdate.normalized_radius;
       let distance = inTIMInteractableUpdate.distance;
-      location.x *= canvasWidth;
-      location.y *= canvasHeight;
-      radius *= canvasWidth;
+      radius *= canvasWidth / 1.6;
+      location.x = location.x * canvasWidth;
+      location.y = location.y * canvasHeight;
 
       for (let asteroid of Asteroids) {
         asteroid.handle === handle &&
@@ -177,9 +178,9 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
         // };
       }
       updateTransform(pos: Vector2, radius: number, dist: number) {
-        this.x = pos.x;
-        this.y = pos.y;
         this.size = radius + this.scaleFactor;
+        this.x = pos.x - this.size / 2;
+        this.y = pos.y - this.size / 2;
         this.distance = dist;
       }
 
@@ -461,6 +462,7 @@ const TNS = ({ inNetworkingManager }: TapnSlashProps) => {
           width={window.innerWidth * 0.9}
         />
       </GridItem>
+
       <GridItem area="TapRegion" rowStart={1} colStart={1}>
         <canvas
           style={{

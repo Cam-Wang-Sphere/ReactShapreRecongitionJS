@@ -128,9 +128,7 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
       for (let asteroid of Asteroids) {
-        asteroid.handle === handle &&
-          asteroid.handle === handle &&
-          asteroid.showTapState();
+        asteroid.handle === handle && asteroid.showTapState();
       }
     };
 
@@ -518,10 +516,10 @@ const RadarView = ({ inNetworkingManager }: TapnSlashProps) => {
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
-          onMouseMove={draw}
+          // onMouseMove={draw}
           onTouchStart={startDrawing}
           onTouchEnd={endDrawing}
-          onTouchMove={draw}
+          // onTouchMove={draw}
           ref={canvasRef}
           height={window.innerHeight * 0.9}
           width={window.innerWidth * 0.9}
