@@ -1,5 +1,0 @@
-#!/bin/sh
-if [ -f package.json ]; then
-    echo "Running npm install post merge"
-    npm install
-fi
