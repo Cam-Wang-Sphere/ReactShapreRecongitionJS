@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NetworkingManager } from "../networking/NetworkingManager";
 import { ETriggerEvent, FTIMInputEvent } from "../TIM/TIMInputEvent";
+import { FTIMInputInteractable } from "../TIM/TIMInputInteractable";
 import { Vector2 } from "../TIM/Vector2";
 import { FTIMMappedAreaHandle } from "../TIM/TIMMappedAreaHandle";
 import { Box, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
@@ -29,6 +30,8 @@ let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
+let mouse = new Vector2(0, 0);
+let tappedAsteroidHandle: number;
 
 const RemapInRange = (
   num: number,
@@ -133,9 +136,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
-      for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.showTapState();
-      }
+      // for (let asteroid of Asteroids) {
+      // asteroid.handle === handle && asteroid.showTapState();
+      // }
     };
 
     inNetworkingManager?.on(
@@ -190,7 +193,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
         _tag === "Medium" && (this.size = 25);
         _tag === "Large" && (this.size = 40);
         this.handle = _handle;
-        this.tintOpacity = 0;
+        this.tintOpacity = 1;
         this.scaleFactor = 0;
         this.distance = 0;
         this.color = "orange";
@@ -211,32 +214,66 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
         }, 200);
       }
 
+      flash() {
+        let flashTimes = [100, 300, 500, 700, 900, 1100];
+        let switchColor = true;
+
+        for (let time of flashTimes) {
+          setTimeout(() => {
+            switchColor ? (this.color = "white") : (this.color = "orange");
+            switchColor ? (this.size += 3) : (this.size -= 3);
+            this.shape === 2 &&
+              (switchColor
+                ? (this.y += this.size / 2)
+                : (this.y -= this.size / 2));
+            switchColor = !switchColor;
+          }, time);
+        }
+      }
+
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        _ctx.globalAlpha = 1;
+        _ctx.globalAlpha = this.tintOpacity;
         switch (this.shape) {
           case 1: {
-            // console.log("Cirlce");
+            // console.log("Draw Cirlce");
             _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             break;
           }
           case 2: {
-            // console.log("Triangle");
+            // console.log("Draw Triangle");
+            _ctx.beginPath();
             _ctx.moveTo(this.x, this.y);
-            _ctx.lineTo(this.x - this.size, this.y + this.size + 4);
-            _ctx.lineTo(this.x + this.size, this.y + this.size + 4);
+            _ctx.lineTo(this.x - this.size - 5, this.y + this.size + 15);
+            _ctx.lineTo(this.x + this.size + 5, this.y + this.size + 15);
+            _ctx.closePath();
             break;
           }
           case 3: {
-            // console.log("Square");
-            _ctx.rect(this.x, this.y, this.size, this.size);
+            // console.log("Draw Square");
+            _ctx.rect(
+              this.x - (this.size + 20) / 2,
+              this.y - (this.size + 20) / 2,
+              this.size + 20,
+              this.size + 20
+            );
             break;
           }
           case 4: {
-            // console.log("Cross");
+            // console.log("Draw Cross");
+            _ctx.beginPath();
+            _ctx.moveTo(this.x - 23, this.y - 23);
+            _ctx.lineTo(this.x + 23, this.y + 23);
+            _ctx.stroke();
+
+            _ctx.moveTo(this.x + 23, this.y - 23);
+            _ctx.lineTo(this.x - 23, this.y + 23);
+            _ctx.stroke();
+            _ctx.closePath();
             break;
           }
         }
+        _ctx.strokeStyle = this.color;
         _ctx.fillStyle = this.color;
         _ctx.fill();
         _ctx.closePath();
@@ -297,9 +334,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let RadarPulses: RadarPulse[] = [];
     RadarPulses.push(new RadarPulse(canvasWidth / 2, canvasHeight, 14, color));
 
-    // Asteroids.push(new Asteroid(110, 400, "Medium", 4));
-    // Asteroids.push(new Asteroid(200, 200, "Medium", 1));
-    // Asteroids.push(new Asteroid(100, 500, "Medium", 3));
+    // Asteroids.push(new Asteroid(110, 400, 1, "Medium", 4));
+    // Asteroids.push(new Asteroid(200, 200, 2, "Medium", 1));
+    // Asteroids.push(new Asteroid(100, 500, 4, "Medium", 3));
 
     //sort asteroids by distance so that ones closer overlap the ones further away
     const sortAsteroidsByDistance = () => {
@@ -312,6 +349,20 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     //canvas functions------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     const update = () => {
+      //check if player taps on an asteroid
+      let tapArea = 50;
+      for (let asteroid of Asteroids) {
+        if (
+          mouse.x >= asteroid.x - tapArea &&
+          mouse.x <= asteroid.x + tapArea &&
+          mouse.y >= asteroid.y - tapArea &&
+          mouse.y <= asteroid.y + tapArea
+        ) {
+          asteroid.showTapState();
+          tappedAsteroidHandle = asteroid.handle;
+        }
+      }
+
       //updating all asteroid positions
       for (let radarPulse of RadarPulses) {
         radarPulse.radiate();
@@ -415,6 +466,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           canvasRect.current.top
         : (e.nativeEvent as MouseEvent).offsetY;
 
+    mouse.x = x;
+    mouse.y = y;
+
     x /= canvasRect.current.width;
     y /= canvasRect.current.height;
 
@@ -426,17 +480,28 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
 
-    let NewInput: FTIMInputEvent = new FTIMInputEvent(
-      Handle,
-      0,
-      Pos,
-      Event,
-      Time
-    );
+    console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
+    let Inputs: FTIMInputInteractable[] = [];
+    if (tappedAsteroidHandle) {
+      let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
+        tappedAsteroidHandle
+      );
 
-    let Inputs: FTIMInputEvent[] = [];
-    Inputs.push(NewInput);
-    inNetworkingManager?.sendTIMInputEvents(Inputs);
+      Inputs.push(NewInput);
+      inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
+    }
+
+    // let NewInput: FTIMInputEvent = new FTIMInputEvent(
+    //   Handle,
+    //   0,
+    //   Pos,
+    //   Event,
+    //   Time
+    // );
+
+    // let Inputs: FTIMInputEvent[] = [];
+    // Inputs.push(NewInput);
+    // inNetworkingManager?.sendTIMInputEvents(Inputs);
   };
 
   const endDrawing = () => {
@@ -447,45 +512,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let DateTime: Date = new Date();
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
-
-    let NewInput: FTIMInputEvent = new FTIMInputEvent(
-      Handle,
-      0,
-      Pos,
-      Event,
-      Time
-    );
-
-    let Inputs: FTIMInputEvent[] = [];
-    Inputs.push(NewInput);
-    inNetworkingManager?.sendTIMInputEvents(Inputs);
-  };
-
-  const draw = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    if (!isDrawing || !ctxRef.current || !canvasRect.current) {
-      return;
-    }
-    let x =
-      "touches" in e
-        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientX -
-          canvasRect.current.left
-        : (e.nativeEvent as MouseEvent).offsetX;
-    let y =
-      "touches" in e
-        ? (e as React.TouchEvent<HTMLCanvasElement>).touches[0].clientY -
-          canvasRect.current.top
-        : (e.nativeEvent as MouseEvent).offsetY;
-
-    x /= canvasRect.current.width;
-    y /= canvasRect.current.height;
-
-    let Event: ETriggerEvent = ETriggerEvent.Ongoing;
-    let Pos: Vector2 = new Vector2(x, y);
-    let DateTime: Date = new Date();
-    let Time: number = DateTime.getTime();
-    let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
+    mouse.x = 0;
+    mouse.y = 0;
 
     let NewInput: FTIMInputEvent = new FTIMInputEvent(
       Handle,
