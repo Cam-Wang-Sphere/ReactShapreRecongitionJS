@@ -16,8 +16,8 @@ interface ConnectBigDomeWidgetProps {
 
 const ConnectWidget = ({ connectFunction }: ConnectBigDomeWidgetProps) => {
 
-  const fullAddress: string = "wss://" + NetworkingConstants.BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
-  const certAddress: string = "https://" + NetworkingConstants.BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
+  const fullAddress: string = "wss://" + NetworkingConstants.NEW_VM_BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
+  const certAddress: string = "https://" + NetworkingConstants.NEW_VM_BIG_DOME_IP + ":" + NetworkingConstants.MINIMUM_REPEATER_PORT;
 
   const tryConnectToBigDome = () => {
     
