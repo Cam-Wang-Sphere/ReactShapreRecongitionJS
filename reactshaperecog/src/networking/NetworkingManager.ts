@@ -150,12 +150,11 @@ export class NetworkingManager extends BaseNetworkingManager {
 
         const builder = new flatbuffers.Builder();
 
-        TIMPlayerInputInteractable.startInputEventsVector(builder, inputEvents.length);
-
+        let offsetArray : flatbuffers.Offset[] = []
         inputEvents.forEach((ie: FTIMInputInteractable)=>{ 
-            TIMInputInteractable.createTIMInputInteractable(builder, ie.netHandle);
+            offsetArray.push(TIMInputInteractable.createTIMInputInteractable(builder, ie.netHandle));
         })
-        const inputEventsOffset = builder.endVector();
+        const inputEventsOffset = TIMPlayerInputInteractable.createInputEventsVector(builder, offsetArray);
 
         TIMPlayerInputInteractable.startTIMPlayerInputInteractable(builder);
         TIMPlayerInputInteractable.addSessionId(builder, this.sessionId);
