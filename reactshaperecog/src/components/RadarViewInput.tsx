@@ -11,7 +11,6 @@ import { FTIMInteractableData } from "../TIM/TIMInteractableData";
 import { TIMInteractableDestroyed } from "../schema/WSSchema";
 import { TIMHitEvent } from "../schema/WSSchema";
 import { forEach } from "lodash";
-import canvasTintImage from "canvas-tint-image";
 
 interface TapnSlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -31,7 +30,8 @@ let canvasHeight = window.innerHeight;
 let reqAnimFrame = 0;
 const asteroidImg = new Image();
 let mouse = new Vector2(0, 0);
-let tappedAsteroidHandle: number;
+let tappedAsteroidHandle = -1;
+let isTapping = false;
 
 const RemapInRange = (
   num: number,
@@ -137,9 +137,9 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
-      // for (let asteroid of Asteroids) {
-      // asteroid.handle === handle && asteroid.showTapState();
-      // }
+      for (let asteroid of Asteroids) {
+        asteroid.handle === handle && asteroid.showTapState();
+      }
     };
 
     inNetworkingManager?.on(
@@ -207,7 +207,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       }
 
       showTapState() {
-        this.size += 3;
+        this.size += 10;
         this.color = "red";
         setTimeout(() => {
           this.size = this.originalSize;
@@ -222,7 +222,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
         for (let time of flashTimes) {
           setTimeout(() => {
             switchColor ? (this.color = "white") : (this.color = "orange");
-            switchColor ? (this.size += 3) : (this.size -= 3);
+            switchColor ? (this.size += 12) : (this.size -= 12);
             switchColor = !switchColor;
           }, time);
         }
@@ -293,7 +293,6 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       speed: number;
       fillOpacity: number;
       scaleFactor: number;
-      // color: { r: number; g: number; b: number };
       color: { r: number; g: number; b: number };
 
       constructor(
@@ -352,6 +351,17 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       });
     };
 
+    const sendInput = (handle: number) => {
+      let Inputs: FTIMInputInteractable[] = [];
+
+      let NewInput: FTIMInputInteractable = new FTIMInputInteractable(handle);
+
+      Inputs.push(NewInput);
+      inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
+      console.log("tapped asteroid handle is.... " + handle);
+      isTapping = false;
+    };
+
     //canvas functions------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     const update = () => {
       //check if player taps on an asteroid
@@ -363,12 +373,12 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           mouse.y >= asteroid.y - tapArea &&
           mouse.y <= asteroid.y + tapArea
         ) {
-          asteroid.showTapState();
+          // asteroid.showTapState();
           tappedAsteroidHandle = asteroid.handle;
+          isTapping && sendInput(tappedAsteroidHandle);
         }
       }
 
-      //updating all asteroid positions
       for (let radarPulse of RadarPulses) {
         radarPulse.radiate();
       }
@@ -454,11 +464,12 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
   const startDrawing = (
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
+    setIsDrawing(true);
+    isTapping = true;
+
     if (!ctxRef.current || !canvasRect.current) {
       return;
     }
-
-    setIsDrawing(true);
 
     let x =
       "touches" in e
@@ -484,33 +495,11 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let DateTime: Date = new Date();
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
-
-    let Inputs: FTIMInputInteractable[] = [];
-    if (tappedAsteroidHandle) {
-      let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
-        tappedAsteroidHandle
-      );
-
-      Inputs.push(NewInput);
-      inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
-      console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
-    }
-
-    // let NewInput: FTIMInputEvent = new FTIMInputEvent(
-    //   Handle,
-    //   0,
-    //   Pos,
-    //   Event,
-    //   Time
-    // );
-
-    // let Inputs: FTIMInputEvent[] = [];
-    // Inputs.push(NewInput);
-    // inNetworkingManager?.sendTIMInputEvents(Inputs);
   };
 
   const endDrawing = () => {
     setIsDrawing(false);
+    isTapping = false;
 
     let Event: ETriggerEvent = ETriggerEvent.Completed;
     let Pos: Vector2 = new Vector2(0, 0);
@@ -555,10 +544,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
-          // onMouseMove={draw}
           onTouchStart={startDrawing}
           onTouchEnd={endDrawing}
-          // onTouchMove={draw}
           ref={canvasRef}
           height={window.innerHeight * 0.9}
           width={window.innerWidth * 0.9}
