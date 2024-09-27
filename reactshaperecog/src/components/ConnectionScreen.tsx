@@ -5,6 +5,8 @@ import ConnectBigDomeWidget from "./ConnectBigDomeWidget";
 import ConnectCDRWidget from "./ConnectCDRWidget";
 import { NetworkingManager } from "../networking/NetworkingManager";
 import { useState, useEffect } from "react";
+import ConnectHardcodedWidget from "./ConnectHardcodedWidget";
+import { NetworkingConstants } from "../constants/NetworkingConstants";
 
 import {
   HStack,
@@ -35,6 +37,8 @@ const ConnectionScreen = ({ connectFunction, inConnectNetworkingManager }: Conne
         <br></br>
         <ConnectBigDomeWidget connectFunction={connectFunction} />
         <ConnectCDRWidget connectFunction={connectFunction} />
+        <ConnectHardcodedWidget inEndpoint={NetworkingConstants.NEW_VM_BIG_DOME_IP} inPort={NetworkingConstants.MINIMUM_LINUX_REPEATER_PORT} 
+        inAcceptCertText="Accept Linux VM cert" inConnectText="Connect to Big Dome Linux" inConnectFunction={connectFunction} />
       </VStack>
     </Box>
   );

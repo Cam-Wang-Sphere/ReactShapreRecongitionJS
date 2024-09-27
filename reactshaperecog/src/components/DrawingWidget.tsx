@@ -95,6 +95,11 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer}: DrawingProps) =>
     Triangle = 3,
     Pigtail = 4,
     Circle = 5,
+    Square = 6,
+    V = 7,
+    Z = 8,
+    L = 9,
+    I = 10,
   }
 
   useEffect(() => {
@@ -196,6 +201,8 @@ const DrawingWidget = ({inNetworkingManager, inRecognizer}: DrawingProps) =>
     }
 
     let DrawResult = inRecognizer.Recognize(pointArray, false);
+
+    // console.log("Score: " + DrawResult.Score);
 
     if (DrawResult.Score >= 0.5) {
       let enumResult = ShapeToEnum[DrawResult.Name as keyof typeof ShapeToEnum];
