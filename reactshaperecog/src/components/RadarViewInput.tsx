@@ -128,6 +128,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       let handle: number = +inTIMInteractableDestroyed;
       Asteroids.forEach((asteroid, index) => {
         if (asteroid.handle === handle) {
+          // asteroid.showTapState();
           let newArr = Asteroids.filter((ele, ind) => ind !== index);
           Asteroids = newArr;
         }
@@ -351,14 +352,12 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       });
     };
 
+    let Inputs: FTIMInputInteractable[] = [];
     const sendInput = (handle: number) => {
-      let Inputs: FTIMInputInteractable[] = [];
-
       let NewInput: FTIMInputInteractable = new FTIMInputInteractable(handle);
-
       Inputs.push(NewInput);
       inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
-      console.log("tapped asteroid handle is.... " + handle);
+      console.log("tapped asteroid handle is: " + handle);
       isTapping = false;
     };
 
@@ -484,42 +483,11 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
     mouse.x = x;
     mouse.y = y;
-
-    x /= canvasRect.current.width;
-    y /= canvasRect.current.height;
-
-    // console.log("X: " + x + "Y: " + y);
-
-    let Event: ETriggerEvent = ETriggerEvent.Started;
-    let Pos: Vector2 = new Vector2(x, y);
-    let DateTime: Date = new Date();
-    let Time: number = DateTime.getTime();
-    let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
   };
 
   const endDrawing = () => {
     setIsDrawing(false);
     isTapping = false;
-
-    let Event: ETriggerEvent = ETriggerEvent.Completed;
-    let Pos: Vector2 = new Vector2(0, 0);
-    let DateTime: Date = new Date();
-    let Time: number = DateTime.getTime();
-    let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
-    mouse.x = 0;
-    mouse.y = 0;
-
-    let NewInput: FTIMInputEvent = new FTIMInputEvent(
-      Handle,
-      0,
-      Pos,
-      Event,
-      Time
-    );
-
-    let Inputs: FTIMInputEvent[] = [];
-    Inputs.push(NewInput);
-    inNetworkingManager?.sendTIMInputEvents(Inputs);
   };
 
   return (
