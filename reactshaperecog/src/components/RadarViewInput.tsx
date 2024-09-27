@@ -92,7 +92,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       asteroidSpawnDist = inTIMInteractableData.distance;
       let handle = inTIMInteractableData.handle;
       let tag = inTIMInteractableData.tags.toString().substring(14);
-      Asteroids.push(new Asteroid(-50, -50, 1, tag, handle));
+      let randInt = Math.floor(Math.random() * 4); //random in range
+      Asteroids.push(new Asteroid(-50, -50, randInt, tag, handle));
       console.log("New Asteroid Spawned. Total asteroids: " + Asteroids.length);
     };
 
@@ -190,8 +191,8 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
         this.shape = _shape;
         this.tag = _tag;
         _tag === "Small" && (this.size = 10);
-        _tag === "Medium" && (this.size = 25);
-        _tag === "Large" && (this.size = 40);
+        _tag === "Medium" && (this.size = 20);
+        _tag === "Large" && (this.size = 30);
         this.handle = _handle;
         this.tintOpacity = 1;
         this.scaleFactor = 0;
@@ -206,7 +207,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
       }
 
       showTapState() {
-        this.size += 5;
+        this.size += 3;
         this.color = "red";
         setTimeout(() => {
           this.size = this.originalSize;
@@ -222,10 +223,6 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           setTimeout(() => {
             switchColor ? (this.color = "white") : (this.color = "orange");
             switchColor ? (this.size += 3) : (this.size -= 3);
-            this.shape === 2 &&
-              (switchColor
-                ? (this.y += this.size / 2)
-                : (this.y -= this.size / 2));
             switchColor = !switchColor;
           }, time);
         }
@@ -233,48 +230,55 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        _ctx.globalAlpha = this.tintOpacity;
         switch (this.shape) {
-          case 1: {
-            // console.log("Draw Cirlce");
-            _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            break;
-          }
-          case 2: {
-            // console.log("Draw Triangle");
+          case 0: {
+            // console.log("Draw Cross");
             _ctx.beginPath();
-            _ctx.moveTo(this.x, this.y);
-            _ctx.lineTo(this.x - this.size - 5, this.y + this.size + 15);
-            _ctx.lineTo(this.x + this.size + 5, this.y + this.size + 15);
+            _ctx.lineWidth = this.size - 10;
+            _ctx.moveTo(this.x - this.size, this.y - this.size);
+            _ctx.lineTo(this.x + this.size, this.y + this.size);
+            _ctx.moveTo(this.x + this.size, this.y - this.size);
+            _ctx.lineTo(this.x - this.size, this.y + this.size);
             _ctx.closePath();
             break;
           }
-          case 3: {
+
+          case 1: {
+            // console.log("Draw Triangle");
+            _ctx.beginPath();
+            _ctx.moveTo(this.x, this.y - this.size);
+            _ctx.lineTo(this.x - this.size - 5, this.y + this.size);
+            _ctx.lineTo(this.x + this.size + 5, this.y + this.size);
+            _ctx.lineWidth = this.size - 15;
+            _ctx.closePath();
+            break;
+          }
+          case 2: {
             // console.log("Draw Square");
+            _ctx.beginPath();
             _ctx.rect(
               this.x - (this.size + 20) / 2,
               this.y - (this.size + 20) / 2,
               this.size + 20,
               this.size + 20
             );
+            _ctx.lineWidth = this.size - 15;
+            _ctx.closePath();
             break;
           }
-          case 4: {
-            // console.log("Draw Cross");
+          case 3: {
+            // console.log("Draw Cirlce");
             _ctx.beginPath();
-            _ctx.moveTo(this.x - 23, this.y - 23);
-            _ctx.lineTo(this.x + 23, this.y + 23);
-            _ctx.stroke();
-
-            _ctx.moveTo(this.x + 23, this.y - 23);
-            _ctx.lineTo(this.x - 23, this.y + 23);
-            _ctx.stroke();
+            _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            _ctx.lineWidth = this.size - 15;
             _ctx.closePath();
             break;
           }
         }
+        _ctx.globalAlpha = this.tintOpacity;
         _ctx.strokeStyle = this.color;
         _ctx.fillStyle = this.color;
+        _ctx.stroke();
         _ctx.fill();
         _ctx.closePath();
       }
@@ -334,9 +338,10 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let RadarPulses: RadarPulse[] = [];
     RadarPulses.push(new RadarPulse(canvasWidth / 2, canvasHeight, 14, color));
 
-    // Asteroids.push(new Asteroid(110, 400, 1, "Medium", 4));
-    // Asteroids.push(new Asteroid(200, 200, 2, "Medium", 1));
-    // Asteroids.push(new Asteroid(100, 500, 4, "Medium", 3));
+    // Asteroids.push(new Asteroid(110, 400, 2, "Medium", 4));
+    // Asteroids.push(new Asteroid(200, 200, 0, "Medium", 0));
+    // Asteroids.push(new Asteroid(100, 300, 1, "Medium", 3));
+    // Asteroids.push(new Asteroid(200, 300, 3, "Medium", 2));
 
     //sort asteroids by distance so that ones closer overlap the ones further away
     const sortAsteroidsByDistance = () => {
@@ -480,7 +485,6 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     let Time: number = DateTime.getTime();
     let Handle: FTIMMappedAreaHandle = new FTIMMappedAreaHandle(0);
 
-    console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
     let Inputs: FTIMInputInteractable[] = [];
     if (tappedAsteroidHandle) {
       let NewInput: FTIMInputInteractable = new FTIMInputInteractable(
@@ -489,6 +493,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
       Inputs.push(NewInput);
       inNetworkingManager?.sendTIMInputInteractableEvents(Inputs);
+      console.log("tapped asteroid handle is.... " + tappedAsteroidHandle);
     }
 
     // let NewInput: FTIMInputEvent = new FTIMInputEvent(
