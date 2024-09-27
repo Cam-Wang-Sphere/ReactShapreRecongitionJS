@@ -7,6 +7,7 @@ import { Result, Point, DollarRecognizer } from "../Template/Recognizer";
 import { GridItem } from "@chakra-ui/react";
 import { VStack } from "@chakra-ui/react";
 import { Vec2 } from "../schema/WSSchema";
+import { EWSSlashTypes } from "../schema/ewsslash-types"
 
 interface SlashProps {
   inNetworkingManager: NetworkingManager | null;
@@ -90,18 +91,6 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
   // Slash enums are labeled as degrees clockwise/anti-clockwise from polar origin <1,0>.
   // So, Slash_E points east at 0 degrees, Slash_N points north at -90^d, 
   // and Slash_SW points diagonally south-west at +135^d.
-  enum SlashEnum {
-    Slash_W    = 0, // ←    ±180
-    Slash_NW   = 1, // ↖    -135
-    Slash_N    = 2, // ↑     -90
-    Slash_NE   = 3, // ↗     -45
-    Slash_E    = 4, // →       0
-    Slash_SE   = 5, // ↘     +45
-    Slash_S    = 6, // ↓     +90
-    Slash_SW   = 7, // ↙    +135
-    Slash_MAX  = 8,
-    Slash_NONE = 9
-  }
   const namesArray = [
     "Slash ←",
     "Slash ↖",
@@ -135,21 +124,21 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
     let step_half = step / 2.0;
     
     let currentAngle = -180.0;
-    for (let i = 0; i <= SlashEnum.Slash_MAX; i++) 
+    for (let i = 0; i <= EWSSlashTypes.Slash_MAX; i++) 
     {
       if ((currentAngle - step_half) <= angle && angle < (currentAngle + step_half))
       {
         // Quick check for +180 where we loop back around to -180.
-        if (i == SlashEnum.Slash_MAX)
+        if (i == EWSSlashTypes.Slash_MAX)
         {
-          return SlashEnum[0];
+          return EWSSlashTypes[0];
         }
-        return SlashEnum[i];
+        return EWSSlashTypes[i];
       }
       currentAngle += step;
     }
 
-    return SlashEnum[SlashEnum.Slash_NONE];
+    return EWSSlashTypes[EWSSlashTypes.Slash_NONE];
   }
 
   useEffect(() => {
@@ -252,9 +241,9 @@ const SlashDrawingWidget = ({inNetworkingManager}: SlashProps) =>
 
     const angle: number = GetAngleFromPoints(pointArray);
     const slashTypeName: string = GetSlashTypeFromAngle(angle);
-    const slashTypeVal: number = SlashEnum[slashTypeName as keyof typeof SlashEnum];
+    const slashTypeVal: number = EWSSlashTypes[slashTypeName as keyof typeof EWSSlashTypes];
 
-    if (slashTypeVal != SlashEnum.Slash_NONE) 
+    if (slashTypeVal != EWSSlashTypes.Slash_NONE) 
     {
       inNetworkingManager?.sendSlashRequest(slashTypeVal);
       setDrawResult(namesArray[slashTypeVal]);
