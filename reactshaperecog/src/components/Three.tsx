@@ -1,84 +1,84 @@
-import React, { useState } from "react";
-import { NetworkingManager } from "../networking/NetworkingManager.ts";
-import { Box, SimpleGrid, keyframes, Text } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import SvgSquareReticle from "../assets/Icons/SqaureReticle.tsx";
-import SvgTriangleReticle from "../assets/Icons/TriangleReticle.tsx";
-import SvgCircleReticle from "../assets/Icons/CircleReticle.tsx";
-import SvgDiamondReticle from "../assets/Icons/DiamondReticle.tsx";
-import { useEffect, useRef } from "react";
-import { EButtonTypeEnum } from "../schema/ebutton-type-enum.ts";
+import * as THREE from "three";
+import * as React from "react";
+import { useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Grid, GridItem } from "@chakra-ui/react";
+import { useGLTF, OrbitControls, ContactShadows } from "@react-three/drei";
+import { Suspense, useDeferredValue } from "react";
+import tunnel from "tunnel-rat";
 
-const Icons = ["X", "Y", "A", "B"];
-const colors = ["#FEE202", "#B5D034", "#0684EC", "#D6048C"];
+const status = tunnel();
 
-interface ThreeProps {
-  inNetworkingManager: NetworkingManager | null;
+function Model(props: JSX.IntrinsicElements["mesh"]) {
+  // useDeferredValue allows us to defer updates, the component is market by React
+  // so that it does *not* run into the fallback when something new loads
+  const deferred = useDeferredValue(
+    "https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/tree-beech/model.gltf"
+  );
+  // We can find out the loading state by comparing the current value with the deferred value
+  // const isLoading = url !== deferred
+  const { scene } = useGLTF(deferred);
+  // <primitive object={...} mounts an already existing object
+  return <primitive object={scene} {...props} />;
 }
 
-const Three = ({ inNetworkingManager }: ThreeProps) => {
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  async function DelayAction() {
-    await delay(200);
-    setSelectedIndex(-1);
-  }
-
-  // const spin = keyframes`
-  //   from {transform:  scale(1.1) rotate(45deg); }
-  //   to {transform:  scale(1.1) rotate(45deg); }
-  // `;
-  // const spinAnimation = `${spin} infinite 1s linear`;
-
-  const handleButtonClick = (index: number) => {
-    setSelectedIndex(index);
-    console.log("selected index = ", index);
-
-    const correspondingButton: EButtonTypeEnum = index + 1;
-    inNetworkingManager?.sendButtonTypeRequest(correspondingButton);
-
-    DelayAction();
-  };
+function Box(props: JSX.IntrinsicElements["mesh"]) {
+  // This reference will give us direct access to the THREE.Mesh object
+  const meshRef = useRef<THREE.Mesh>(null!);
+  // Hold state for hovered and clicked events
+  const [hovered, hover] = useState(false);
+  const [clicked, click] = useState(false);
+  // Rotate mesh every frame, this is outside of React without overhead
+  useFrame((state, delta) => (meshRef.current.rotation.x += 0.0));
 
   return (
-    <SimpleGrid
-      as={motion.div}
-      columns={2}
-      spacing={5}
-      // animation={spinAnimation}
-      animate={{ rotate: 45, scale: 1.1 }}
-      m="50px"
-      mt="30%"
+    <mesh
+      ref={meshRef}
+      scale={clicked ? 1.2 : 1}
+      onClick={() => click(!clicked)}
+      onPointerOver={() => hover(true)}
+      onPointerOut={() => hover(false)}
     >
-      {Icons.map((Icon, index) => (
-        <Box
-          key={index}
-          // bg={selectedIndex === index ? "teal" : "white"}
-          // bgGradient="linear(to-l, #7928CA, #FF0080)"
-          // bg={colors[index]}
-          bg="#494949"
-          borderWidth="2px"
-          borderColor="#080808"
-          height="120px"
-          width="120px"
-          // blur="50px"
-          as={motion.div}
-          initial={false}
-          animate={{
-            rotate: -45,
-            scale: selectedIndex === index ? 0.9 : 1.0,
-            opacity: selectedIndex === index ? 0 : 1,
-          }}
-          borderRadius="120px"
-          onClick={() => handleButtonClick(index)}
-        >
-          <Text color="pink">{Icon}</Text>
-        </Box>
-      ))}
-    </SimpleGrid>
+      <dodecahedronGeometry args={[8.75]} />
+      <meshStandardMaterial color={clicked ? "green" : "orange"} />
+    </mesh>
   );
-};
+}
 
-export default Three;
+export default function ThreeApp() {
+  return (
+    <Grid
+      templateRows="repeat(1, 1fr)"
+      templateColumns="repeat(1, 1fr)"
+      templateAreas={`"TapRegion" "UIOverlay"`}
+      gap={4}
+      pt={"10px"}
+      h="100%"
+      style={{
+        position: "relative",
+      }}
+    >
+      <GridItem area="TapRegion" rowStart={1} colStart={1}>
+        <Canvas
+          style={{
+            position: "relative",
+            height: "100vw",
+            width: "100vw",
+          }}
+          camera={{ position: [-10, 10, 40], fov: 50 }}
+        >
+          <hemisphereLight color="white" groundColor="blue" intensity={2.5} />
+          <spotLight position={[2, 2, 1]} angle={0.4} penumbra={1} />
+          <group position={[0, 0, 0]}>
+            <Suspense fallback={<status.In>Loading ...</status.In>}>
+              {/* <Model position={[0, 0.25, 0]} /> */}
+              <Box position={[0, 0, 0]} />
+            </Suspense>
+            {/* <ContactShadows scale={20} blur={10} far={20} /> */}
+          </group>
+          <OrbitControls />
+        </Canvas>
+      </GridItem>
+    </Grid>
+  );
+}
