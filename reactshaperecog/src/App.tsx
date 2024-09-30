@@ -114,6 +114,7 @@ const App = () => {
     "Radar View",
     "Point Tap",
     "Slash",
+    "ThreeJS",
   ];
 
   // Initialization when the component

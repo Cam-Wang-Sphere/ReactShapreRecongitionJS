@@ -21,6 +21,7 @@ import { WSPlayerData } from "../player/WSPlayerData";
 import PointTapInput from "./PointTapInput";
 import AddTemplateWidget from "./AddTemplate";
 import { TemplateManager } from "../Template/TemplateManager";
+import Three from "./../components/Three";
 
 let Framecolor = { r: 173, g: 179, b: 175 }; // color for the frame
 
@@ -67,6 +68,7 @@ const ScreenSwitcher = ({
     />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
+    <Three inNetworkingManager={inNetworkingManager} />,
   ];
 
   useEffect(() => {
