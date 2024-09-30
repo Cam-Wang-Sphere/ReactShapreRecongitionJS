@@ -130,7 +130,7 @@ const ReticleGridButton = ({ inNetworkingManager }: ReticleGridButtonProps) => {
             animate={{
               // scale: selectedIndex === index ? 20 : 0.8,
               scale:
-                selectedIndex === index ? (isScoreChanged ? 20 : 0.8) : 0.8,
+                selectedIndex === index ? (isScoreChanged ? 20 : 0.2) : 0.2,
               opacity: selectedIndex === index ? 1 : 0.5,
             }}
             transition="0.5s ease-out"
