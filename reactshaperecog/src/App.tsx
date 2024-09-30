@@ -35,6 +35,7 @@ import ScreenSwitcher from "./components/ScreenSwitcher";
 import IsConnectedWidget from "./components/IsConnectedWidget";
 import SuccessOverlay from "./components/SuccessOverlay";
 import { FTIMMappedArea } from "./TIM/TIMMappedArea";
+import  { Helmet } from "react-helmet";
 
 const UserInputKey = "UserInput";
 
@@ -150,31 +151,55 @@ const App = () => {
   });
 
   return (
-    <Container
-      className="App"
-      // maxW={"sm"}
-      // h="100vh"
-      maxW={isLandscape ? "150vw" : "sm"}
-      h="100vh"
-      style={{
-        position: "relative",
-      }}
-      bg="#1F1F1F"
-    >
-      <Grid
-        // className="landscape"
-        templateRows="repeat(10, 1fr)"
-        templateColumns="repeat(5, 1fr)"
-        templateAreas={`"Heading" "Score" "Main"`}
-        gap={4}
-        pt={"10px"}
+    <div>
+      <Helmet>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+       </Helmet>
+      <Container
+        className="App"
+        // maxW={"sm"}
+        // h="100vh"
+        maxW={isLandscape ? "150vw" : "sm"}
+        h="100vh"
         style={{
           position: "relative",
-          overflow: "hidden",
         }}
+        bg="#1F1F1F"
       >
-        {/* Heading------------------------------ */}
-        {/* {!isLandscape && (
+        <Grid
+          // className="landscape"
+          templateRows="repeat(10, 1fr)"
+          templateColumns="repeat(5, 1fr)"
+          templateAreas={`"Heading" "Score" "Main"`}
+          gap={4}
+          pt={"10px"}
+          style={{
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Heading------------------------------ */}
+          {/* {!isLandscape && (
+            <GridItem rowSpan={1} colSpan={1} area="Heading">
+              <NavMenu
+                Names={namesArray}
+                onSelect={selectHandle}
+                inSelectedIndex={_index}
+              />
+              <GameState
+                inNetworkingManager={networkingManager}
+                inPlayerData={playerData}
+              />
+            </GridItem>
+          )} */}
+          {/* {!isLandscape && (
+            <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
+              <Center>
+                <Heading color={"red.500"}>PreFE</Heading>
+              </Center>
+            </GridItem>
+          )} */}
+
           <GridItem rowSpan={1} colSpan={1} area="Heading">
             <NavMenu
               Names={namesArray}
@@ -186,66 +211,49 @@ const App = () => {
               inPlayerData={playerData}
             />
           </GridItem>
-        )} */}
-        {/* {!isLandscape && (
+
           <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
             <Center>
-              <Heading color={"red.500"}>PreFE</Heading>
+              <IsConnectedWidget inNetworkingManager={networkingManager} />
             </Center>
           </GridItem>
-        )} */}
-
-        <GridItem rowSpan={1} colSpan={1} area="Heading">
-          <NavMenu
-            Names={namesArray}
-            onSelect={selectHandle}
-            inSelectedIndex={_index}
-          />
-          <GameState
-            inNetworkingManager={networkingManager}
-            inPlayerData={playerData}
-          />
-        </GridItem>
-
-        <GridItem rowSpan={1} colStart={2} colEnd={5} area="Heading" mt="1%">
-          <Center>
-            <IsConnectedWidget inNetworkingManager={networkingManager} />
-          </Center>
-        </GridItem>
-        {/* Main content------------------------------ */}
-        <GridItem
-          area="Main"
-          rowStart={_index === 2 ? 2 : 3}
-          // rowStart={_index === 2 ? 2 : 3}
-          // rowEnd={14}
-          colSpan={5}
-          alignItems={"center"}
-          h={isLandscape ? "80vh" : "50vh"}
-          // w={isLandscape ? "95vw" : "100%"}
-          mt={
-            isLandscape
-              ? _index === 2
-                ? "-14%"
-                : "-4%"
-              : _index === 2
-              ? "-25%"
-              : "0"
-          }
-        >
-          <ScreenSwitcher
-            inPlayerData={playerData}
-            inConnectFunction={connectToServer}
-            inNetworkingManager={networkingManager}
-            inSSDollarRecognizer={Recognizer}
-            inSelectHandle={selectHandle}
-            inSelectedIndex={_index}
-            inTemplateManager={templateManager}
-          />
-          {/* <SuccessOverlay inPlayerData={playerData} /> */}
-        </GridItem>
-      </Grid>
-    </Container>
+          {/* Main content------------------------------ */}
+          <GridItem
+            area="Main"
+            rowStart={_index === 2 ? 2 : 3}
+            // rowStart={_index === 2 ? 2 : 3}
+            // rowEnd={14}
+            colSpan={5}
+            alignItems={"center"}
+            h={isLandscape ? "80vh" : "50vh"}
+            // w={isLandscape ? "95vw" : "100%"}
+            mt={
+              isLandscape
+                ? _index === 2
+                  ? "-14%"
+                  : "-4%"
+                : _index === 2
+                ? "-25%"
+                : "0"
+            }
+          >
+            <ScreenSwitcher
+              inPlayerData={playerData}
+              inConnectFunction={connectToServer}
+              inNetworkingManager={networkingManager}
+              inSSDollarRecognizer={Recognizer}
+              inSelectHandle={selectHandle}
+              inSelectedIndex={_index}
+              inTemplateManager={templateManager}
+            />
+            {/* <SuccessOverlay inPlayerData={playerData} /> */}
+          </GridItem>
+        </Grid>
+      </Container>
+    </div>
   );
+
+
 
   // <button type="button" onClick={AddSetScore}>Add Template</button>
 };
