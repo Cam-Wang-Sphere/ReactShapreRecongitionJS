@@ -40,7 +40,7 @@ function Box(props: JSX.IntrinsicElements["mesh"]) {
       onPointerOut={() => hover(false)}
     >
       <dodecahedronGeometry args={[8.75]} />
-      <meshStandardMaterial color={clicked ? "green" : "orange"} />
+      <meshStandardMaterial color={clicked ? "red" : "#886356"} />
     </mesh>
   );
 }
