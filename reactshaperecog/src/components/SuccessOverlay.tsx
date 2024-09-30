@@ -31,8 +31,8 @@ const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
       {
         if (!isIOS && shouldPlaySounds) 
         {
-          const failAudio = new Audio(FailSound);
-          failAudio.play();
+          // const failAudio = new Audio(FailSound);
+          // failAudio.play();
         }
         return;
       }
@@ -48,8 +48,8 @@ const SuccessOverlay = ({ inPlayerData }: SuccessOverlayProps) => {
 
       // play sounds if possible
       if (!isIOS && shouldPlaySounds) {
-        const successAudio = new Audio(SuccessSound);
-        successAudio.play();
+        // const successAudio = new Audio(SuccessSound);
+        // successAudio.play();
       }
 
       setIsVisible(true);
