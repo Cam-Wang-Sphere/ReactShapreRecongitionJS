@@ -139,7 +139,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
       for (let asteroid of Asteroids) {
-        // asteroid.handle === handle && asteroid.showTapState();
+        asteroid.handle === handle && asteroid.showTapState();
       }
     };
 
@@ -231,51 +231,58 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
 
       draw(_ctx: CanvasRenderingContext2D) {
         _ctx.beginPath();
-        switch (this.shape) {
-          case 0: {
-            // console.log("Draw Cross");
-            _ctx.beginPath();
-            _ctx.lineWidth = this.size - 10;
-            _ctx.moveTo(this.x - this.size, this.y - this.size);
-            _ctx.lineTo(this.x + this.size, this.y + this.size);
-            _ctx.moveTo(this.x + this.size, this.y - this.size);
-            _ctx.lineTo(this.x - this.size, this.y + this.size);
-            _ctx.closePath();
-            break;
-          }
+        // switch (this.shape) {
+        //   case 0: {
+        //     // console.log("Draw Cross");
+        //     _ctx.beginPath();
+        //     _ctx.lineWidth = this.size - 10;
+        //     _ctx.moveTo(this.x - this.size, this.y - this.size);
+        //     _ctx.lineTo(this.x + this.size, this.y + this.size);
+        //     _ctx.moveTo(this.x + this.size, this.y - this.size);
+        //     _ctx.lineTo(this.x - this.size, this.y + this.size);
+        //     _ctx.closePath();
+        //     break;
+        //   }
 
-          case 1: {
-            // console.log("Draw Triangle");
-            _ctx.beginPath();
-            _ctx.moveTo(this.x, this.y - this.size);
-            _ctx.lineTo(this.x - this.size - 5, this.y + this.size);
-            _ctx.lineTo(this.x + this.size + 5, this.y + this.size);
-            _ctx.lineWidth = this.size - 15;
-            _ctx.closePath();
-            break;
-          }
-          case 2: {
-            // console.log("Draw Square");
-            _ctx.beginPath();
-            _ctx.rect(
-              this.x - (this.size + 20) / 2,
-              this.y - (this.size + 20) / 2,
-              this.size + 20,
-              this.size + 20
-            );
-            _ctx.lineWidth = this.size - 15;
-            _ctx.closePath();
-            break;
-          }
-          case 3: {
-            // console.log("Draw Cirlce");
-            _ctx.beginPath();
-            _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            _ctx.lineWidth = this.size - 15;
-            _ctx.closePath();
-            break;
-          }
-        }
+        //   case 1: {
+        //     // console.log("Draw Triangle");
+        //     _ctx.beginPath();
+        //     _ctx.moveTo(this.x, this.y - this.size);
+        //     _ctx.lineTo(this.x - this.size - 5, this.y + this.size);
+        //     _ctx.lineTo(this.x + this.size + 5, this.y + this.size);
+        //     _ctx.lineWidth = this.size - 15;
+        //     _ctx.closePath();
+        //     break;
+        //   }
+        //   case 2: {
+        //     // console.log("Draw Square");
+        //     _ctx.beginPath();
+        //     _ctx.rect(
+        //       this.x - (this.size + 20) / 2,
+        //       this.y - (this.size + 20) / 2,
+        //       this.size + 20,
+        //       this.size + 20
+        //     );
+        //     _ctx.lineWidth = this.size - 15;
+        //     _ctx.closePath();
+        //     break;
+        //   }
+        //   case 3: {
+        //     // console.log("Draw Cirlce");
+        //     _ctx.beginPath();
+        //     _ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        //     _ctx.lineWidth = this.size - 15;
+        //     _ctx.closePath();
+        //     break;
+        //   }
+        // }
+        _ctx.rect(
+          this.x - (this.size + 20) / 2,
+          this.y - (this.size + 20) / 2,
+          this.size + 20,
+          this.size + 20
+        );
+        _ctx.lineWidth = this.size - 15;
         _ctx.globalAlpha = this.tintOpacity;
         _ctx.strokeStyle = this.color;
         _ctx.fillStyle = this.color;
@@ -372,7 +379,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           mouse.y >= asteroid.y - tapArea &&
           mouse.y <= asteroid.y + tapArea
         ) {
-          asteroid.showTapState();
+          // asteroid.showTapState();
           tappedAsteroidHandle = asteroid.handle;
           isTapping && sendInput(tappedAsteroidHandle);
         }
