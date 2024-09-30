@@ -63,7 +63,7 @@ export default function ThreeApp() {
           style={{
             position: "relative",
             height: "100vw",
-            width: "100vw",
+            width: "90vw",
           }}
           camera={{ position: [-10, 10, 40], fov: 50 }}
         >
