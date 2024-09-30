@@ -67,12 +67,12 @@ export default function ThreeApp() {
           }}
           camera={{ position: [-10, 10, 40], fov: 50 }}
         >
-          <hemisphereLight color="white" groundColor="blue" intensity={5.75} />
-          <spotLight position={[50, 50, 10]} angle={0.15} penumbra={1} />
-          <group position={[5, 5, 0]}>
+          <hemisphereLight color="white" groundColor="blue" intensity={2.5} />
+          <spotLight position={[2, 2, 1]} angle={0.4} penumbra={1} />
+          <group position={[0, 0, 0]}>
             <Suspense fallback={<status.In>Loading ...</status.In>}>
               {/* <Model position={[0, 0.25, 0]} /> */}
-              <Box position={[10, 0, 0]} />
+              <Box position={[0, 0, 0]} />
             </Suspense>
             {/* <ContactShadows scale={20} blur={10} far={20} /> */}
           </group>
