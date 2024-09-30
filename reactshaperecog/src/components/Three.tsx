@@ -52,13 +52,14 @@ export default function ThreeApp() {
       templateColumns="repeat(1, 1fr)"
       templateAreas={`"TapRegion" "UIOverlay"`}
       gap={4}
+      mt="-30%"
       pt={"10px"}
       h="100%"
       style={{
         position: "relative",
       }}
     >
-      <GridItem area="TapRegion" rowStart={1} colStart={1}>
+      <GridItem area="TapRegion" rowStart={1} colStart={1} bg="#2E2E2E">
         <Canvas
           style={{
             position: "relative",
@@ -69,6 +70,8 @@ export default function ThreeApp() {
         >
           <hemisphereLight color="white" groundColor="blue" intensity={2.5} />
           <spotLight position={[2, 2, 1]} angle={0.4} penumbra={1} />
+          {/* <spotLight position={[0, 1, 1]} angle={0.9} penumbra={10} /> */}
+          <pointLight position={[-0.5, 1, -5]} />
           <group position={[0, 0, 0]}>
             <Suspense fallback={<status.In>Loading ...</status.In>}>
               {/* <Model position={[0, 0.25, 0]} /> */}
