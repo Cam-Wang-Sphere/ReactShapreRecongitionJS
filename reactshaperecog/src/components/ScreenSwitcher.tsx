@@ -68,7 +68,7 @@ const ScreenSwitcher = ({
     />,
     <PointTapInput inNetworkingManager={inNetworkingManager} />,
     <SlashDrawingWidget inNetworkingManager={inNetworkingManager} />,
-    <Three inNetworkingManager={inNetworkingManager} />,
+    <Three />,
   ];
 
   useEffect(() => {
