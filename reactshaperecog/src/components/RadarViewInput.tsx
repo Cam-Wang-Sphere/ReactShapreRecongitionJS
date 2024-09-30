@@ -139,7 +139,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
     const handleTIMHitEvent = (inTIMHitEvent: TIMHitEvent): void => {
       let handle: number = +inTIMHitEvent.netHandle;
       for (let asteroid of Asteroids) {
-        asteroid.handle === handle && asteroid.showTapState();
+        // asteroid.handle === handle && asteroid.showTapState();
       }
     };
 
@@ -372,7 +372,7 @@ const RadarView = ({ inNetworkingManager, frameColor }: TapnSlashProps) => {
           mouse.y >= asteroid.y - tapArea &&
           mouse.y <= asteroid.y + tapArea
         ) {
-          // asteroid.showTapState();
+          asteroid.showTapState();
           tappedAsteroidHandle = asteroid.handle;
           isTapping && sendInput(tappedAsteroidHandle);
         }
